@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -40,14 +41,23 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="button" layoutX="569.0" layoutY="356.0" mnemonicParsing="false" onMouseClicked="#onMouseEvent" text="Button" />
+                              <SplitPane disable="true" dividerPositions="0.3333, 0.6666" layoutX="87.0" layoutY="134.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                </items>
+                              </SplitPane>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
                 <Tab text="Semaine">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="button" layoutX="569.0" layoutY="356.0" mnemonicParsing="false" onMouseClicked="#onMouseEvent" text="Button" />
+                           </children></AnchorPane>
                   </content>
                 </Tab>
               </tabs>
