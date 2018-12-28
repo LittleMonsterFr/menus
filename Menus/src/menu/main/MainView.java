@@ -7,8 +7,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.Stack;
 
 public class MainView extends Application {
+
+    private Stack<Stage> stageStack = null;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -18,6 +21,9 @@ public class MainView extends Application {
         MainController mainController = MainController.getInstance();
         mainController.setMainView(this);
 
+        MainModel mainModel = MainModel.getInstance();
+        mainController.setMainModel(mainModel);
+
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaximized(true);
         primaryStage.setTitle("Menus");
@@ -26,6 +32,9 @@ public class MainView extends Application {
         primaryStage.setMinHeight(screenSize.height * 0.50);
         primaryStage.setMinWidth(screenSize.width * 0.50);
 
+        stageStack = new Stack<>();
+        stageStack.push(primaryStage);
+
         primaryStage.show();
     }
 
@@ -33,4 +42,7 @@ public class MainView extends Application {
         launch(args);
     }
 
+    public Stack<Stage> getStageStack() {
+        return stageStack;
+    }
 }

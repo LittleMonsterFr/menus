@@ -1,14 +1,21 @@
 package menu.main;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class MainController {
 
-    private static MainController single_instance = null;
+    private static MainController singleInstance = null;
     private MainView mainView = null;
+    private MainModel mainModel = null;
+    private FileChooser fileChooser = null;
 
     @FXML
     private TabPane tabPane;
@@ -19,7 +26,11 @@ public class MainController {
     public MainController() {
         // because the controller is instantiated by the FXMLLoader, set the instance manually
         // Every next access to the controller should be done with getInstance
-        single_instance = this;
+        singleInstance = this;
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Comma Separated Values (CSV)", "*.csv")
+        );
 
         System.out.println("MainController created");
     }
@@ -32,10 +43,10 @@ public class MainController {
 
     static MainController getInstance()
     {
-        if (single_instance == null)
-            single_instance = new MainController();
+        if (singleInstance == null)
+            singleInstance = new MainController();
 
-        return single_instance;
+        return singleInstance;
     }
 
     @FXML
@@ -46,7 +57,18 @@ public class MainController {
         System.out.println("Button clicked");
     }
 
+    @FXML
+    void OnEntreesCsvFileEdition(Event event)
+    {
+        Stage topStage = mainView.getStageStack().lastElement();
+        File selectedFile = fileChooser.showOpenDialog(topStage);
+    }
+
     void setMainView(MainView mainView) {
         this.mainView = mainView;
+    }
+
+    void setMainModel(MainModel mainModel) {
+        this.mainModel = mainModel;
     }
 }
