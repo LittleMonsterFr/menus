@@ -29,7 +29,7 @@ class MainModel {
             br = new BufferedReader(new FileReader(entreesCsvFile));
             String line;
             while ((line = br.readLine()) != null) {
-                String entreeName = line.trim().split(",")[0].trim().strip("\"");
+                String entreeName = line.trim().split("\",\"")[0].substring(1);
                 entreeListTemp.add(entreeName);
             }
         } catch (IOException e) {

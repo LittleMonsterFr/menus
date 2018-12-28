@@ -1,10 +1,11 @@
 package menu.main;
 
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,6 +19,9 @@ public class MainController {
     private MainView mainView = null;
     private MainModel mainModel = null;
     private FileChooser fileChooser;
+
+    @FXML
+    private SplitPane splitPane;
 
     @FXML
     private ListView<String> entreeNameList;
@@ -41,6 +45,16 @@ public class MainController {
     {
         // Handle here what you want to edit on the fields once they have been populated after the constructor call
         System.out.println("MainController initialised");
+
+        entreeNameList.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends String> ov, String old_val,
+                 String new_val) -> {
+                    System.out.println(new_val);
+
+                });
+
+        splitPane.lookupAll(".split-pane-divider").stream()
+                .forEach(div ->  div.setMouseTransparent(true) );
     }
 
     static MainController getInstance()
@@ -71,8 +85,8 @@ public class MainController {
             return;
         }
         this.entreeNameList.getItems().clear();
-        for (String entreeName : entreeNameList)
-            this.entreeNameList.getItems().add(entreeName);
+        ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
+        this.entreeNameList.setItems(entrees);
     }
 
     void setMainView(MainView mainView) {
