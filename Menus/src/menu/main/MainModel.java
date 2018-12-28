@@ -1,13 +1,13 @@
 package menu.main;
 
-import java.io.File;
-import java.util.List;
+import java.io.*;
+import java.util.ArrayList;
 
 class MainModel {
     private static MainModel singleInstance = null;
 
-    private List<String> entreeList = null;
-    private File EntreesCsvFile = null;
+    private ArrayList<String> entreeList = null;
+    private File entreesCsvFile = null;
 
     private MainModel() {
 
@@ -21,17 +21,31 @@ class MainModel {
         return singleInstance;
     }
 
-//    private List<String> readEntreesFromCsvFilePath()
-//    {
-//
-//    }
+    ArrayList<String> readEntreesFromCsvFile()
+    {
+        ArrayList<String> entreeListTemp = new ArrayList<>();
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(entreesCsvFile));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String entreeName = line.trim().split(",")[0].trim().strip("\"");
+                entreeListTemp.add(entreeName);
+            }
+        } catch (IOException e) {
+            return null;
+        }
 
-
-    public File getEntreesCsvFile() {
-        return EntreesCsvFile;
+        entreeList = entreeListTemp;
+        return entreeList;
     }
 
-    public void setEntreesCsvFile(File entreesCsvFile) {
-        EntreesCsvFile = entreesCsvFile;
+
+    public File getentreesCsvFile() {
+        return entreesCsvFile;
+    }
+
+    public void setentreesCsvFile(File entreesCsvFile) {
+        this.entreesCsvFile = entreesCsvFile;
     }
 }

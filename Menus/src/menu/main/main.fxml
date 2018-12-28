@@ -73,7 +73,7 @@
                                                 </TilePane>
                                                 <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                                    <content>
-                                                      <ListView prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: ff0000;" />
+                                                      <ListView fx:id="entreeList" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: ff0000;" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>
