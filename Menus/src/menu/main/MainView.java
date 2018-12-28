@@ -1,4 +1,4 @@
-package menu;
+package menu.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,16 +8,15 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 
-public class Main extends Application {
-
-    Controller controller;
+public class MainView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("main.fxml"));
+        Parent root = fxmlLoader.load();
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        controller = fxmlLoader.getController();
+        MainController mainController = MainController.getInstance();
+        mainController.setMainView(this);
 
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaximized(true);
