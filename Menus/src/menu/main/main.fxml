@@ -28,9 +28,9 @@
                     <MenuItem mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Editer">
+                <Menu mnemonicParsing="false" text="Données">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#OnEntreesCsvFileEdition" text="Chemin du CSV des Entrées" />
+                    <MenuItem mnemonicParsing="false" text="Editer la location du fichier de données" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Aide">

@@ -24,6 +24,7 @@ public class MainView extends Application {
 
         MainModel mainModel = MainModel.getInstance();
         mainController.setMainModel(mainModel);
+        mainController.updateListPlats();
 
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaximized(true);

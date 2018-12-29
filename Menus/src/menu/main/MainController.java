@@ -55,21 +55,8 @@ public class MainController {
         return singleInstance;
     }
 
-    @FXML
-    void onMouseEvent(MouseEvent event)
-    {
-        System.out.println("event : " + event.toString());
-        button.setText("Hello");
-        System.out.println("Button clicked");
-    }
-
-    @FXML
-    void OnEntreesCsvFileEdition(Event event)
-    {
-        Stage topStage = mainView.getStageStack().lastElement();
-        File selectedFile = fileChooser.showOpenDialog(topStage);
-        mainModel.setentreesCsvFile(selectedFile);
-        ArrayList<String> entreeNameList = mainModel.readEntreesFromCsvFile();
+    void updateListPlats() {
+        ArrayList<String> entreeNameList = mainModel.getTypePlatFromDatabase("entree");
         if (entreeNameList == null) {
             mainView.showAlert(Alert.AlertType.WARNING, "Fichier d'entrées.", null, "Une erreur est survenus lors de la récupération de la liste des entrées.");
             return;
@@ -77,6 +64,14 @@ public class MainController {
         this.entreeNameList.getItems().clear();
         ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
         this.entreeNameList.setItems(entrees);
+    }
+
+    @FXML
+    void onMouseEvent(MouseEvent event)
+    {
+        System.out.println("event : " + event.toString());
+        button.setText("Hello");
+        System.out.println("Button clicked");
     }
 
     void setMainView(MainView mainView) {
