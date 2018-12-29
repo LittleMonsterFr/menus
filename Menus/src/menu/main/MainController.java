@@ -21,9 +21,6 @@ public class MainController {
     private FileChooser fileChooser;
 
     @FXML
-    private SplitPane splitPane;
-
-    @FXML
     private ListView<String> entreeNameList;
 
     @FXML
@@ -47,14 +44,7 @@ public class MainController {
         System.out.println("MainController initialised");
 
         entreeNameList.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends String> ov, String old_val,
-                 String new_val) -> {
-                    System.out.println(new_val);
-
-                });
-
-        splitPane.lookupAll(".split-pane-divider").stream()
-                .forEach(div ->  div.setMouseTransparent(true) );
+                (ObservableValue<? extends String> ov, String old_val, String new_val) -> System.out.println(new_val));
     }
 
     static MainController getInstance()
