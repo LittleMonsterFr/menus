@@ -1,17 +1,10 @@
-package menu.main;
+package main.java.menu.main;
 
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class MainController {
 
@@ -55,16 +48,16 @@ public class MainController {
         return singleInstance;
     }
 
-    void updateListPlats() {
-        ArrayList<String> entreeNameList = mainModel.getTypePlatFromDatabase("entree");
-        if (entreeNameList == null) {
-            mainView.showAlert(Alert.AlertType.WARNING, "Fichier d'entrées.", null, "Une erreur est survenus lors de la récupération de la liste des entrées.");
-            return;
-        }
-        this.entreeNameList.getItems().clear();
-        ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
-        this.entreeNameList.setItems(entrees);
-    }
+//    void updateListPlats() {
+//        ArrayList<String> entreeNameList = mainModel.getTypePlatFromDatabase("entree");
+//        if (entreeNameList == null) {
+//            mainView.showAlert(Alert.AlertType.WARNING, "Fichier d'entrées.", null, "Une erreur est survenus lors de la récupération de la liste des entrées.");
+//            return;
+//        }
+//        this.entreeNameList.getItems().clear();
+//        ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
+//        this.entreeNameList.setItems(entrees);
+//    }
 
     @FXML
     void onMouseEvent(MouseEvent event)
