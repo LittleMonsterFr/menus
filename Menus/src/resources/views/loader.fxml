@@ -18,7 +18,7 @@
             <Image url="@../images/loader_init.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="375.0" layoutY="165.0" text="Menus" textAlignment="CENTER" textFill="WHITE" underline="true">
+      <Label layoutX="107.0" layoutY="181.0" text="Menus" textAlignment="CENTER" textFill="WHITE" underline="true">
          <font>
             <Font name="DejaVu Serif Condensed Bold" size="70.0" />
          </font>

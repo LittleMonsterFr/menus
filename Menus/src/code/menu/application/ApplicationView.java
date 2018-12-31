@@ -61,7 +61,6 @@ public class ApplicationView extends Application {
             applicationController.updateListPlats();
         }
 
-
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaximized(true);
         primaryStage.setTitle("Menus");
