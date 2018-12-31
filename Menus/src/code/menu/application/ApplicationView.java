@@ -9,13 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import code.menu.loader.FileNotification;
 
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
+
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ import java.util.Stack;
 public class ApplicationView extends Application {
 
     private Stack<Stage> stageStack = null;
-    private File databaseFile;
+    private File databaseFile = null;
     private DatabaseHandler databaseHandler;
 
     public static void main(String[] args) {
@@ -37,7 +38,9 @@ public class ApplicationView extends Application {
         databaseHandler.setApplicationView(this);
         File databaseFile = databaseHandler.getDatabaseFile();
 
-        this.databaseFile = getDatabaseFileRecursively(databaseFile.getParentFile().toPath(), databaseFile.getName()).toFile();
+        Path path = getDatabaseFileRecursively(databaseFile.getParentFile().toPath(), databaseFile.getName());
+        if (path != null)
+            this.databaseFile = path.toFile();
 
         Thread.sleep(2500);
 
@@ -82,7 +85,6 @@ public class ApplicationView extends Application {
     {
         Alert alert = new Alert(alertType);
 
-
         alert.setTitle(title);
         if (header != null)
             alert.setHeaderText(header);
@@ -90,6 +92,8 @@ public class ApplicationView extends Application {
             Pane pane = new Pane();
             TextArea textArea = new TextArea();
             textArea.setText(message);
+            textArea.setDisable(true);
+            pane.getChildren().addAll(textArea);
             alert.getDialogPane().setContent(pane);
         }
         alert.showAndWait();
@@ -99,33 +103,35 @@ public class ApplicationView extends Application {
     {
         Path path = null;
 
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
-            notifyPreloader(new PathNotification(folder.toString()));
+        notifyPreloader(new PathNotification(folder.toString()));
 
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder, "*.db")) {
             for (Path entry : stream) {
                 if (Files.isHidden(entry))
                     continue;
 
                 if (!Files.isDirectory(entry)) {
-                    notifyPreloader(new FileNotification(entry.getName(entry.getNameCount() - 1).toString()));
-                    if (entry.getName(entry.getNameCount() - 1).equals(Path.of(fileName)))
+                    notifyPreloader(new FileNotification(entry.getFileName().toString()));
+                    if (entry.getFileName().toString().equals(fileName))
                         return entry;
                 }
             }
+        } catch (Exception e) {
+            this.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
+        }
 
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
             for (Path entry : stream) {
                 if (Files.isHidden(entry))
                     continue;
 
                 if (Files.isDirectory(entry)) {
-                    notifyPreloader(new PathNotification(entry.toString()));
                     path = getDatabaseFileRecursively(entry, fileName);
                     if (path != null)
                         return path;
                 }
             }
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             this.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
 
