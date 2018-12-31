@@ -1,11 +1,13 @@
 package code.menu.dao;
 
 import code.menu.application.ApplicationView;
+import code.menu.plat.Plat;
 import code.menu.utils.Utils;
 import javafx.scene.control.Alert;
 
 import java.io.File;
 import java.sql.*;
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class DatabaseHandler {
@@ -50,8 +52,8 @@ public class DatabaseHandler {
         }
     }
 
-    public ArrayList<String> getPlatsByType(String plat) {
-        ArrayList<String> result = new ArrayList<>();
+    public ArrayList<Plat> getPlatsByType(String typePlat) {
+        ArrayList<Plat> result = new ArrayList<>();
 
         Connection conn = connect();
 
@@ -59,12 +61,20 @@ public class DatabaseHandler {
 
         try {
             PreparedStatement preparedStatement = conn.prepareStatement(query);
-            preparedStatement.setString(1, plat);
+            preparedStatement.setString(1, typePlat);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             // loop through the result set
             while (resultSet.next()) {
-                result.add(resultSet.getString("nom"));
+                int id = resultSet.getInt("id");
+                String type = resultSet.getString("type");
+                String nom = resultSet.getString("nom");
+                String ingredient = resultSet.getString("ingredients");
+                String description = resultSet.getString("description");
+                Duration temps = Duration.ofSeconds(resultSet.getInt("temps"));
+                int note = resultSet.getInt("note");
+                Plat plat = new Plat(id, type, nom, ingredient, description, temps, note);
+                result.add(plat);
             }
         } catch (SQLException e) {
             applicationView.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));

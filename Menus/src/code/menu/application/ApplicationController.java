@@ -1,12 +1,14 @@
 package code.menu.application;
 
 import code.menu.dao.DatabaseHandler;
+import code.menu.plat.Plat;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,7 @@ public class ApplicationController {
     private DatabaseHandler databaseHandler = null;
 
     @FXML
-    private ListView<String> entreeNameList;
+    private ListView<Plat> entreesList;
 
     @FXML
     private Button button;
@@ -32,8 +34,11 @@ public class ApplicationController {
     public void initialize()
     {
         // Handle here what you want to edit on the fields once they have been populated after the constructor call
-        entreeNameList.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends String> ov, String old_val, String new_val) -> System.out.println(new_val));
+
+        entreesList.setCellFactory(list -> new PlatFormatCell());
+
+        entreesList.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends Plat> ov, Plat old_val, Plat new_val) -> System.out.println("Selected value : " + new_val));
     }
 
     static ApplicationController getInstance()
@@ -45,10 +50,10 @@ public class ApplicationController {
     }
 
     void updateListPlats() {
-        ArrayList<String> entreeNameList = databaseHandler.getPlatsByType("entree");
-        this.entreeNameList.getItems().clear();
-        ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
-        this.entreeNameList.setItems(entrees);
+        ArrayList<Plat> entreeNameList = databaseHandler.getPlatsByType("entree");
+        this.entreesList.getItems().clear();
+        ObservableList<Plat> entrees = FXCollections.observableArrayList(entreeNameList);
+        this.entreesList.setItems(entrees);
     }
 
     @FXML

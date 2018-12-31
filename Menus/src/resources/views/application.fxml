@@ -78,7 +78,7 @@
                                                 </Label>
                                              </children>
                                           </TilePane>
-                                          <ListView fx:id="entreeNameList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                          <ListView fx:id="entreesList" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                     <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="1" />
