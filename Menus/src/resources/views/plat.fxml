@@ -19,18 +19,18 @@
    <children>
       <GridPane alignment="CENTER" hgap="10.0" layoutX="218.0" layoutY="98.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
-          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" />
+          <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="SOMETIMES" />
           <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
+          <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Plat" underline="true" GridPane.columnSpan="2" GridPane.halignment="CENTER">
@@ -44,7 +44,7 @@
             <Label text="Ingrédients :" GridPane.rowIndex="5" />
             <Label text="Note :" GridPane.rowIndex="4" />
             <Label text="Description :" GridPane.rowIndex="6" />
-            <ChoiceBox GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox prefHeight="26.0" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <GridPane hgap="10.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
