@@ -2,12 +2,14 @@ package code.menu.application;
 
 import code.menu.dao.DatabaseHandler;
 import code.menu.loader.PathNotification;
+import code.menu.utils.Utils;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import code.menu.loader.FileNotification;
 
@@ -32,6 +34,7 @@ public class ApplicationView extends Application {
     @Override
     public void init() throws Exception {
         databaseHandler = DatabaseHandler.getInstance();
+        databaseHandler.setApplicationView(this);
         File databaseFile = databaseHandler.getDatabaseFile();
 
         this.databaseFile = getDatabaseFileRecursively(databaseFile.getParentFile().toPath(), databaseFile.getName()).toFile();
@@ -75,14 +78,20 @@ public class ApplicationView extends Application {
         primaryStage.show();
     }
 
-    void showAlert(Alert.AlertType alertType, String title, String header, String message)
+    public void showAlert(Alert.AlertType alertType, String title, String header, String message)
     {
         Alert alert = new Alert(alertType);
+
+
         alert.setTitle(title);
         if (header != null)
             alert.setHeaderText(header);
-        if (message != null)
-            alert.setContentText(message);
+        if (message != null) {
+            Pane pane = new Pane();
+            TextArea textArea = new TextArea();
+            textArea.setText(message);
+            alert.getDialogPane().setContent(pane);
+        }
         alert.showAndWait();
     }
 
@@ -116,8 +125,8 @@ public class ApplicationView extends Application {
                 }
             }
 
-        } catch (IOException ex) {
-            // An I/O problem has occurred
+        } catch (IOException e) {
+            this.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
 
         return path;

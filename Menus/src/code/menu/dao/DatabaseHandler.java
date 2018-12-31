@@ -1,10 +1,17 @@
 package code.menu.dao;
 
+import code.menu.application.ApplicationView;
+import code.menu.utils.Utils;
+import javafx.scene.control.Alert;
+
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseHandler {
+
+    private ApplicationView applicationView = null;
+
     private static DatabaseHandler singleInstance = null;
     private static final String DATABASE_PREFIX = "jdbc:sqlite:";
     private File databaseFile;
@@ -28,7 +35,7 @@ public class DatabaseHandler {
         try {
             conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            applicationView.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
         return conn;
     }
@@ -38,12 +45,12 @@ public class DatabaseHandler {
             if (conn != null) {
                 conn.close();
             }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException e) {
+            applicationView.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
     }
 
-    public ArrayList<String> getTypePlat(String plat) {
+    public ArrayList<String> getPlatsByType(String plat) {
         ArrayList<String> result = new ArrayList<>();
 
         Connection conn = connect();
@@ -60,7 +67,7 @@ public class DatabaseHandler {
                 result.add(resultSet.getString("nom"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            applicationView.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
 
         disconnect(conn);
@@ -74,5 +81,9 @@ public class DatabaseHandler {
 
     public void setDatabaseFile(File databaseFile) {
         this.databaseFile = databaseFile;
+    }
+
+    public void setApplicationView(ApplicationView applicationView) {
+        this.applicationView = applicationView;
     }
 }

@@ -45,7 +45,7 @@ public class ApplicationController {
     }
 
     void updateListPlats() {
-        ArrayList<String> entreeNameList = databaseHandler.getTypePlat("entree");
+        ArrayList<String> entreeNameList = databaseHandler.getPlatsByType("entree");
         this.entreeNameList.getItems().clear();
         ObservableList<String> entrees = FXCollections.observableArrayList(entreeNameList);
         this.entreeNameList.setItems(entrees);
