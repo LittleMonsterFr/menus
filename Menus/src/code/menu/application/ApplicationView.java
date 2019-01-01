@@ -92,7 +92,9 @@ public class ApplicationView extends Application {
             Pane pane = new Pane();
             TextArea textArea = new TextArea();
             textArea.setText(message);
-            textArea.setDisable(true);
+            textArea.setEditable(false);
+            textArea.setMouseTransparent(true);
+            textArea.setFocusTraversable(false);
             pane.getChildren().addAll(textArea);
             alert.getDialogPane().setContent(pane);
         }
