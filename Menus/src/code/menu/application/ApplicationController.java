@@ -6,10 +6,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ApplicationController {
@@ -59,9 +64,28 @@ public class ApplicationController {
     @FXML
     void onMouseEvent(MouseEvent event)
     {
-        System.out.println("event : " + event.toString());
-        button.setText("Hello");
-        System.out.println("Button clicked");
+        if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/plat.fxml"));
+            Parent root = null;
+            try {
+                root = fxmlLoader.load();
+                Stage platScene = new Stage();
+                platScene.initModality(Modality.APPLICATION_MODAL);
+                platScene.setScene(new Scene(root));
+                platScene.setTitle("Plat");
+                platScene.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+            System.out.println("event : " + event.toString());
+            button.setText("Hello");
+            System.out.println("Button clicked");
+        }
     }
 
     void setApplicationView(ApplicationView applicationView) {
