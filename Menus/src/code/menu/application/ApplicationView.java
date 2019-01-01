@@ -20,13 +20,12 @@ import java.io.File;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Stack;
 
 public class ApplicationView extends Application {
 
-    private Stack<Stage> stageStack = null;
     private File databaseFile = null;
     private DatabaseHandler databaseHandler;
+    private Stage mainStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -49,6 +48,8 @@ public class ApplicationView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        mainStage = primaryStage;
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/application.fxml"));
         Parent root = fxmlLoader.load();
 
@@ -75,9 +76,6 @@ public class ApplicationView extends Application {
         primaryStage.setMinHeight(screenSize.height * 0.50);
         primaryStage.setMinWidth(screenSize.width * 0.50);
 
-        stageStack = new Stack<>();
-        stageStack.push(primaryStage);
-
         primaryStage.show();
     }
 
@@ -86,8 +84,10 @@ public class ApplicationView extends Application {
         Alert alert = new Alert(alertType);
 
         alert.setTitle(title);
+
         if (header != null)
             alert.setHeaderText(header);
+
         if (message != null) {
             Pane pane = new Pane();
             TextArea textArea = new TextArea();
@@ -98,6 +98,7 @@ public class ApplicationView extends Application {
             pane.getChildren().addAll(textArea);
             alert.getDialogPane().setContent(pane);
         }
+
         alert.showAndWait();
     }
 
@@ -140,7 +141,7 @@ public class ApplicationView extends Application {
         return path;
     }
 
-    public Stack<Stage> getStageStack() {
-        return stageStack;
+    public Stage getMainStage() {
+        return mainStage;
     }
 }

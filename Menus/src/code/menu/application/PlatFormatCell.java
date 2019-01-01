@@ -8,7 +8,7 @@ import javafx.scene.text.FontWeight;
 
 public class PlatFormatCell extends ListCell<Plat> {
 
-    public PlatFormatCell() {
+    PlatFormatCell() {
     }
 
     @Override

@@ -1,5 +1,6 @@
 package code.menu.loader;
 
+import code.menu.utils.Utils;
 import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,9 +30,8 @@ public class LoaderView extends Preloader {
 
         primaryStage.show();
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        primaryStage.setX((screenSize.width - primaryStage.getWidth()) / 2.0 );
-        primaryStage.setY((screenSize.height - primaryStage.getHeight()) / 2.0);
+        primaryStage.setX(Utils.getCenterX(primaryStage));
+        primaryStage.setY(Utils.getCenterY(primaryStage));
     }
 
     @Override
