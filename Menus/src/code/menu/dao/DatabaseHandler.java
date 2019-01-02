@@ -72,7 +72,11 @@ public class DatabaseHandler {
                 String ingredient = resultSet.getString("ingredients");
                 String description = resultSet.getString("description");
                 Duration temps = Duration.ofSeconds(resultSet.getInt("temps"));
-                int note = resultSet.getInt("note");
+                if (resultSet.wasNull())
+                    temps = null;
+                Integer note = resultSet.getInt("note");
+                if (resultSet.wasNull())
+                    note = null;
                 Plat plat = new Plat(id, type, nom, ingredient, description, temps, note);
                 result.add(plat);
             }
@@ -83,6 +87,42 @@ public class DatabaseHandler {
         disconnect(conn);
 
         return result;
+    }
+
+    public boolean createPlat(Plat plat) {
+        String query = "INSERT INTO plats(type, nom, ingredients, description, temps, note) VALUES(?,?,?,?,?,?)";
+
+        Connection conn = connect();
+
+        boolean res = true;
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, plat.getType());
+            pstmt.setString(2, plat.getNom());
+            pstmt.setString(3, plat.getIngredients());
+            pstmt.setString(4, plat.getDescription());
+
+            Duration temps = plat.getTemps();
+            if (temps == null)
+                pstmt.setNull(5, Types.INTEGER);
+            else
+                pstmt.setLong(5, temps.toSeconds());
+
+            Integer note = plat.getNote();
+            if (note == null)
+                pstmt.setNull(6, Types.INTEGER);
+            else
+                pstmt.setInt(6, plat.getNote());
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            applicationView.showAlert(Alert.AlertType.ERROR, e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
+            res = false;
+        }
+
+        disconnect(conn);
+        return res;
     }
 
     public File getDatabaseFile() {

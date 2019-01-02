@@ -8,7 +8,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class PlatView {
@@ -20,7 +19,6 @@ public class PlatView {
 
     private Stage ownerStage;
     private Stage actualStage;
-    private PlatController platController;
 
     public PlatView(Stage ownerStage) {
         this.ownerStage = ownerStage;
@@ -31,12 +29,7 @@ public class PlatView {
         Parent root;
         try {
             root = fxmlLoader.load();
-            platController = fxmlLoader.getController();
-            platController.setPlatView(this);
-            if (platAction == PlatAction.CREATE)
-                platController.setValidateButtonText("Créer");
-            else
-                platController.setValidateButtonText("Editer");
+            PlatController platController = fxmlLoader.getController();
             actualStage = new Stage();
             actualStage.initModality(Modality.WINDOW_MODAL);
             actualStage.initOwner(ownerStage);
@@ -44,6 +37,12 @@ public class PlatView {
             actualStage.setScene(new Scene(root));
             actualStage.setMinWidth(actualStage.getWidth());
             actualStage.setResizable(true);
+            platController.setPlatView(this);
+            if (platAction == PlatAction.CREATE)
+                platController.setValidateButtonText("Créer");
+            else
+                platController.setValidateButtonText("Editer");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +55,11 @@ public class PlatView {
         actualStage.setY(Utils.getCenterY(actualStage));
     }
 
-    public void hide() {
+    void hide() {
         actualStage.hide();
+    }
+
+    Stage getActualStage() {
+        return actualStage;
     }
 }

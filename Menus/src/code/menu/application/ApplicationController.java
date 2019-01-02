@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ApplicationController {
 
@@ -42,7 +43,7 @@ public class ApplicationController {
                 (ObservableValue<? extends Plat> ov, Plat old_val, Plat new_val) -> System.out.println("Selected value : " + new_val));
     }
 
-    static ApplicationController getInstance()
+    public static ApplicationController getInstance()
     {
         if (singleInstance == null)
             singleInstance = new ApplicationController();
@@ -51,10 +52,20 @@ public class ApplicationController {
     }
 
     void updateListPlats() {
-        ArrayList<Plat> entreeNameList = databaseHandler.getPlatsByType("entree");
+        ArrayList<Plat> entreeNameList = databaseHandler.getPlatsByType("Entrée");
+        entreeNameList.sort((plat1, plat2) -> plat1.getNom().compareToIgnoreCase(plat2.getNom()));
         this.entreesList.getItems().clear();
         ObservableList<Plat> entrees = FXCollections.observableArrayList(entreeNameList);
         this.entreesList.setItems(entrees);
+    }
+
+    public void addPlatToList(Plat plat) {
+        if (plat.getType().equals("Entrée")) {
+            ObservableList<Plat> list = entreesList.getItems();
+            list.add(plat);
+            list.sort((plat1, plat2) -> plat1.getNom().compareToIgnoreCase(plat2.getNom()));
+            entreesList.setItems(list);
+        }
     }
 
     @FXML

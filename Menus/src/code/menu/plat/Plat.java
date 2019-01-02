@@ -3,15 +3,15 @@ package code.menu.plat;
 import java.time.Duration;
 
 public class Plat {
-    private int id;
+    private Integer id;
     private String type;
     private String nom;
     private String ingredients;
     private String description;
     private Duration temps;
-    private int note;
+    private Integer note;
 
-    public Plat(int id, String type, String nom, String ingredients, String description, Duration temps, int note) {
+    public Plat(Integer id, String type, String nom, String ingredients, String description, Duration temps, Integer note) {
         this.id = id;
         this.type = type;
         this.nom = nom;
@@ -21,11 +21,11 @@ public class Plat {
         this.note = note;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -65,25 +65,38 @@ public class Plat {
         return temps;
     }
 
-    public String getHumanTemps()
+    private String getHumanTemps()
     {
-        return String.format("%dh %02dm", this.temps.toHours(), this.temps.toMinutes());
+        if (temps == null)
+            return null;
+        else
+            return this.temps.toHours() + "h " + this.temps.toMinutesPart() + "m";
     }
 
     public void setTemps(Duration temps) {
         this.temps = temps;
     }
 
-    public int getNote() {
+    public Integer getNote() {
         return note;
     }
 
-    public void setNote(int note) {
+    public void setNote(Integer note) {
         this.note = note;
     }
 
     public String getRepresentation() {
-        return this.nom + " - " + getHumanTemps() + " - " + this.note + "/10";
+        String representation = "";
+        representation += this.nom;
+
+        String humanTemps = getHumanTemps();
+        if (humanTemps != null)
+            representation += " - " + humanTemps;
+
+        if(note != null)
+            representation += " - " + this.note + "/10";
+
+        return representation;
     }
 
     @Override
