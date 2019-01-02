@@ -35,12 +35,13 @@ public class PlatView {
             actualStage.initOwner(ownerStage);
             actualStage.initStyle(StageStyle.UNDECORATED);
             actualStage.setScene(new Scene(root));
+            actualStage.getScene().getStylesheets().add(getClass().getResource("../../../resources/css/styles.css").toExternalForm());
             actualStage.setMinWidth(actualStage.getWidth());
             actualStage.setResizable(true);
             platController.setPlatView(this);
             if (platAction == PlatAction.CREATE)
                 platController.setValidateButtonText("Créer");
-            else
+            else if (platAction == PlatAction.EDIT)
                 platController.setValidateButtonText("Editer");
 
         } catch (IOException e) {

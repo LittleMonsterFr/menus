@@ -1,30 +1,42 @@
 package code.menu.application;
 
 import code.menu.plat.Plat;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class PlatFormatCell extends ListCell<Plat> {
 
+    private HBox hBox = new HBox();
+    private Label label = new Label();
+    private Button button = new Button();
+
     PlatFormatCell() {
+        super();
+        label.setOnMouseEntered(mouseEvent -> {
+            label.setUnderline(true);
+        });
+        label.setOnMouseExited(mouseEvent -> {
+            label.setUnderline(false);
+        });
+        setCursor(Cursor.HAND);
+        label.setFont(Font.font(getFont().getFamily(), FontWeight.BOLD, getFont().getSize()));
+        button.setText("✎");
+        hBox.getChildren().setAll(button, label);
+        hBox.setSpacing(5);
+        hBox.setAlignment(Pos.CENTER_LEFT);
     }
 
     @Override
     protected void updateItem(Plat plat, boolean b) {
         super.updateItem(plat, b);
-        setText(plat == null ? "" : plat.getRepresentation());
-        setFont(Font.font(getFont().getFamily(), FontWeight.BOLD, getFont().getSize()));
-
-        setOnMouseEntered(mouseEvent -> {
-            setUnderline(true);
-            setCursor(Cursor.HAND);}
-        );
-
-        setOnMouseExited(mouseEvent -> {
-            setUnderline(false);
-            setCursor(Cursor.DEFAULT);
-        });
+        setText(null);
+        label.setText(plat == null ? "" : plat.getRepresentation());
+        setGraphic(hBox);
     }
 }

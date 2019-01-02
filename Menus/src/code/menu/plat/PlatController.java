@@ -2,6 +2,7 @@ package code.menu.plat;
 
 import code.menu.application.ApplicationController;
 import code.menu.dao.DatabaseHandler;
+import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -71,6 +72,9 @@ public class PlatController {
     void onMouseEvent(MouseEvent event) {
         Button b = (Button) event.getSource();
         if (b.equals(validate)) {
+            if (!verifyInput())
+                return;
+
             long seconds = 0;
 
             if (heures.getValue() != null)
@@ -91,9 +95,13 @@ public class PlatController {
 
             ApplicationController applicationController = ApplicationController.getInstance();
             applicationController.addPlatToList(plat);
+
+            platView.hide();
+        } else if (b.equals(cancel)) {
+            platView.hide();
         }
 
-        platView.hide();
+
     }
 
     void setValidateButtonText(String text){
@@ -117,5 +125,29 @@ public class PlatController {
         };
 
         platView.getActualStage().addEventFilter(KeyEvent.KEY_PRESSED, filter);
+    }
+
+    private boolean verifyInput() {
+        final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+
+        boolean res = true;
+
+        if (types.getValue().equals("Selectionnez un type de plat"))
+            res = false;
+        types.pseudoClassStateChanged(errorClass, types.getValue().equals("Selectionnez un type de plat"));
+
+        if (nom.getText().trim().isEmpty())
+            res = false;
+        nom.pseudoClassStateChanged(errorClass, nom.getText().trim().isEmpty());
+
+        if (ingredients.getText().trim().isEmpty())
+            res = false;
+        ingredients.pseudoClassStateChanged(errorClass, ingredients.getText().trim().isEmpty());
+
+        if (description.getText().trim().isEmpty())
+            res = false;
+        description.pseudoClassStateChanged(errorClass, description.getText().trim().isEmpty());
+
+        return res;
     }
 }
