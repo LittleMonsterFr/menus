@@ -12,12 +12,16 @@ import javafx.scene.text.FontWeight;
 
 public class PlatFormatCell extends ListCell<Plat> {
 
-    private HBox hBox = new HBox();
-    private Label label = new Label();
-    private Button button = new Button();
+    private HBox hBox;
+    private Label label;
+    private ApplicationController applicationController;
 
     PlatFormatCell() {
         super();
+        applicationController = ApplicationController.getInstance();
+        hBox = new HBox();
+        label = new Label();
+        Button button = new Button();
         label.setOnMouseEntered(mouseEvent -> {
             label.setUnderline(true);
         });
@@ -27,6 +31,9 @@ public class PlatFormatCell extends ListCell<Plat> {
         setCursor(Cursor.HAND);
         label.setFont(Font.font(getFont().getFamily(), FontWeight.BOLD, getFont().getSize()));
         button.setText("✎");
+        button.setOnMouseClicked(mouseEvent -> {
+            applicationController.displayPlatView(getItem());
+        });
         hBox.getChildren().setAll(button, label);
         hBox.setSpacing(5);
         hBox.setAlignment(Pos.CENTER_LEFT);

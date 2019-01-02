@@ -1,9 +1,11 @@
 package code.menu.plat;
 
+import code.menu.application.ApplicationController;
 import code.menu.utils.Utils;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,7 +26,7 @@ public class PlatView {
         this.ownerStage = ownerStage;
     }
 
-    public void createView(PlatAction platAction) {
+    public void createView(PlatAction platAction, Plat plat) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/plat.fxml"));
         Parent root;
         try {
@@ -39,19 +41,22 @@ public class PlatView {
             actualStage.setMinWidth(actualStage.getWidth());
             actualStage.setResizable(true);
             platController.setPlatView(this);
+            platController.setPlatAction(platAction);
             if (platAction == PlatAction.CREATE)
                 platController.setValidateButtonText("Créer");
-            else if (platAction == PlatAction.EDIT)
-                platController.setValidateButtonText("Editer");
-
+            else if (platAction == PlatAction.EDIT) {
+                platController.setValidateButtonText("Editer et Fermer");
+                platController.setEditAndContinueVisible(true);
+                platController.fillPlat(plat);
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            ApplicationController.getInstance().getApplicationView().showAlert(Alert.AlertType.ERROR,
+                    e.getClass().toString(), "The following error happened :", Utils.getStackTrace(e));
         }
     }
 
     public void show() {
         actualStage.show();
-
         actualStage.setX(Utils.getCenterX(actualStage));
         actualStage.setY(Utils.getCenterY(actualStage));
     }

@@ -18,6 +18,9 @@ import java.time.Duration;
 public class PlatController {
 
     private PlatView platView;
+    private PlatView.PlatAction platAction;
+
+    private Integer id;
 
     @FXML
     ChoiceBox<String> types;
@@ -39,6 +42,9 @@ public class PlatController {
 
     @FXML
     TextArea description;
+
+    @FXML
+    Button editAndContinue;
 
     @FXML
     Button validate;
@@ -71,37 +77,46 @@ public class PlatController {
     @FXML
     void onMouseEvent(MouseEvent event) {
         Button b = (Button) event.getSource();
-        if (b.equals(validate)) {
+        if (b.equals(validate) || b.equals(editAndContinue)) {
             if (!verifyInput())
                 return;
 
-            long seconds = 0;
-
-            if (heures.getValue() != null)
-                seconds += heures.getValue() * 3600;
-
-            if(minutes.getValue() != null)
-                seconds += minutes.getValue() * 60;
-
-            Duration temps = null;
-            if (seconds != 0)
-                temps = Duration.ofSeconds(seconds);
-
-            Plat plat = new Plat(0, types.getValue(), nom.getText(), ingredients.getText(), description.getText(), temps, note.getValue());
+            Plat plat = getPlatFromInput();
 
             DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-            if (!databaseHandler.createPlat(plat))
-                return;
-
             ApplicationController applicationController = ApplicationController.getInstance();
-            applicationController.addPlatToList(plat);
 
-            platView.hide();
+            if(platAction == PlatView.PlatAction.CREATE) {
+                if (!databaseHandler.createPlat(plat))
+                    return;
+                applicationController.addPlatToList(plat);
+            } else if (platAction == PlatView.PlatAction.EDIT) {
+                if (!databaseHandler.editPlat(plat))
+                    return;
+                applicationController.updateListPlats();
+            }
+
+            if (b.equals(validate))
+                platView.hide();
         } else if (b.equals(cancel)) {
             platView.hide();
         }
+    }
 
+    private Plat getPlatFromInput() {
+        long seconds = 0;
 
+        if (heures.getValue() != null)
+            seconds += heures.getValue() * 3600;
+
+        if (minutes.getValue() != null)
+            seconds += minutes.getValue() * 60;
+
+        Duration temps = null;
+        if (seconds != 0)
+            temps = Duration.ofSeconds(seconds);
+
+        return new Plat(id, types.getValue(), nom.getText(), ingredients.getText(), description.getText(), temps, note.getValue());
     }
 
     void setValidateButtonText(String text){
@@ -149,5 +164,24 @@ public class PlatController {
         description.pseudoClassStateChanged(errorClass, description.getText().trim().isEmpty());
 
         return res;
+    }
+
+    void fillPlat(Plat plat) {
+        id = plat.getId();
+        types.setValue(plat.getType());
+        nom.setText(plat.getNom());
+        heures.setValue(plat.getTemps() != null ? (int) plat.getTemps().toHours() : null);
+        minutes.setValue(plat.getTemps() != null ? plat.getTemps().toMinutesPart() : null);
+        note.setValue(plat.getNote());
+        ingredients.setText(plat.getIngredients());
+        description.setText(plat.getDescription());
+    }
+
+    void setEditAndContinueVisible(boolean b) {
+        editAndContinue.setVisible(b);
+    }
+
+    void setPlatAction(PlatView.PlatAction platAction) {
+        this.platAction = platAction;
     }
 }

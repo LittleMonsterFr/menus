@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ApplicationController {
 
@@ -51,7 +50,7 @@ public class ApplicationController {
         return singleInstance;
     }
 
-    void updateListPlats() {
+    public void updateListPlats() {
         ArrayList<Plat> entreeNameList = databaseHandler.getPlatsByType("Entrée");
         entreeNameList.sort((plat1, plat2) -> plat1.getNom().compareToIgnoreCase(plat2.getNom()));
         this.entreesList.getItems().clear();
@@ -72,14 +71,27 @@ public class ApplicationController {
     void onMouseEvent(MouseEvent event) {
         Button b = (Button) event.getSource();
         if (b.equals(addEntreeButton)) {
-            platView = new PlatView(applicationView.getMainStage());
-            platView.createView(PlatView.PlatAction.CREATE);
-            platView.show();
+            displayPlatView(null);
         }
+    }
+
+    void displayPlatView(Plat plat) {
+        PlatView.PlatAction platAction;
+        if (plat == null)
+            platAction = PlatView.PlatAction.CREATE;
+        else
+            platAction = PlatView.PlatAction.EDIT;
+        platView = new PlatView(applicationView.getMainStage());
+        platView.createView(platAction, plat);
+        platView.show();
     }
 
     void setApplicationView(ApplicationView applicationView) {
         this.applicationView = applicationView;
+    }
+
+    public ApplicationView getApplicationView() {
+        return applicationView;
     }
 
     void setApplicationModel(ApplicationModel applicationModel) {

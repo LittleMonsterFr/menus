@@ -66,7 +66,7 @@ public class DatabaseHandler {
 
             // loop through the result set
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                Integer id = resultSet.getInt("id");
                 String type = resultSet.getString("type");
                 String nom = resultSet.getString("nom");
                 String ingredient = resultSet.getString("ingredients");
@@ -92,6 +92,16 @@ public class DatabaseHandler {
     public boolean createPlat(Plat plat) {
         String query = "INSERT INTO plats(type, nom, ingredients, description, temps, note) VALUES(?,?,?,?,?,?)";
 
+        return createUpdate(plat, query);
+    }
+
+    public boolean editPlat(Plat plat) {
+        String query = "UPDATE plats SET type = ?, nom = ?, ingredients = ?, description = ?, temps = ?, note = ? where id = ?";
+
+        return createUpdate(plat, query);
+    }
+
+    boolean createUpdate(Plat plat, String query) {
         Connection conn = connect();
 
         boolean res = true;
@@ -114,6 +124,9 @@ public class DatabaseHandler {
                 pstmt.setNull(6, Types.INTEGER);
             else
                 pstmt.setInt(6, plat.getNote());
+
+            if (query.startsWith("UPDATE"))
+                pstmt.setInt(7, plat.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

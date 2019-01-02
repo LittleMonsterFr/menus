@@ -75,6 +75,7 @@
             <HBox alignment="CENTER" fillHeight="false" spacing="25.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.vgrow="NEVER">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
+                  <Button fx:id="editAndContinue" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onMouseEvent" text="Editer et Continuer" visible="false" />
                   <Button fx:id="validate" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onMouseEvent" text="Valider" HBox.hgrow="NEVER" />
                   <Button fx:id="cancel" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onMouseClicked="#onMouseEvent" text="Annuler" HBox.hgrow="NEVER" />
                </children>
