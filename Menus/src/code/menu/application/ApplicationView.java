@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import code.menu.loader.FileNotification;
@@ -50,7 +51,7 @@ public class ApplicationView extends Application {
     public void start(Stage primaryStage) throws Exception {
         mainStage = primaryStage;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/application.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/views/application.fxml"));
         Parent root = fxmlLoader.load();
 
         ApplicationController applicationController = ApplicationController.getInstance();
@@ -89,14 +90,16 @@ public class ApplicationView extends Application {
             alert.setHeaderText(header);
 
         if (message != null) {
-            Pane pane = new Pane();
-            TextArea textArea = new TextArea();
-            textArea.setText(message);
+            AnchorPane anchorPane = new AnchorPane();
+            TextArea textArea = new TextArea(message);
             textArea.setEditable(false);
-            textArea.setMouseTransparent(true);
-            textArea.setFocusTraversable(false);
-            pane.getChildren().addAll(textArea);
-            alert.getDialogPane().setContent(pane);
+            AnchorPane.setLeftAnchor(textArea, 0.0);
+            AnchorPane.setRightAnchor(textArea, 0.0);
+            AnchorPane.setBottomAnchor(textArea, 0.0);
+            AnchorPane.setTopAnchor(textArea, 0.0);
+            anchorPane.getChildren().addAll(textArea);
+            alert.getDialogPane().setContent(anchorPane);
+            alert.setResizable(true);
         }
 
         alert.showAndWait();

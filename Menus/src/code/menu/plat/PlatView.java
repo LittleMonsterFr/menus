@@ -27,7 +27,7 @@ public class PlatView {
     }
 
     public void createView(PlatAction platAction, Plat plat) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/plat.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/views/plat.fxml"));
         Parent root;
         try {
             root = fxmlLoader.load();
@@ -37,7 +37,7 @@ public class PlatView {
             actualStage.initOwner(ownerStage);
             actualStage.initStyle(StageStyle.UNDECORATED);
             actualStage.setScene(new Scene(root));
-            actualStage.getScene().getStylesheets().add(getClass().getResource("../../../resources/css/styles.css").toExternalForm());
+            actualStage.getScene().getStylesheets().add(getClass().getResource("/resources/css/styles.css").toExternalForm());
             actualStage.setMinWidth(actualStage.getWidth());
             actualStage.setResizable(true);
             platController.setPlatView(this);

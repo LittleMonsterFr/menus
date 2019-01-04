@@ -17,7 +17,7 @@ public class LoaderView extends Preloader {
     public void start(Stage primaryStage) throws Exception {
         preloader = primaryStage;
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/views/loader.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/views/loader.fxml"));
         Parent root = fxmlLoader.load();
 
         loaderController = fxmlLoader.getController();
