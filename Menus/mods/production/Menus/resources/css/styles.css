@@ -1,4 +1,0 @@
-.text-field:error, .text-area:error, .choice-box:error{
-    -fx-border-color: red ;
-    -fx-focus-color: red ;
-}
