@@ -10,11 +10,14 @@
     PrimaryButtonText="Primary"
     SecondaryButtonText="Secondary"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
-    Width="Auto"
-    Height="Auto">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" >
+                <Setter Property="Padding" Value="0,10,10,10" />
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -22,8 +25,37 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Type :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="Nom :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Text="Type :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Text="Saison :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="Temps :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="Note :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="Ingrédients :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Description :" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <TextBox Grid.Column="1" Grid.Row="0" PlaceholderText="Nom du plat" VerticalAlignment="Center" HorizontalAlignment="Left" HorizontalTextAlignment="Left"/>
+        <ComboBox Grid.Column="1" Grid.Row="1" SelectionChanged="Type_SelectionChanged" PlaceholderText="Choisir un type" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <x:String>Entrée</x:String>
+            <x:String>Plat de résistance</x:String>
+            <x:String>Soir</x:String>
+            <x:String>Déssert</x:String>
+            <x:String>Appéritif</x:String>
+        </ComboBox>
+        <ComboBox Grid.Column="1" Grid.Row="2" SelectionChanged="Saison_SelectionChanged" PlaceholderText="Choisir une saison" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <x:String>Hiver</x:String>
+            <x:String>Printemps</x:String>
+            <x:String>Eté</x:String>
+            <x:String>Automne</x:String>
+        </ComboBox>
+        <TimePicker Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Slider Grid.Column="1" Grid.Row="4" Minimum="0" Maximum="10" StepFrequency="1" Value="5" TickPlacement="Outside" VerticalAlignment="Center" AutomationProperties.Name="Slider with ticks" SnapsTo="Ticks" TickFrequency="1"/>
+        <TextBox Grid.Column="1" Grid.Row="5" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Width="400" Height="190" HorizontalAlignment="Left" Margin="0,10,0,10"/>
+        <TextBox Grid.Column="1" Grid.Row="6" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Width="400" Height="190" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,10"/>
 
     </Grid>
 </ContentDialog>

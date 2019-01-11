@@ -31,5 +31,15 @@ namespace Menus
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
         }
+
+        private void Type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Saison_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
