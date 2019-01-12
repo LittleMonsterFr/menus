@@ -23,11 +23,11 @@
 
         </MenuBar>
 
-        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar">
+        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10">
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
-                    <AppBarButton  Click="OpenDatabaseFolder" Label="Localiser database">
+                    <AppBarButton Click="OpenDatabaseFolder" Label="Localiser database">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;"/>
                     </AppBarButton>
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
@@ -50,11 +50,11 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Entrées" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="2" Grid.Row="0" Text="Plats de résistance" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="4" Grid.Row="0" Text="Soirs" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="6" Grid.Row="0" Text="Désserts" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="8" Grid.Row="0" Text="Apéritifs" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Grid.Row="0" x:Name="entreeTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" x:Name="platTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Grid.Row="0" x:Name="soirtitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Grid.Row="0" x:Name="dessertTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Grid.Row="0" x:Name="aperitifTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <Rectangle Grid.Column="0" Grid.Row="1" Fill="AliceBlue"/>
                     <Rectangle Grid.Column="2" Grid.Row="1" Fill="Azure"/>
                     <Rectangle Grid.Column="4" Grid.Row="1" Fill="Beige"/>
@@ -68,7 +68,7 @@
                     <ListView Grid.Column="2" Grid.Row="1" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
                     <ListView Grid.Column="4" Grid.Row="1" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
                     <ListView Grid.Column="6" Grid.Row="1" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
-                    <ListView Grid.Column="8" Grid.Row="1" x:Name="apperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
+                    <ListView Grid.Column="8" Grid.Row="1" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Semaines">

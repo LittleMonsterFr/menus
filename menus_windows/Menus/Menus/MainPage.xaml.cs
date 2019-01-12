@@ -48,7 +48,13 @@ namespace Menus
                 platResitanceList.ItemsSource = lists["Plat de résistance"];
                 soirList.ItemsSource = lists["Soir"];
                 dessertList.ItemsSource = lists["Déssert"];
-                apperitifList.ItemsSource = lists["Apéritif"];
+                aperitifList.ItemsSource = lists["Apéritif"];
+
+                entreeTitle.Text = "Entrée";
+                platTitle.Text = "Plat de résistance";
+                soirtitle.Text = "Soir";
+                dessertTitle.Text = "Déssert";
+                aperitifTitle.Text = "Apéritif";
             }
         }
 
