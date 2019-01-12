@@ -27,6 +27,10 @@
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
+                    <AppBarButton  Click="OpenDatabaseFolder" Label="Localiser database">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;"/>
+                    </AppBarButton>
+                    <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
                 </CommandBar>
             </Pivot.RightHeader>
             <PivotItem Header="Plats" >
@@ -47,15 +51,24 @@
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Entrées" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Text="Plats de résistance" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Grid.Row="0" Text="Soirs" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Grid.Row="0" Text="Désserts" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Grid.Row="0" Text="Apéritifs" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <Rectangle Grid.Column="0" Grid.Row="1" Fill="AliceBlue"/>
-                    <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Rectangle Grid.Column="2" Grid.Row="1" Fill="Azure"/>
-                    <Border Grid.Column="3" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Rectangle Grid.Column="4" Grid.Row="1" Fill="Beige"/>
-                    <Border Grid.Column="5" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Rectangle Grid.Column="6" Grid.Row="1" Fill="BlanchedAlmond"/>
-                    <Border Grid.Column="7" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Rectangle Grid.Column="8" Grid.Row="1" Fill="BurlyWood"/>
+                    <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="3" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="5" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="7" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <ListView Grid.Column="0" Grid.Row="1" x:Name="entreeList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
+                    <ListView Grid.Column="2" Grid.Row="1" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
+                    <ListView Grid.Column="4" Grid.Row="1" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
+                    <ListView Grid.Column="6" Grid.Row="1" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
+                    <ListView Grid.Column="8" Grid.Row="1" x:Name="apperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single"/>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Semaines">

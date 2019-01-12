@@ -8,30 +8,29 @@
     mc:Ignorable="d"
     Title="Tittle"
     PrimaryButtonText="Primary"
-    SecondaryButtonText="Secondary"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    CloseButtonText="Close"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 
     <ScrollViewer Padding="20" Width="600">
         <StackPanel Orientation="Vertical" Spacing="10">
-            <TextBox Header="* Nom :" PlaceholderText="Nom du plat"/>
-            <ComboBox Header="* Type :" SelectionChanged="Type_SelectionChanged" PlaceholderText="Choisir un type">
+            <TextBox x:Name="nom" Header="* Nom :" PlaceholderText="Nom du plat"/>
+            <ComboBox x:Name="type" Header="* Type :" PlaceholderText="Choisir un type">
                 <x:String>Entrée</x:String>
                 <x:String>Plat de résistance</x:String>
                 <x:String>Soir</x:String>
                 <x:String>Déssert</x:String>
                 <x:String>Appéritif</x:String>
             </ComboBox>
-            <ComboBox Header="* Saison :" SelectionChanged="Saison_SelectionChanged" PlaceholderText="Choisir une saison">
+            <ComboBox x:Name="saison" Header="* Saison :" PlaceholderText="Choisir une saison">
                 <x:String>Hiver</x:String>
                 <x:String>Printemps</x:String>
                 <x:String>Eté</x:String>
                 <x:String>Automne</x:String>
             </ComboBox>
-            <TimePicker Header="* Temps :" MinuteIncrement="15" Time="00:00" />
-            <Slider Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="0" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" SnapsTo="Ticks" TickFrequency="1"/>
-            <TextBox Header="Ingrédients :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
-            <TextBox Header="Description :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
+            <TimePicker x:Name="temps" Header="Temps :" MinuteIncrement="15" Time="00:00" />
+            <Slider x:Name="note" Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="0" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" SnapsTo="Ticks" TickFrequency="1"/>
+            <TextBox x:Name="ingredients" Header="Ingrédients :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
+            <TextBox x:Name="description" Header="Description :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>
