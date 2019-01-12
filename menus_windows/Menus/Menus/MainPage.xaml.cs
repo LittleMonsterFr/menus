@@ -29,10 +29,12 @@ namespace Menus
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
         {
-            PlatDialog platDialog = new PlatDialog();
-            platDialog.Title = "Ajout d'un plat";
-            platDialog.PrimaryButtonText = "Valider";
-            platDialog.SecondaryButtonText = "Cancel";
+            PlatDialog platDialog = new PlatDialog
+            {
+                Title = "Ajout d'un plat",
+                PrimaryButtonText = "Valider",
+                SecondaryButtonText = "Annuler"
+            };
             ContentDialogResult result = await platDialog.ShowAsync();
         }
     }
