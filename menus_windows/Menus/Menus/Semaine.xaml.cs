@@ -30,12 +30,11 @@ namespace Menus
         override protected void OnNavigatedTo(NavigationEventArgs e)
         {
             semaine_index = (int) e.Parameter;
-            semaineIndex.Text = semaine_index.ToString();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            semaineIndex.Text = semaine_index.ToString();
         }
     }
 }

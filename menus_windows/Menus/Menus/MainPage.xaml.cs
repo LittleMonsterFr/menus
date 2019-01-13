@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.UI.Animations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -26,7 +27,8 @@ namespace Menus
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private NavigationTransitionInfo navigationTransitionInfo;
+        private NavigationTransitionInfo backTransition;
+        private NavigationTransitionInfo forwardTransition;
         Dictionary<string, ObservableCollection<Plat>> lists;
         DatabaseHandler databaseHandler;
         int semaine_index = 0;
@@ -34,10 +36,8 @@ namespace Menus
         public MainPage()
         {
             this.InitializeComponent();
-            navigationTransitionInfo = new SlideNavigationTransitionInfo()
-            {
-                Effect = SlideNavigationTransitionEffect.FromRight
-            };
+            forwardTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight };
+            backTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft };
             semaineFrame.Navigate(typeof(Semaine), semaine_index);
 
             databaseHandler = new DatabaseHandler();
@@ -113,12 +113,31 @@ namespace Menus
         {
             if (((Button)sender).Name.Equals("back"))
             {
-                if (semaineFrame.BackStackDepth > 0)
-                    semaineFrame.GoBack();
+                semaineFrame.Navigate(typeof(Semaine), --semaine_index, backTransition);
             }
             else
             {
-                semaineFrame.Navigate(typeof(Semaine), ++semaine_index, navigationTransitionInfo);
+                semaineFrame.Navigate(typeof(Semaine), ++semaine_index, forwardTransition);
+            }
+        }
+
+        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Pivot pivot = (Pivot)sender;
+            if (pivot.SelectedItem == platTab)
+            {
+                back.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
+                await forward.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
+                back.Visibility = Visibility.Collapsed;
+                forward.Visibility = Visibility.Collapsed;
+            }
+            else if (pivot.SelectedItem == semaineTab)
+            {
+                Debug.WriteLine("semaine selected");
+                back.Visibility = Visibility.Visible;
+                forward.Visibility = Visibility.Visible;
+                back.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
+                await forward.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
             }
         }
     }

@@ -5,8 +5,19 @@
     xmlns:local="using:Menus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"  
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <!--<interactivity:Interaction.Behaviors>
+        <behaviors:Fade x:Name="FadeBehavior" 
+            Value="0.5" 
+            Duration="2500" 
+            Delay="250"
+            EasingType="Linear"
+            AutomaticallyStart="True"/>
+    </interactivity:Interaction.Behaviors>-->
 
     <RelativePanel>
         <MenuBar x:Name="MenuBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
@@ -23,10 +34,10 @@
 
         </MenuBar>
 
-        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10" >
+        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
-                    <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation" />
+                    <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation"/>
                     <AppBarButton x:Name="forward" Icon="Forward" Label="Semaine suivante" Click="SemaineNavigation"/>
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
                     <AppBarButton Click="OpenDatabaseFolder" Label="Localiser database">
@@ -35,8 +46,8 @@
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
                 </CommandBar>
             </Pivot.RightHeader>
-            <PivotItem Header="Semaines">
-                <Frame x:Name="semaineFrame" Background="AliceBlue">
+            <PivotItem Header="Semaines" x:Name="semaineTab">
+                <Frame x:Name="semaineFrame" Background="AliceBlue" IsNavigationStackEnabled="False">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
                             <NavigationThemeTransition />
@@ -44,7 +55,7 @@
                     </Frame.ContentTransitions>
                 </Frame>
             </PivotItem>
-            <PivotItem Header="Plats" >
+            <PivotItem Header="Plats" x:Name="platTab" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
