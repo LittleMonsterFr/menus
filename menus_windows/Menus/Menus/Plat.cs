@@ -28,5 +28,10 @@ namespace Menus
             this.ingredients = ingredients;
             this.description = description;
         }
+
+        public override string ToString()
+        {
+            return nom;
+        }
     }
 }

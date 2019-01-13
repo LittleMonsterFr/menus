@@ -25,24 +25,25 @@ namespace Menus
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        Dictionary<string, ObservableCollection<string>> lists;
+        List<string> types;
+        Dictionary<string, ObservableCollection<Plat>> lists;
         DatabaseHandler databaseHandler;
 
         public MainPage()
         {
             this.InitializeComponent();
             databaseHandler = new DatabaseHandler();
-            lists = new Dictionary<string, ObservableCollection<string>>();
+            lists = new Dictionary<string, ObservableCollection<Plat>>();
 
             List<string> types = databaseHandler.GetTypesPlat();
             if (types != null)
             {
                 foreach (string type in types)
-                    lists.Add(type, new ObservableCollection<string>());
+                    lists.Add(type, new ObservableCollection<Plat>());
 
                 List<Plat> plats = databaseHandler.GetAllPlat();
                 foreach (Plat plat in plats)
-                    lists[plat.type].Add(plat.nom);
+                    lists[plat.type].Add(plat);
 
                 entreeList.ItemsSource = lists["Entrée"];
                 platResitanceList.ItemsSource = lists["Plat de résistance"];
@@ -94,6 +95,13 @@ namespace Menus
                         Debug.WriteLine(ex.Message);
                 }
             }
+        }
+
+        public void OnPlatClicked(object sender, ItemClickEventArgs e)
+        {
+            Plat plat = (Plat) e.ClickedItem;
+
+            Debug.WriteLine(plat.nom);
         }
     }
 }
