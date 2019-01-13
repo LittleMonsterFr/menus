@@ -68,11 +68,7 @@ namespace Menus
             if (args.Cancel == false)
             {
                 Plat plat = new Plat(0, nom.Text, (string) type.SelectedValue, (string)saison.SelectedValue, temps.Time, (int) note.Value, ingredients.Text, description.Text);
-                Exception e = databaseHandler.InsertPlat(plat);
-                if (e != null)
-                {
-                    Debug.WriteLine(e.Message);
-                }
+                databaseHandler.InsertPlat(plat);
             }
             deferral.Complete();
         }

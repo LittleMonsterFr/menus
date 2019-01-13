@@ -23,9 +23,11 @@
 
         </MenuBar>
 
-        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10">
+        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10" >
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
+                    <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation" />
+                    <AppBarButton x:Name="forward" Icon="Forward" Label="Semaine suivante" Click="SemaineNavigation"/>
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
                     <AppBarButton Click="OpenDatabaseFolder" Label="Localiser database">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;"/>
@@ -33,6 +35,15 @@
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
                 </CommandBar>
             </Pivot.RightHeader>
+            <PivotItem Header="Semaines">
+                <Frame x:Name="semaineFrame" Background="AliceBlue">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition />
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </PivotItem>
             <PivotItem Header="Plats" >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -71,11 +82,7 @@
                     <ListView Grid.Column="8" Grid.Row="1" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
                 </Grid>
             </PivotItem>
-            <PivotItem Header="Semaines">
-                <TextBlock Text="Semaines previsions will go there" />
-            </PivotItem>
+ 
         </Pivot>
-
-
     </RelativePanel>
 </Page>

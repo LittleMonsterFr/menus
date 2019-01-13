@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -25,13 +26,20 @@ namespace Menus
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        List<string> types;
+        private NavigationTransitionInfo navigationTransitionInfo;
         Dictionary<string, ObservableCollection<Plat>> lists;
         DatabaseHandler databaseHandler;
+        int semaine_index = 0;
 
         public MainPage()
         {
             this.InitializeComponent();
+            navigationTransitionInfo = new SlideNavigationTransitionInfo()
+            {
+                Effect = SlideNavigationTransitionEffect.FromRight
+            };
+            semaineFrame.Navigate(typeof(Semaine), semaine_index);
+
             databaseHandler = new DatabaseHandler();
             lists = new Dictionary<string, ObservableCollection<Plat>>();
 
@@ -90,9 +98,7 @@ namespace Menus
                 foreach (Tuple<string, string, string> line in entries)
                 {
                     Plat plat = new Plat(0, line.Item2, line.Item1, null, TimeSpan.Zero, 0, null, line.Item3);
-                    Exception ex = databaseHandler.InsertPlat(plat);
-                    if (ex != null)
-                        Debug.WriteLine(ex.Message);
+                    databaseHandler.InsertPlat(plat);
                 }
             }
         }
@@ -100,8 +106,20 @@ namespace Menus
         public void OnPlatClicked(object sender, ItemClickEventArgs e)
         {
             Plat plat = (Plat) e.ClickedItem;
-
             Debug.WriteLine(plat.nom);
+        }
+
+        private void SemaineNavigation(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).Name.Equals("back"))
+            {
+                if (semaineFrame.BackStackDepth > 0)
+                    semaineFrame.GoBack();
+            }
+            else
+            {
+                semaineFrame.Navigate(typeof(Semaine), ++semaine_index, navigationTransitionInfo);
+            }
         }
     }
 }

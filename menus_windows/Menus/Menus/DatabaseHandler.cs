@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.IO;
-using System.Diagnostics;
 
 namespace Menus
 {
@@ -35,7 +31,7 @@ namespace Menus
             connection.Close();
         }
 
-        public Exception InsertPlat(Plat plat)
+        public void InsertPlat(Plat plat)
         {
             SQLiteConnection connection = Connect();
 
@@ -51,22 +47,19 @@ namespace Menus
             command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
             command.Parameters.Add("@description", System.Data.DbType.String).Value = plat.description;
 
-            Exception e = null;
             try
             {
                 command.ExecuteNonQuery();
                 command = new SQLiteCommand("select last_insert_rowid();", connection);
-                long LastRowId = (long)command.ExecuteScalar();
+                long LastRowId = (long) command.ExecuteScalar();
                 plat.id = LastRowId;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                e = ex;
+                new Alert("Erreur lors de l'ajout du plat.", e.Message, e.StackTrace).ShowAsync();
             }
 
             Disconnect(connection);
-
-            return e;
         }
 
         public List<string> GetTypesPlat()
@@ -90,8 +83,9 @@ namespace Menus
                     types.Add(type);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
                 types = null;
             }
 
@@ -123,8 +117,9 @@ namespace Menus
                     plats.Add(new Plat(id, nom, type, null, TimeSpan.Zero, 0, null, null));
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
+                new Alert("Erreur lors de la récupération des plats.", e.Message, e.StackTrace).ShowAsync();
                 plats = null;
             }
 
