@@ -31,14 +31,15 @@ namespace Menus
         private NavigationTransitionInfo forwardTransition;
         Dictionary<string, ObservableCollection<Plat>> lists;
         DatabaseHandler databaseHandler;
-        int semaine_index = 0;
+        DateTime date;
 
         public MainPage()
         {
             this.InitializeComponent();
             forwardTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight };
             backTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft };
-            semaineFrame.Navigate(typeof(Semaine), semaine_index);
+            date = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
+            semaineFrame.Navigate(typeof(Semaine), date);
 
             databaseHandler = new DatabaseHandler();
             lists = new Dictionary<string, ObservableCollection<Plat>>();
@@ -111,13 +112,17 @@ namespace Menus
 
         private void SemaineNavigation(object sender, RoutedEventArgs e)
         {
-            if (((Button)sender).Name.Equals("back"))
+            if (sender == back)
             {
-                semaineFrame.Navigate(typeof(Semaine), --semaine_index, backTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(-7), backTransition);
             }
-            else
+            else if (sender == forward)
             {
-                semaineFrame.Navigate(typeof(Semaine), ++semaine_index, forwardTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(7), forwardTransition);
+            }
+            else if(sender == today)
+            {
+                semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), forwardTransition);
             }
         }
 

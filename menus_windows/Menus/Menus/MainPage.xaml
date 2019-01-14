@@ -10,15 +10,6 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <!--<interactivity:Interaction.Behaviors>
-        <behaviors:Fade x:Name="FadeBehavior" 
-            Value="0.5" 
-            Duration="2500" 
-            Delay="250"
-            EasingType="Linear"
-            AutomaticallyStart="True"/>
-    </interactivity:Interaction.Behaviors>-->
-
     <RelativePanel>
         <MenuBar x:Name="MenuBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
             <MenuBarItem Title="Fichier">
@@ -38,6 +29,7 @@
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
                     <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation"/>
+                    <AppBarButton x:Name="today" Icon="GoToToday" Label="Aujourd'hui" Click="SemaineNavigation"/>
                     <AppBarButton x:Name="forward" Icon="Forward" Label="Semaine suivante" Click="SemaineNavigation"/>
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
                     <AppBarButton Click="OpenDatabaseFolder" Label="Localiser database">

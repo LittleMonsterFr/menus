@@ -7,8 +7,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="Page_Loaded">
+    Loaded="PageLoaded">
 
-    <TextBlock x:Name="semaineIndex" Text="inside a frame" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    <Grid x:Name="semaineGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+    </Grid>
 
 </Page>

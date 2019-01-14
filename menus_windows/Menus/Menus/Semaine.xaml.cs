@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,19 +23,42 @@ namespace Menus
     /// </summary>
     public sealed partial class Semaine : Page
     {
-        int semaine_index;
+        DateTimeFormatter dateFormatter;
+        DateTime date;
+
         public Semaine()
         {
             this.InitializeComponent();
-        }
-        override protected void OnNavigatedTo(NavigationEventArgs e)
-        {
-            semaine_index = (int) e.Parameter;
+            dateFormatter = new DateTimeFormatter("dayofweek.full day month.full year.full");
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        override protected void OnNavigatedTo(NavigationEventArgs e)
         {
-            semaineIndex.Text = semaine_index.ToString();
+            date = (DateTime) e.Parameter;
+        }
+
+        private void PageLoaded(object sender, RoutedEventArgs e)
+        {
+            for (int c = 0; c < 7; c++)
+            {
+                for (int l = 0; l < 3; l++)
+                {
+                    Border border = new Border();
+                    if (l == 0)
+                    {
+                        border.VerticalAlignment = VerticalAlignment.Center;
+                        border.HorizontalAlignment = HorizontalAlignment.Center;
+                        TextBlock textBlock = new TextBlock
+                        {
+                            Text = dateFormatter.Format(date)
+                        };
+                        border.Child = textBlock;
+                        Grid.SetColumn(border, c);
+                        Grid.SetRow(border, l);
+                        semaineGrid.
+                    }
+                }
+            }
         }
     }
 }
