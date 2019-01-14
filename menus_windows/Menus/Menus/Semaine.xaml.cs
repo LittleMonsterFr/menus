@@ -53,9 +53,9 @@ namespace Menus
                             Text = dateFormatter.Format(date)
                         };
                         border.Child = textBlock;
+                        semaineGrid.
                         Grid.SetColumn(border, c);
                         Grid.SetRow(border, l);
-                        semaineGrid.
                     }
                 }
             }
