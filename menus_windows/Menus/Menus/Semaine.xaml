@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="PageLoaded">
 
-    <Grid x:Name="semaineGrid">
+    <Grid x:Name="semaineGrid" xmlns:src="using:Menus">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -20,12 +20,18 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="3*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
-        
+        <src:HeaderCell Grid.Column="0" Grid.Row="0" />
+        <src:HeaderCell Grid.Column="1" Grid.Row="0"/>
+        <src:HeaderCell Grid.Column="2" Grid.Row="0"/>
+        <src:HeaderCell Grid.Column="3" Grid.Row="0"/>
+        <src:HeaderCell Grid.Column="4" Grid.Row="0"/>
+        <src:HeaderCell Grid.Column="5" Grid.Row="0"/>
+        <src:HeaderCell Grid.Column="6" Grid.Row="0"/>
     </Grid>
 
 </Page>

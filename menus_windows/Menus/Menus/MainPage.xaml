@@ -39,7 +39,7 @@
                 </CommandBar>
             </Pivot.RightHeader>
             <PivotItem Header="Semaines" x:Name="semaineTab">
-                <Frame x:Name="semaineFrame" Background="AliceBlue" IsNavigationStackEnabled="False">
+                <Frame x:Name="semaineFrame" IsNavigationStackEnabled="False">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
                             <NavigationThemeTransition />

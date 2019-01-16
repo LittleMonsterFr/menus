@@ -131,6 +131,7 @@ namespace Menus
             Pivot pivot = (Pivot)sender;
             if (pivot.SelectedItem == platTab)
             {
+                today.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
                 back.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
                 back.Visibility = Visibility.Collapsed;
@@ -141,6 +142,7 @@ namespace Menus
                 Debug.WriteLine("semaine selected");
                 back.Visibility = Visibility.Visible;
                 forward.Visibility = Visibility.Visible;
+                today.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
                 back.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
             }

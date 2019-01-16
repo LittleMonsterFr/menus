@@ -29,36 +29,27 @@ namespace Menus
         public Semaine()
         {
             this.InitializeComponent();
-            dateFormatter = new DateTimeFormatter("dayofweek.full day month.full year.full");
+            dateFormatter = new DateTimeFormatter("day month.full year.full");
         }
 
         override protected void OnNavigatedTo(NavigationEventArgs e)
         {
             date = (DateTime) e.Parameter;
+            UIElementCollection elements = semaineGrid.Children;
+            foreach(UIElement element in elements)
+            {
+                FrameworkElement elt = (FrameworkElement)element;
+                if (Grid.GetRow(elt) == 0)
+                {
+                    HeaderCell cell = (HeaderCell)elt;
+                    cell.date.Text = dateFormatter.Format(date.AddDays(Grid.GetColumn(cell)));
+                }
+            }
         }
 
         private void PageLoaded(object sender, RoutedEventArgs e)
         {
-            for (int c = 0; c < 7; c++)
-            {
-                for (int l = 0; l < 3; l++)
-                {
-                    Border border = new Border();
-                    if (l == 0)
-                    {
-                        border.VerticalAlignment = VerticalAlignment.Center;
-                        border.HorizontalAlignment = HorizontalAlignment.Center;
-                        TextBlock textBlock = new TextBlock
-                        {
-                            Text = dateFormatter.Format(date)
-                        };
-                        border.Child = textBlock;
-                        semaineGrid.
-                        Grid.SetColumn(border, c);
-                        Grid.SetRow(border, l);
-                    }
-                }
-            }
+            
         }
     }
 }
