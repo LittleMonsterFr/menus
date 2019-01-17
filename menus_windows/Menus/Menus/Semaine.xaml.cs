@@ -44,6 +44,10 @@ namespace Menus
                     HeaderCell cell = (HeaderCell)elt;
                     cell.date.Text = dateFormatter.Format(date.AddDays(Grid.GetColumn(cell)));
                 }
+                else
+                {
+
+                }
             }
         }
 

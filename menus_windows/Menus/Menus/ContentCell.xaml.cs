@@ -17,28 +17,30 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Menus
 {
-    public sealed partial class HeaderCell : UserControl
+    public sealed partial class ContentCell : UserControl
     {
-        int column;
-
-        public HeaderCell()
+        public ContentCell()
         {
             this.InitializeComponent();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            column = Grid.GetColumn(this);
-            Grid parent = (Grid) this.Parent;
+            int column = Grid.GetColumn(this);
+            int row = Grid.GetRow(this);
+            Grid parent = (Grid)this.Parent;
 
-            if (column == 0)
-                border.BorderThickness = new Thickness(10, 10, 5, 5);
-            else if (column == parent.ColumnDefinitions.Count - 1)
-                border.BorderThickness = new Thickness(5, 10, 10, 5);
-            else
-                border.BorderThickness = new Thickness(5, 10, 5, 5);
+            if (row != 0)
+            {
+                double left = column == 0 ? 10 : 5;
+                double top = 5;
+                double right = column == parent.ColumnDefinitions.Count - 1 ? 10 : 5;
+                double bottom = row == parent.RowDefinitions.Count - 1 ? 10 : 5;
 
-            day.Text = ((DayOfWeek) ((column + 1) % 7)).ToString();
+                border.BorderThickness = new Thickness(left, top, right, bottom);
+            }
+
+                
         }
     }
 }

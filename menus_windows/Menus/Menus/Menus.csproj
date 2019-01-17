@@ -122,6 +122,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContentCell.xaml.cs">
+      <DependentUpon>ContentCell.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseHandler.cs" />
     <Compile Include="HeaderCell.xaml.cs">
       <DependentUpon>HeaderCell.xaml</DependentUpon>
@@ -161,6 +164,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Alert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ContentCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
