@@ -9,9 +9,6 @@
     Loaded="UserControl_Loaded">
 
     <Border x:Name="border" BorderBrush="AliceBlue">
-        <StackPanel Orientation="Vertical" Spacing="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:Name="day" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="date" x:FieldModifier="public" HorizontalAlignment="Center"/>
-        </StackPanel>
+        <TextBlock x:Name="platName" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Plat"/>
     </Border>
 </UserControl>
