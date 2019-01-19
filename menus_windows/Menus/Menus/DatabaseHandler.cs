@@ -93,7 +93,7 @@ namespace Menus
         
         public List<Saison> GetSaisons()
         {
-            List<Saison> types = null;
+            List<Saison> saisons = null;
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM saisons ORDER BY id ASC";
@@ -101,23 +101,23 @@ namespace Menus
             try
             {
                 SQLiteDataReader sQLiteDataReader = command.ExecuteReader();
-                types = new List<Saison>();
+                saisons = new List<Saison>();
 
                 while (sQLiteDataReader.Read())
                 {
                     long id = sQLiteDataReader.GetInt64(0);
                     string nom = sQLiteDataReader.GetString(1);
-                    types.Add(new Saison(id, nom));
+                    saisons.Add(new Saison(id, nom));
                 }
             }
             catch (Exception e)
             {
                 new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
-                types = null;
+                saisons = null;
             }
 
             Disconnect(connection);
-            return types;
+            return saisons;
         }
 
 

@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -8,11 +10,17 @@ namespace Menus
     public sealed partial class PlatDialog : ContentDialog
     {
         private DatabaseHandler databaseHandler;
+        private ObservableCollection<Type> types;
+        private ObservableCollection<Saison> saisons;
+        private Dictionary<long, ObservableCollection<Plat>> lists;
 
-        public PlatDialog(DatabaseHandler databaseHandler)
+        public PlatDialog(DatabaseHandler databaseHandler, Dictionary<long, ObservableCollection<Plat>> lists)
         {
             this.InitializeComponent();
             this.databaseHandler = databaseHandler;
+            this.lists = lists;
+            types = new ObservableCollection<Type>(databaseHandler.GetTypes());
+            saisons = new ObservableCollection<Saison>(databaseHandler.GetSaisons());
         }
 
         private bool ValidatePlatInput()
@@ -53,8 +61,9 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                Plat plat = new Plat(0, nom.Text, (int)type.SelectedValue, (int)saison.SelectedValue, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
+                Plat plat = new Plat(0, nom.Text, ((Type)type.SelectedValue).Id, ((Saison)saison.SelectedValue).Id, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
                 databaseHandler.InsertPlat(plat);
+                lists[plat.type].Add(plat);
             }
             deferral.Complete();
         }

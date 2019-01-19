@@ -61,7 +61,7 @@ namespace Menus
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
         {
-            PlatDialog platDialog = new PlatDialog(databaseHandler)
+            PlatDialog platDialog = new PlatDialog(databaseHandler, lists)
             {
                 Title = "Ajout d'un plat",
                 PrimaryButtonText = "Valider",

@@ -14,19 +14,8 @@
     <ScrollViewer Padding="20" Width="600">
         <StackPanel Orientation="Vertical" Spacing="10">
             <TextBox x:Name="nom" Header="* Nom :" PlaceholderText="Nom du plat"/>
-            <ComboBox x:Name="type" Header="* Type :" PlaceholderText="Choisir un type">
-                <x:String>Entrée</x:String>
-                <x:String>Plat de résistance</x:String>
-                <x:String>Soir</x:String>
-                <x:String>Déssert</x:String>
-                <x:String>Appéritif</x:String>
-            </ComboBox>
-            <ComboBox x:Name="saison" Header="* Saison :" PlaceholderText="Choisir une saison">
-                <x:String>Hiver</x:String>
-                <x:String>Printemps</x:String>
-                <x:String>Eté</x:String>
-                <x:String>Automne</x:String>
-            </ComboBox>
+            <ComboBox x:Name="type" Header="* Type :" PlaceholderText="Choisir un type" ItemsSource="{x:Bind types}"/>
+            <ComboBox x:Name="saison" Header="* Saison :" PlaceholderText="Choisir une saison" ItemsSource="{x:Bind saisons}"/>
             <TimePicker x:Name="temps" Header="Temps :" MinuteIncrement="15" Time="00:00" />
             <Slider x:Name="note" Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="0" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" SnapsTo="Ticks" TickFrequency="1"/>
             <TextBox x:Name="ingredients" Header="Ingrédients :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
