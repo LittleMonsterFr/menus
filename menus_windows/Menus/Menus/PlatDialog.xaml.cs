@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
+﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using System.Diagnostics;
 
 // The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -67,7 +53,7 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                Plat plat = new Plat(0, nom.Text, (string) type.SelectedValue, (string)saison.SelectedValue, temps.Time, (int) note.Value, ingredients.Text, description.Text);
+                Plat plat = new Plat(0, nom.Text, (int)type.SelectedValue, (int)saison.SelectedValue, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
                 databaseHandler.InsertPlat(plat);
             }
             deferral.Complete();

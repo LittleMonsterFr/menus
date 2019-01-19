@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -20,25 +21,38 @@ namespace Menus
     public sealed partial class HeaderCell : UserControl
     {
         int column;
+        DateTime date;
+        DateTimeFormatter dateFormatter;
 
         public HeaderCell()
         {
             this.InitializeComponent();
+            dateFormatter = new DateTimeFormatter("day month.full year.full");
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void HeaderCell_Loaded(object sender, RoutedEventArgs e)
         {
             column = Grid.GetColumn(this);
-            Grid parent = (Grid) this.Parent;
+            Grid parent = (Grid)this.Parent;
+            double simpleBorder = Semaine.simpleBorder;
+            double doubleBorder = Semaine.doubleBorder;
 
             if (column == 0)
-                border.BorderThickness = new Thickness(10, 10, 5, 5);
+                border.BorderThickness = new Thickness(doubleBorder, doubleBorder, simpleBorder, simpleBorder);
             else if (column == parent.ColumnDefinitions.Count - 1)
-                border.BorderThickness = new Thickness(5, 10, 10, 5);
+                border.BorderThickness = new Thickness(simpleBorder, doubleBorder, doubleBorder, simpleBorder);
             else
-                border.BorderThickness = new Thickness(5, 10, 5, 5);
+                border.BorderThickness = new Thickness(simpleBorder, doubleBorder, simpleBorder, simpleBorder);
 
-            day.Text = ((DayOfWeek) ((column + 1) % 7)).ToString();
+            dayText.Text = ((DayOfWeek)((column + 1) % 7)).ToString();
+        }
+
+        public DateTime Date {
+            get { return date; }
+            set {
+                date = value;
+                dateText.Text = dateFormatter.Format(date);
+            }
         }
     }
 }

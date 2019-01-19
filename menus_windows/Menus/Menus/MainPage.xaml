@@ -62,6 +62,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" x:Name="entreeTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -69,20 +70,16 @@
                     <TextBlock Grid.Column="4" Grid.Row="0" x:Name="soirtitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBlock Grid.Column="6" Grid.Row="0" x:Name="dessertTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBlock Grid.Column="8" Grid.Row="0" x:Name="aperitifTitle" FontWeight="Bold" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <Rectangle Grid.Column="0" Grid.Row="1" Fill="AliceBlue"/>
-                    <Rectangle Grid.Column="2" Grid.Row="1" Fill="Azure"/>
-                    <Rectangle Grid.Column="4" Grid.Row="1" Fill="Beige"/>
-                    <Rectangle Grid.Column="6" Grid.Row="1" Fill="BlanchedAlmond"/>
-                    <Rectangle Grid.Column="8" Grid.Row="1" Fill="BurlyWood"/>
-                    <Border Grid.Column="1" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
-                    <Border Grid.Column="3" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
-                    <Border Grid.Column="5" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
-                    <Border Grid.Column="7" Grid.RowSpan="2" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
-                    <ListView Grid.Column="0" Grid.Row="1" x:Name="entreeList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="2" Grid.Row="1" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="4" Grid.Row="1" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="6" Grid.Row="1" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="8" Grid.Row="1" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="3" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="5" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.Column="7" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <Border Grid.ColumnSpan="9" Grid.Row="1" BorderThickness="0,1,0,1" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
+                    <ListView Grid.Column="0" Grid.Row="2" x:Name="entreeList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <ListView Grid.Column="2" Grid.Row="2" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <ListView Grid.Column="4" Grid.Row="2" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <ListView Grid.Column="6" Grid.Row="2" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <ListView Grid.Column="8" Grid.Row="2" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
                 </Grid>
             </PivotItem>
  

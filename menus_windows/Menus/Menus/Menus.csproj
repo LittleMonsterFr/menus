@@ -137,9 +137,11 @@
       <DependentUpon>PlatDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Saison.cs" />
     <Compile Include="Semaine.xaml.cs">
       <DependentUpon>Semaine.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Type.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

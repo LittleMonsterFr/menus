@@ -10,14 +10,14 @@ namespace Menus
     {
         public long id;
         public string nom;
-        public string type;
-        public string saison;
-        public TimeSpan temps;
+        public long type;
+        public long saison;
+        public int temps;
         public int note;
         public string ingredients;
         public string description;
 
-        public Plat(long id, string nom, string type, string saison, TimeSpan temps, int note, string ingredients, string description)
+        public Plat(long id, string nom, long type, long saison, int temps, int note, string ingredients, string description)
         {
             this.id = id;
             this.nom = nom;

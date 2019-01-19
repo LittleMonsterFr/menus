@@ -19,43 +19,44 @@ namespace Menus
     {
         private NavigationTransitionInfo backTransition;
         private NavigationTransitionInfo forwardTransition;
-        Dictionary<string, ObservableCollection<Plat>> lists;
+        private NavigationTransitionInfo drillTransition;
+        Dictionary<long, ObservableCollection<Plat>> lists;
         DatabaseHandler databaseHandler;
         DateTime date;
+        int fadeDuration = 1000;
 
         public MainPage()
         {
             this.InitializeComponent();
             forwardTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight };
             backTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft };
+            drillTransition = new DrillInNavigationTransitionInfo();
             date = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
             semaineFrame.Navigate(typeof(Semaine), date);
 
             databaseHandler = new DatabaseHandler();
-            lists = new Dictionary<string, ObservableCollection<Plat>>();
+            lists = new Dictionary<long, ObservableCollection<Plat>>();
 
-            List<string> types = databaseHandler.GetTypesPlat();
-            if (types != null)
-            {
-                foreach (string type in types)
-                    lists.Add(type, new ObservableCollection<Plat>());
+            List<Type> types = databaseHandler.GetTypes();
 
-                List<Plat> plats = databaseHandler.GetAllPlat();
-                foreach (Plat plat in plats)
-                    lists[plat.type].Add(plat);
+            foreach (Type type in types)
+                lists.Add(type.Id, new ObservableCollection<Plat>());
 
-                entreeList.ItemsSource = lists["Entrée"];
-                platResitanceList.ItemsSource = lists["Plat de résistance"];
-                soirList.ItemsSource = lists["Soir"];
-                dessertList.ItemsSource = lists["Déssert"];
-                aperitifList.ItemsSource = lists["Apéritif"];
+            List<Plat> plats = databaseHandler.GetPlats();
+            foreach (Plat plat in plats)
+                lists[plat.type].Add(plat);
 
-                entreeTitle.Text = "Entrée";
-                platTitle.Text = "Plat de résistance";
-                soirtitle.Text = "Soir";
-                dessertTitle.Text = "Déssert";
-                aperitifTitle.Text = "Apéritif";
-            }
+            entreeList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Entrée")];
+            platResitanceList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Plat de résistance")];
+            soirList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Soir")];
+            dessertList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Déssert")];
+            aperitifList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Apéritif")];
+
+            entreeTitle.Text = "Entrée";
+            platTitle.Text = "Plat de résistance";
+            soirtitle.Text = "Soir";
+            dessertTitle.Text = "Déssert";
+            aperitifTitle.Text = "Apéritif";
         }
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
@@ -90,7 +91,7 @@ namespace Menus
                 List<Tuple<string, string, string>> entries = await Utils.parseCsv(file);
                 foreach (Tuple<string, string, string> line in entries)
                 {
-                    Plat plat = new Plat(0, line.Item2, line.Item1, null, TimeSpan.Zero, 0, null, line.Item3);
+                    Plat plat = new Plat(0, line.Item2, databaseHandler.GetIdForTypeName(line.Item1), 0, 0, 0, string.Empty, line.Item3);
                     databaseHandler.InsertPlat(plat);
                 }
             }
@@ -114,7 +115,7 @@ namespace Menus
             }
             else if(sender == today)
             {
-                semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), forwardTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), drillTransition);
             }
         }
 
@@ -123,21 +124,24 @@ namespace Menus
             Pivot pivot = (Pivot)sender;
             if (pivot.SelectedItem == platTab)
             {
-                today.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
-                back.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
-                await forward.Fade(value: 0.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
+                today.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
+                back.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
+                await forward.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
                 back.Visibility = Visibility.Collapsed;
                 forward.Visibility = Visibility.Collapsed;
+                today.Visibility = Visibility.Collapsed;
+
             }
             else if (pivot.SelectedItem == semaineTab)
             {
-                Debug.WriteLine("semaine selected");
+                today.Visibility = Visibility.Visible;
                 back.Visibility = Visibility.Visible;
                 forward.Visibility = Visibility.Visible;
-                today.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
-                back.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).Start();
-                await forward.Fade(value: 1.0f, duration: 2000, delay: 0, easingType: EasingType.Linear).StartAsync();
+                today.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
+                back.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
+                await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
             }
+
         }
     }
 }
