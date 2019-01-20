@@ -61,9 +61,9 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                Plat plat = new Plat(0, nom.Text, ((Type)type.SelectedValue).Id, ((Saison)saison.SelectedValue).Id, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
+                Plat plat = new Plat(0, nom.Text, (Type)type.SelectedValue, (Saison)saison.SelectedValue, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
                 databaseHandler.InsertPlat(plat);
-                lists[plat.type].Add(plat);
+                lists[plat.type.Id].Add(plat);
             }
             deferral.Complete();
         }

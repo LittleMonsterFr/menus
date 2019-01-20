@@ -6,6 +6,8 @@ using System.Diagnostics;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -44,7 +46,7 @@ namespace Menus
 
             List<Plat> plats = databaseHandler.GetPlats();
             foreach (Plat plat in plats)
-                lists[plat.type].Add(plat);
+                lists[plat.type.Id].Add(plat);
 
             entreeList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Entrée")];
             platResitanceList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Plat de résistance")];
@@ -91,16 +93,14 @@ namespace Menus
                 List<Tuple<string, string, string>> entries = await Utils.parseCsv(file);
                 foreach (Tuple<string, string, string> line in entries)
                 {
-                    Plat plat = new Plat(0, line.Item2, databaseHandler.GetIdForTypeName(line.Item1), 0, 0, 0, string.Empty, line.Item3);
+                    long typeId = databaseHandler.GetIdForTypeName(line.Item1);
+                    Type type = new Type(typeId, line.Item1);
+
+                    Saison saison = new Saison(1, string.Empty);
+                    Plat plat = new Plat(0, line.Item2, type, saison, 0, 0, string.Empty, line.Item3);
                     databaseHandler.InsertPlat(plat);
                 }
             }
-        }
-
-        public void OnPlatClicked(object sender, ItemClickEventArgs e)
-        {
-            Plat plat = (Plat) e.ClickedItem;
-            Debug.WriteLine(plat.nom);
         }
 
         private void SemaineNavigation(object sender, RoutedEventArgs e)
@@ -142,6 +142,11 @@ namespace Menus
                 await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
             }
 
+        }
+
+        private void ListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
         }
     }
 }

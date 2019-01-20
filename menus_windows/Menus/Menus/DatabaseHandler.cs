@@ -11,6 +11,9 @@ namespace Menus
         private string DatabaseFile = "menus.db";
         private string DataBaseFullPath;
 
+        List<Type> types = null;
+        List<Saison> saisons = null;
+
         public DatabaseHandler()
         {
             DataBaseFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
@@ -40,8 +43,8 @@ namespace Menus
             command.CommandText = "INSERT INTO plats (nom, type, saison, temps, note, ingredients, description) VALUES (@nom, @type, @saison, @temps, @note, @ingredients, @description);";
 
             command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.nom;
-            command.Parameters.Add("@type", System.Data.DbType.Int64).Value = plat.type;
-            command.Parameters.Add("@saison", System.Data.DbType.Int64).Value = plat.saison;
+            command.Parameters.Add("@type", System.Data.DbType.Int64).Value = plat.type.Id;
+            command.Parameters.Add("@saison", System.Data.DbType.Int64).Value = plat.saison.Id;
             command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.temps;
             command.Parameters.Add("@note", System.Data.DbType.Int32).Value = plat.note;
             command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
@@ -64,7 +67,9 @@ namespace Menus
 
         public List<Type> GetTypes()
         {
-            List<Type> types = null;
+            if (types != null)
+                return types;
+
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM types ORDER BY id ASC";
@@ -93,7 +98,9 @@ namespace Menus
         
         public List<Saison> GetSaisons()
         {
-            List<Saison> saisons = null;
+            if (saisons != null)
+                return saisons;
+
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM saisons ORDER BY id ASC";
@@ -140,12 +147,19 @@ namespace Menus
                 {
                     long id = sQLiteDataReader.GetInt64(0);
                     string nom = sQLiteDataReader.GetString(1);
-                    long type = sQLiteDataReader.GetInt64(2);
-                    long saison = sQLiteDataReader.GetInt64(3);
+                    long typeId = sQLiteDataReader.GetInt64(2);
+                    long saisonId = sQLiteDataReader.GetInt64(3);
                     int temps = sQLiteDataReader.GetInt32(4);
                     int note = sQLiteDataReader.GetInt32(5);
                     string ingredients = sQLiteDataReader.GetString(6);
                     string description = sQLiteDataReader.GetString(7);
+
+                    string typeName = GetTypes()[(int) typeId - 1].Name;
+                    Type type = new Type(typeId, typeName);
+
+                    string saisonName = GetSaisons()[(int) saisonId - 1].Name;
+                    Saison saison = new Saison(saisonId, saisonName);
+
                     plats.Add(new Plat(id, nom, type, saison, temps, note, ingredients, description));
                 }
             }
@@ -176,6 +190,27 @@ namespace Menus
             try
             {
                id = (long) command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return id;
+        }
+
+        public long GetIdForSaisonName(string name)
+        {
+            long id = 0;
+            SQLiteConnection connection = Connect();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT id FROM saisons where name = @name;";
+            command.Parameters.Add("@name", System.Data.DbType.String).Value = name;
+
+            try
+            {
+                id = (long)command.ExecuteScalar();
             }
             catch (Exception e)
             {

@@ -10,19 +10,44 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <local:Plat x:Key="TempsConverter"/>
+        <DataTemplate x:Key="listViewItemTemplate" x:DataType="local:Plat">
+            <ListViewItem IsDoubleTapEnabled="False" IsHoldingEnabled="False" Tapped="ListViewItem_Tapped" IsRightTapEnabled="False">
+                <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout Placement="Full">
+                        <StackPanel Orientation="Vertical" Spacing="10">
+                            <TextBlock Text="{x:Bind nom}"/>
+                            <TextBlock Text="{x:Bind type.Name}"/>
+                            <TextBlock Text="{x:Bind saison.Name}"/>
+                            <TimePicker Header="Temps :" Time="{Binding temps, Mode=OneWay, Converter={StaticResource TempsConverter}}" IsEnabled="False"/>
+                            <Slider Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="{x:Bind note}" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" TickFrequency="1" IsEnabled="False"/>
+                            <StackPanel>
+                                <TextBlock Text="Ingrédients :"/>
+                                <TextBlock Text="{x:Bind ingredients}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Text="Description :"/>
+                                <TextBlock Text="{x:Bind description}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </ListViewItem>
+        </DataTemplate>
+    </Page.Resources>
+
     <RelativePanel>
         <MenuBar x:Name="MenuBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
             <MenuBarItem Title="Fichier">
                 <MenuFlyoutItem Text="Quitter"/>
             </MenuBarItem>
-
             <MenuBarItem Title="Editer">
             </MenuBarItem>
-
             <MenuBarItem Title="Aide">
                 <MenuFlyoutItem Text="A propos"/>
             </MenuBarItem>
-
         </MenuBar>
 
         <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
@@ -38,15 +63,6 @@
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
                 </CommandBar>
             </Pivot.RightHeader>
-            <PivotItem Header="Semaines" x:Name="semaineTab">
-                <Frame x:Name="semaineFrame" IsNavigationStackEnabled="False">
-                    <Frame.ContentTransitions>
-                        <TransitionCollection>
-                            <NavigationThemeTransition />
-                        </TransitionCollection>
-                    </Frame.ContentTransitions>
-                </Frame>
-            </PivotItem>
             <PivotItem Header="Plats" x:Name="platTab" >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,14 +91,23 @@
                     <Border Grid.Column="5" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Border Grid.Column="7" Grid.RowSpan="3" BorderThickness="1,0,1,0" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
                     <Border Grid.ColumnSpan="9" Grid.Row="1" BorderThickness="0,1,0,1" Margin="5" BorderBrush="#ddd" CornerRadius="100"/>
-                    <ListView Grid.Column="0" Grid.Row="2" x:Name="entreeList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="2" Grid.Row="2" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="4" Grid.Row="2" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="6" Grid.Row="2" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
-                    <ListView Grid.Column="8" Grid.Row="2" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemClick="OnPlatClicked" IsItemClickEnabled="True"/>
+                    <ListView Grid.Column="0" Grid.Row="2" x:Name="entreeList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemTemplate="{StaticResource listViewItemTemplate}"/>
+                    <ListView Grid.Column="2" Grid.Row="2" x:Name="platResitanceList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemTemplate="{StaticResource listViewItemTemplate}"/>
+                    <ListView Grid.Column="4" Grid.Row="2" x:Name="soirList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemTemplate="{StaticResource listViewItemTemplate}"/>
+                    <ListView Grid.Column="6" Grid.Row="2" x:Name="dessertList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemTemplate="{StaticResource listViewItemTemplate}"/>
+                    <ListView Grid.Column="8" Grid.Row="2" x:Name="aperitifList" CanDragItems="False" CanReorderItems="False" AllowDrop="False" SelectionMode="Single" ItemTemplate="{StaticResource listViewItemTemplate}"/>
                 </Grid>
             </PivotItem>
- 
+
+            <PivotItem Header="Semaines" x:Name="semaineTab">
+                <Frame x:Name="semaineFrame" IsNavigationStackEnabled="False">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection>
+                            <NavigationThemeTransition />
+                        </TransitionCollection>
+                    </Frame.ContentTransitions>
+                </Frame>
+            </PivotItem>
         </Pivot>
     </RelativePanel>
 </Page>
