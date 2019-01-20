@@ -17,21 +17,23 @@
                 <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <FlyoutBase.AttachedFlyout>
                     <Flyout Placement="Full">
-                        <StackPanel Orientation="Vertical" Spacing="10">
-                            <TextBlock Text="{x:Bind nom}"/>
-                            <TextBlock Text="{x:Bind type.Name}"/>
-                            <TextBlock Text="{x:Bind saison.Name}"/>
-                            <TimePicker Header="Temps :" Time="{Binding temps, Mode=OneWay, Converter={StaticResource TempsConverter}}" IsEnabled="False"/>
-                            <Slider Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="{x:Bind note}" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" TickFrequency="1" IsEnabled="False"/>
-                            <StackPanel>
-                                <TextBlock Text="Ingrédients :"/>
-                                <TextBlock Text="{x:Bind ingredients}"/>
+                        <ScrollViewer x:Name="scrollView" Padding="20">
+                            <StackPanel Orientation="Vertical" Spacing="10">
+                                <TextBlock Text="{x:Bind nom}"/>
+                                <TextBlock Text="{x:Bind type.Name}"/>
+                                <TextBlock Text="{x:Bind saison.Name}"/>
+                                <TimePicker Header="Temps :" Time="{Binding temps, Mode=OneWay, Converter={StaticResource TempsConverter}}" IsEnabled="False"/>
+                                <Slider Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="{x:Bind note}" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" TickFrequency="1" IsEnabled="False"/>
+                                <StackPanel>
+                                    <TextBlock Text="Ingrédients :"/>
+                                    <TextBlock Text="{x:Bind ingredients}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Description :"/>
+                                    <TextBlock Text="{x:Bind description}"/>
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel>
-                                <TextBlock Text="Description :"/>
-                                <TextBlock Text="{x:Bind description}"/>
-                            </StackPanel>
-                        </StackPanel>
+                        </ScrollViewer>
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
             </ListViewItem>
