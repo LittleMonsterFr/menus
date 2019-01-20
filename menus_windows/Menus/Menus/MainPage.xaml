@@ -17,23 +17,40 @@
                 <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <FlyoutBase.AttachedFlyout>
                     <Flyout Placement="Full">
-                        <ScrollViewer x:Name="scrollView" Padding="20">
+                        <Flyout.FlyoutPresenterStyle>
+                            <Style TargetType="FlyoutPresenter">
+                                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                            </Style>
+                        </Flyout.FlyoutPresenterStyle>
+                        <Grid>
                             <StackPanel Orientation="Vertical" Spacing="10">
-                                <TextBlock Text="{x:Bind nom}"/>
-                                <TextBlock Text="{x:Bind type.Name}"/>
-                                <TextBlock Text="{x:Bind saison.Name}"/>
-                                <TimePicker Header="Temps :" Time="{Binding temps, Mode=OneWay, Converter={StaticResource TempsConverter}}" IsEnabled="False"/>
-                                <Slider Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="{x:Bind note}" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" TickFrequency="1" IsEnabled="False"/>
-                                <StackPanel>
-                                    <TextBlock Text="Ingrédients :"/>
-                                    <TextBlock Text="{x:Bind ingredients}"/>
+                                <TextBlock Text="{x:Bind nom}" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                <StackPanel Spacing="5" Orientation="Horizontal">
+                                    <TextBlock Text="Type :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{x:Bind type.Name}"/>
                                 </StackPanel>
-                                <StackPanel>
-                                    <TextBlock Text="Description :"/>
-                                    <TextBlock Text="{x:Bind description}"/>
+                                <StackPanel Spacing="5" Orientation="Horizontal">
+                                    <TextBlock Text="Saison :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{x:Bind saison.Name}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="Temps :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{Binding temps, Mode=OneWay, Converter={StaticResource TempsConverter}}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="Note :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{x:Bind note}"/>
+                                </StackPanel>
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Ingrédients :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{x:Bind ingredients}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                                </StackPanel>
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Description :" TextDecorations="Underline"/>
+                                    <TextBlock Text="{x:Bind description}" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
                                 </StackPanel>
                             </StackPanel>
-                        </ScrollViewer>
+                        </Grid>
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
             </ListViewItem>
@@ -41,18 +58,7 @@
     </Page.Resources>
 
     <RelativePanel>
-        <MenuBar x:Name="MenuBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
-            <MenuBarItem Title="Fichier">
-                <MenuFlyoutItem Text="Quitter"/>
-            </MenuBarItem>
-            <MenuBarItem Title="Editer">
-            </MenuBarItem>
-            <MenuBarItem Title="Aide">
-                <MenuFlyoutItem Text="A propos"/>
-            </MenuBarItem>
-        </MenuBar>
-
-        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="MenuBar" Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
+        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True"  Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
                     <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation"/>

@@ -40,8 +40,8 @@ namespace Menus
 
         public object Convert(object value, System.Type targetType, object parameter, string language)
         {
-            Debug.WriteLine(value);
-            return TimeSpan.FromSeconds((int)value);
+            TimeSpan timeSpan = TimeSpan.FromSeconds((int)value);
+            return timeSpan.Hours + "h " + timeSpan.Minutes + "m";
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, string language)
