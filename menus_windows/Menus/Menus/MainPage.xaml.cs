@@ -26,6 +26,7 @@ namespace Menus
         DatabaseHandler databaseHandler;
         DateTime date;
         int fadeDuration = 1000;
+        ListViewItem selectedItem = null;
 
         public MainPage()
         {
@@ -35,6 +36,9 @@ namespace Menus
             drillTransition = new DrillInNavigationTransitionInfo();
             date = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
             semaineFrame.Navigate(typeof(Semaine), date);
+
+            //Dumy item
+            selectedItem = new ListViewItem();
 
             databaseHandler = new DatabaseHandler();
             lists = new Dictionary<long, ObservableCollection<Plat>>();
@@ -146,7 +150,57 @@ namespace Menus
 
         private void ListViewItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            selectedItem.IsSelected = false;
             FlyoutBase.ShowAttachedFlyout(sender as FrameworkElement);
+            selectedItem = sender as ListViewItem;
+        }
+
+        private void ListViewItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            selectedItem.IsSelected = false;
+            selectedItem = (sender as ListViewItem);
+            selectedItem.IsSelected = true;
+        }
+
+        private async void MenuFlyoutItem_Tapped(object sender, RoutedEventArgs e)
+        {
+            MenuFlyoutItem item = sender as MenuFlyoutItem;
+            string text = item.Text;
+            if (text.Equals("Modifier"))
+            {
+
+            }
+            else if (text.Equals("Supprimer"))
+            {
+                ContentDialog dialog = new ContentDialog()
+                {
+                    Title = "Suppression d'un plat",
+                    PrimaryButtonText = "Oui ! 😃",
+                    SecondaryButtonText = "Non ! 😱",
+                };
+
+                dialog.Content = new TextBlock()
+                {
+                    Text = "Confirmez-vous la suppression du plat ?",
+                };
+
+                ContentDialogResult result = await dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    Plat plat = selectedItem.DataContext as Plat;
+                    if (databaseHandler.DeletePlatById(plat.id) == 1)
+                    {
+                        foreach (ObservableCollection<Plat> ListPlat in lists.Values)
+                        {
+                            if (ListPlat.Contains(plat))
+                            {
+                                ListPlat.Remove(plat);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

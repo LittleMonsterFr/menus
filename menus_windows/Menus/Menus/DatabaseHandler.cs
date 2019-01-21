@@ -220,5 +220,26 @@ namespace Menus
             Disconnect(connection);
             return id;
         }
+
+        public int DeletePlatById(long id)
+        {
+            int res = 0;
+            SQLiteConnection connection = Connect();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "DELETE FROM plats where id = @id;";
+            command.Parameters.Add("@id", System.Data.DbType.Int64).Value = id;
+
+            try
+            {
+                res = command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return res;
+        }
     }
 }

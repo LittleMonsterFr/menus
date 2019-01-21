@@ -13,10 +13,10 @@
     <Page.Resources>
         <local:Plat x:Key="TempsConverter"/>
         <DataTemplate x:Key="listViewItemTemplate" x:DataType="local:Plat">
-            <ListViewItem IsDoubleTapEnabled="False" IsHoldingEnabled="False" Tapped="ListViewItem_Tapped" IsRightTapEnabled="False">
+            <ListViewItem IsDoubleTapEnabled="False" IsHoldingEnabled="False" Tapped="ListViewItem_Tapped" IsRightTapEnabled="True" RightTapped="ListViewItem_RightTapped">
                 <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <FlyoutBase.AttachedFlyout>
-                    <Flyout Placement="Full">
+                    <Flyout Placement="Full" x:Name="viewPlatFlyout">
                         <Flyout.FlyoutPresenterStyle>
                             <Style TargetType="FlyoutPresenter">
                                 <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
@@ -53,6 +53,20 @@
                         </Grid>
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
+                <ListViewItem.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Modifier" Click="MenuFlyoutItem_Tapped" IsTapEnabled="True">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE70F;"/>
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                        <MenuFlyoutItem Text="Supprimer" Click="MenuFlyoutItem_Tapped" IsTapEnabled="True">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE74D;"/>
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
+                    </MenuFlyout>
+                </ListViewItem.ContextFlyout>
             </ListViewItem>
         </DataTemplate>
     </Page.Resources>
