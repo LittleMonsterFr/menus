@@ -67,13 +67,19 @@ namespace Menus
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
         {
-            PlatDialog platDialog = new PlatDialog(databaseHandler, lists)
+            PlatDialog platDialog = new PlatDialog(databaseHandler)
             {
                 Title = "Ajout d'un plat",
                 PrimaryButtonText = "Valider",
                 CloseButtonText = "Annuler"
             };
-            await platDialog.ShowAsync();
+            ContentDialogResult result = await platDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                Plat plat = platDialog.Plat;
+                databaseHandler.InsertPlat(plat);
+                lists[plat.type.Id].Add(plat);
+            }
         }
 
         private async void OpenDatabaseFolder(object sender, RoutedEventArgs e)
@@ -168,7 +174,32 @@ namespace Menus
             string text = item.Text;
             if (text.Equals("Modifier"))
             {
-
+                PlatDialog platDialog = new PlatDialog(databaseHandler)
+                {
+                    Title = "Edition d'un plat",
+                    SecondaryButtonText = "Modifier",
+                    CloseButtonText = "Annuler"
+                };
+                Plat plat = selectedItem.DataContext as Plat;
+                platDialog.Plat = plat;
+                ContentDialogResult result = await platDialog.ShowAsync();
+                if (result == ContentDialogResult.Secondary)
+                {
+                    if (platDialog.Plat.Equals(plat) == false)
+                    {
+                        if (databaseHandler.EditPlat(platDialog.Plat) == 1)
+                        {
+                            int index = lists[plat.type.Id].IndexOf(plat);
+                            lists[plat.type.Id].RemoveAt(index);
+                            lists[plat.type.Id].Insert(index, platDialog.Plat);
+                            selectedItem.DataContext = platDialog.Plat;
+                        }
+                        else
+                        {
+                            new Alert("Erreur lors de la modification du plat.", "Plus d'un plat a été modifié.", null).ShowAsync();
+                        }
+                    }
+                }
             }
             else if (text.Equals("Supprimer"))
             {

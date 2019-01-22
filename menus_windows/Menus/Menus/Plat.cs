@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Windows.UI.Xaml.Data;
 
@@ -16,7 +17,6 @@ namespace Menus
 
         public Plat()
         {
-
         }
 
         public Plat(long id, string nom, Type type, Saison saison, int temps, int note, string ingredients, string description)
@@ -47,6 +47,25 @@ namespace Menus
         public object ConvertBack(object value, System.Type targetType, object parameter, string language)
         {
             throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var plat = obj as Plat;
+            return plat != null &&
+                   id == plat.id &&
+                   nom == plat.nom &&
+                   type.Equals(plat.type) &&
+                   saison.Equals(plat.saison) &&
+                   note == plat.note &&
+                   ingredients.Equals(plat.ingredients) &&
+                   description.Equals(plat.description) &&
+                   temps == plat.temps;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(id, nom, type, saison, note, ingredients, description, temps);
         }
     }
 }

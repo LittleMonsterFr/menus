@@ -241,5 +241,36 @@ namespace Menus
             Disconnect(connection);
             return res;
         }
+
+        public int EditPlat(Plat plat)
+        {
+            SQLiteConnection connection = Connect();
+
+            SQLiteCommand command = connection.CreateCommand();
+
+            command.CommandText = "UPDATE plats SET nom = @nom, type = @type, saison = @saison, temps = @temps, note = @note, ingredients = @ingredients, description = @description WHERE id = @id;";
+
+            command.Parameters.Add("@id", System.Data.DbType.Int64).Value = plat.id;
+            command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.nom;
+            command.Parameters.Add("@type", System.Data.DbType.Int64).Value = plat.type.Id;
+            command.Parameters.Add("@saison", System.Data.DbType.Int64).Value = plat.saison.Id;
+            command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.temps;
+            command.Parameters.Add("@note", System.Data.DbType.Int32).Value = plat.note;
+            command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
+            command.Parameters.Add("@description", System.Data.DbType.String).Value = plat.description;
+
+            int res = 0;
+            try
+            {
+                res = command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de l'ajout du plat.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return res;
+        }
     }
 }

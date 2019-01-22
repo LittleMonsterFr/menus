@@ -7,9 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Tittle"
-    PrimaryButtonText="Primary"
     CloseButtonText="Close"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <ScrollViewer Padding="20" Width="600">
         <StackPanel Orientation="Vertical" Spacing="10">
