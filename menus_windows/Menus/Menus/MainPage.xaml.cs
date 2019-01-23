@@ -77,8 +77,10 @@ namespace Menus
             if (result == ContentDialogResult.Primary)
             {
                 Plat plat = platDialog.Plat;
-                databaseHandler.InsertPlat(plat);
-                lists[plat.type.Id].Add(plat);
+                if (databaseHandler.InsertPlat(plat) == true)
+                {
+                    lists[plat.type.Id].Add(plat);
+                }
             }
         }
 
@@ -106,9 +108,14 @@ namespace Menus
                     long typeId = databaseHandler.GetIdForTypeName(line.Item1);
                     Type type = new Type(typeId, line.Item1);
 
-                    Saison saison = new Saison(1, string.Empty);
+                    long saisonId = 1;
+                    string saisonName = databaseHandler.GetSaisonNameForId(saisonId);
+                    Saison saison = new Saison(saisonId, saisonName);
                     Plat plat = new Plat(0, line.Item2, type, saison, 0, 0, string.Empty, line.Item3);
-                    databaseHandler.InsertPlat(plat);
+                    if (databaseHandler.InsertPlat(plat))
+                    {
+                        lists[plat.type.Id].Add(plat);
+                    }
                 }
             }
         }

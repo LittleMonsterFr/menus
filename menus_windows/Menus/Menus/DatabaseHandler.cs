@@ -34,12 +34,10 @@ namespace Menus
             connection.Close();
         }
 
-        public void InsertPlat(Plat plat)
+        public bool InsertPlat(Plat plat)
         {
             SQLiteConnection connection = Connect();
-
             SQLiteCommand command = connection.CreateCommand();
-
             command.CommandText = "INSERT INTO plats (nom, type, saison, temps, note, ingredients, description) VALUES (@nom, @type, @saison, @temps, @note, @ingredients, @description);";
 
             command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.nom;
@@ -50,12 +48,18 @@ namespace Menus
             command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
             command.Parameters.Add("@description", System.Data.DbType.String).Value = plat.description;
 
+            bool result = false;
             try
             {
-                command.ExecuteNonQuery();
-                command = new SQLiteCommand("select last_insert_rowid();", connection);
-                long LastRowId = (long) command.ExecuteScalar();
-                plat.id = LastRowId;
+                int res = command.ExecuteNonQuery();
+                if (res == 1)
+                {
+                    command = new SQLiteCommand("select last_insert_rowid();", connection);
+                    long LastRowId = (long)command.ExecuteScalar();
+                    plat.id = LastRowId;
+                    result = true;
+                }
+                
             }
             catch (Exception e)
             {
@@ -63,6 +67,7 @@ namespace Menus
             }
 
             Disconnect(connection);
+            return result;
         }
 
         public List<Type> GetTypes()
@@ -126,16 +131,12 @@ namespace Menus
             Disconnect(connection);
             return saisons;
         }
-
-
+        
         public List<Plat> GetPlats()
         {
             List<Plat> plats = null;
-
             SQLiteConnection connection = Connect();
-
             SQLiteCommand command = connection.CreateCommand();
-
             command.CommandText = "SELECT * FROM plats;";
 
             try
@@ -170,7 +171,6 @@ namespace Menus
             }
 
             Disconnect(connection);
-
             return plats;
         }
 
@@ -221,6 +221,27 @@ namespace Menus
             return id;
         }
 
+        public string GetSaisonNameForId(long id)
+        {
+            string name = null;
+            SQLiteConnection connection = Connect();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT nom FROM saisons where id = @id;";
+            command.Parameters.Add("@id", System.Data.DbType.Int64).Value = id;
+
+            try
+            {
+                name = (string)command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return name;
+        }
+
         public int DeletePlatById(long id)
         {
             int res = 0;
@@ -245,9 +266,7 @@ namespace Menus
         public int EditPlat(Plat plat)
         {
             SQLiteConnection connection = Connect();
-
             SQLiteCommand command = connection.CreateCommand();
-
             command.CommandText = "UPDATE plats SET nom = @nom, type = @type, saison = @saison, temps = @temps, note = @note, ingredients = @ingredients, description = @description WHERE id = @id;";
 
             command.Parameters.Add("@id", System.Data.DbType.Int64).Value = plat.id;

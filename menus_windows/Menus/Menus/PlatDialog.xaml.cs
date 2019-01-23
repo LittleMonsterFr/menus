@@ -60,7 +60,7 @@ namespace Menus
             get { return plat; }
             set
             {
-                plat = value;
+                plat = new Plat(value.id, value.nom, value.type, value.saison, value.temps, value.note, value.ingredients, value.description);
                 nom.Text = value.nom;
                 type.SelectedItem = value.type;
                 saison.SelectedItem = value.saison;

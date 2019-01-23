@@ -21,7 +21,7 @@ namespace Menus
                 string s2 = fields[1];
                 string s3 = null;
                 if (!string.IsNullOrEmpty(fields[2]))
-                    s3 = fields[2].TrimStart('"').TrimEnd('"').Trim().TrimEnd('\n');
+                    s3 = fields[2].TrimStart('"').TrimEnd('"').Trim().TrimEnd('\n').Replace('\n', '\r');
                 else
                     s3 = string.Empty;
                 var recordItem = new Tuple<string, string, string>(s1, s2, s3);
