@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,6 +24,7 @@ namespace Menus
         int column;
         DateTime date;
         DateTimeFormatter dateFormatter;
+        double minWidth = 0;
 
         public HeaderCell()
         {
@@ -44,6 +46,7 @@ namespace Menus
             else
                 border.BorderThickness = new Thickness(simpleBorder, doubleBorder, simpleBorder, simpleBorder);
 
+            MinHeight = stackPanel.ActualHeight + doubleBorder * 4;
             dayText.Text = ((DayOfWeek)((column + 1) % 7)).ToString();
         }
 
@@ -53,6 +56,13 @@ namespace Menus
                 date = value;
                 dateText.Text = dateFormatter.Format(date);
             }
+        }
+
+        private void Text_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            if (textBlock.ActualWidth > minWidth)
+                MinWidth = textBlock.ActualWidth + Semaine.doubleBorder * 4;
         }
     }
 }

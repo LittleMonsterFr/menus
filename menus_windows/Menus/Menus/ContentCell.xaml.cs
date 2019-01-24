@@ -33,7 +33,7 @@ namespace Menus
                 double right = column == parent.ColumnDefinitions.Count - 1 ? doubleBorder : simpleBorder;
                 double bottom = row == parent.RowDefinitions.Count - 1 ? doubleBorder : simpleBorder;
 
-                this.BorderThickness = new Thickness(left, top, right, bottom);
+                border.BorderThickness = new Thickness(left, top, right, bottom);
             }
         }
 

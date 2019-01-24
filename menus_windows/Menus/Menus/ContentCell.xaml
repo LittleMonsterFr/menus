@@ -9,11 +9,12 @@
     Loaded="OnLoaded"
     PointerEntered="OnPointerEntered"
     PointerExited="OnPointerExited"
-    Tapped="OnTapped"
-    Background="Transparent">
+    Tapped="OnTapped">
 
-    <Grid x:Name="grid" BorderBrush="#ddd" >
-        <TextBlock x:Name="platName" HorizontalAlignment="Stretch" Text="Plat" TextAlignment="Center"/>
-    </Grid>
-    
+    <Border x:Name="border" BorderBrush="#ddd">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="platName" HorizontalAlignment="Center" Text="Plat"/>
+        </StackPanel>
+    </Border>
+
 </UserControl>

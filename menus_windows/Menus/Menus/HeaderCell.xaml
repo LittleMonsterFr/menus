@@ -9,10 +9,10 @@
     Loaded="HeaderCell_Loaded">
 
     <Border x:Name="border" BorderBrush="#ddd">
-        <StackPanel Orientation="Vertical" Spacing="10" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock x:Name="dayText" HorizontalAlignment="Center"/>
-            <TextBlock x:Name="dateText" HorizontalAlignment="Center"/>
+        <StackPanel x:Name="stackPanel" Orientation="Vertical" Spacing="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="dayText" HorizontalAlignment="Center" SizeChanged="Text_SizeChanged"/>
+            <TextBlock x:Name="dateText" HorizontalAlignment="Center" SizeChanged="Text_SizeChanged"/>
         </StackPanel>
     </Border>
-    
+
 </UserControl>
