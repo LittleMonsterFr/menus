@@ -31,9 +31,7 @@ namespace Menus
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            double height = semaineGrid.ColumnDefinitions[0].ActualWidth;
-            double minHeaderRowHeight = 0;
-            double minColumnWidth = 0;
+            double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;
             foreach (UIElement element in elements)
@@ -43,27 +41,23 @@ namespace Menus
                 {
                     HeaderCell cell = (HeaderCell)elt;
                     cell.Date = date.AddDays(Grid.GetColumn(cell));
-                    minHeaderRowHeight = cell.MinHeight;
-                    if (cell.MinWidth > minColumnWidth)
-                        minColumnWidth = cell.MinWidth;
-                }
-                else
-                {
-                    ContentCell cell = (ContentCell)elt;
-                    cell.Height = height;
+                    cell.Day = (DayOfWeek)((Grid.GetColumn(cell) + 1) % 7);
+                    cell.UpdateLayout();
+                    if (cell.MinWidth > minCellWidth)
+                        minCellWidth = cell.MinWidth;
                 }
             }
 
-            semaineGrid.RowDefinitions[0].MinHeight = minHeaderRowHeight;
+            semaineGrid.RowDefinitions[0].MinHeight = topLeftCell.MinHeight;
             for (int index = 0; index < semaineGrid.ColumnDefinitions.Count; index++)
             {
-                semaineGrid.ColumnDefinitions[index].MinWidth = minColumnWidth;
+                semaineGrid.ColumnDefinitions[index].MinWidth = minCellWidth;
             }
         }
 
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            double height = semaineGrid.ColumnDefinitions[0].ActualWidth;
+            double cellContentHeight = semaineGrid.ColumnDefinitions[0].ActualWidth;
 
             UIElementCollection elements = semaineGrid.Children;
             foreach (UIElement element in elements)
@@ -72,7 +66,7 @@ namespace Menus
                 if (Grid.GetRow(elt) != 0)
                 {
                     ContentCell cell = (ContentCell)elt;
-                    cell.Height = height;
+                    cell.Height = cellContentHeight;
                 }
             }
         }

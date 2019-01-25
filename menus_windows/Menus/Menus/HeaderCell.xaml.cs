@@ -23,8 +23,8 @@ namespace Menus
     {
         int column;
         DateTime date;
+        DayOfWeek day;
         DateTimeFormatter dateFormatter;
-        double minWidth = 0;
 
         public HeaderCell()
         {
@@ -45,9 +45,6 @@ namespace Menus
                 border.BorderThickness = new Thickness(simpleBorder, doubleBorder, doubleBorder, simpleBorder);
             else
                 border.BorderThickness = new Thickness(simpleBorder, doubleBorder, simpleBorder, simpleBorder);
-
-            MinHeight = stackPanel.ActualHeight + doubleBorder * 4;
-            dayText.Text = ((DayOfWeek)((column + 1) % 7)).ToString();
         }
 
         public DateTime Date {
@@ -58,11 +55,20 @@ namespace Menus
             }
         }
 
-        private void Text_SizeChanged(object sender, SizeChangedEventArgs e)
+        public DayOfWeek Day
         {
-            TextBlock textBlock = sender as TextBlock;
-            if (textBlock.ActualWidth > minWidth)
-                MinWidth = textBlock.ActualWidth + Semaine.doubleBorder * 4;
+            get { return day; }
+            set
+            {
+                day = value;
+                dayText.Text = value.ToString();
+            }
+        }
+
+        private void StackPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            MinHeight = stackPanel.ActualHeight + Semaine.doubleBorder * 4;
+            MinWidth = stackPanel.ActualWidth + Semaine.doubleBorder * 4;
         }
     }
 }
