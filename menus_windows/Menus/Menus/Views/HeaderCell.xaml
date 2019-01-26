@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Loaded="HeaderCell_Loaded">
 
-    <Border x:Name="border" BorderBrush="#ddd">
+    <Border x:Name="border" BorderBrush="{ThemeResource SystemControlBackgroundListMediumRevealBorderBrush}">
         <StackPanel x:Name="stackPanel" Orientation="Vertical" Spacing="10" VerticalAlignment="Center" HorizontalAlignment="Center" SizeChanged="StackPanel_SizeChanged">
             <TextBlock x:Name="dayText" HorizontalAlignment="Center"/>
             <TextBlock x:Name="dateText" HorizontalAlignment="Center"/>

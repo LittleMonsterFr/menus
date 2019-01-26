@@ -158,7 +158,6 @@ namespace Menus
                 back.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
             }
-
         }
 
         private void ListViewItem_Tapped(object sender, TappedRoutedEventArgs e)

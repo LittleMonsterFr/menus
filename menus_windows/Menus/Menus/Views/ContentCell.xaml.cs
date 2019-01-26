@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -13,6 +14,8 @@ namespace Menus
     {
         Plat plat;
 
+        ObservableCollection<Plat> ListPlats { get; set; }
+
         public ContentCell()
         {
             this.InitializeComponent();
@@ -26,15 +29,12 @@ namespace Menus
             double simpleBorder = Semaine.simpleBorder;
             double doubleBorder = Semaine.doubleBorder;
 
-            if (row != 0)
-            {
-                double left = column == 0 ? doubleBorder : simpleBorder;
-                double top = simpleBorder;
-                double right = column == parent.ColumnDefinitions.Count - 1 ? doubleBorder : simpleBorder;
-                double bottom = row == parent.RowDefinitions.Count - 1 ? doubleBorder : simpleBorder;
+            double left = column == 0 ? doubleBorder : simpleBorder;
+            double top = simpleBorder;
+            double right = column == parent.ColumnDefinitions.Count - 1 ? doubleBorder : simpleBorder;
+            double bottom = row == parent.RowDefinitions.Count - 1 ? doubleBorder : simpleBorder;
 
-                border.BorderThickness = new Thickness(left, top, right, bottom);
-            }
+            border.BorderThickness = new Thickness(left, top, right, bottom);
         }
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
