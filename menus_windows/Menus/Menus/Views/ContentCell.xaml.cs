@@ -60,15 +60,38 @@ namespace Menus
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as ComboBox).SelectedItem is Plat plat)
+            {
+                this.plat = plat;
                 platName.Text = plat.nom;
+            }
             else
+            {
+                this.plat = null;
                 platName.Text = string.Empty;
+            }
         }
 
-        private void AppBarButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             comboBox.SelectedIndex = -1;
             comboBox.SelectedItem = null;
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            stackPanel.MaxWidth = e.NewSize.Width;
+
+            stackPanel.Width = e.NewSize.Width;
+            UpdateLayout();
+        }
+
+        private void UserControl_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            var point = e.GetCurrentPoint(sender as ContentCell);
+            int delta = point.Properties.MouseWheelDelta;
+            double tmp = comboBox.ActualWidth + (delta > 0 ? 2 : -2);
+            comboBox.Width = tmp >= 0 ? tmp : 0;
+            platName.Text = stackPanel.Width.ToString();
         }
     }
 }

@@ -65,10 +65,11 @@ namespace Menus
             }
         }
 
+        // Look at the stack panel size because it is this size witch is updated once the day and the date have been set
         private void StackPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            MinHeight = stackPanel.ActualHeight + Semaine.doubleBorder * 4;
-            MinWidth = stackPanel.ActualWidth + Semaine.doubleBorder * 4;
+            MinHeight = e.NewSize.Height + Semaine.doubleBorder * 4;
+            MinWidth = e.NewSize.Width + Semaine.doubleBorder * 4;
         }
     }
 }
