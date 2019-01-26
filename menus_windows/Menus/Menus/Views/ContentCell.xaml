@@ -6,14 +6,22 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="OnLoaded"
-    Tapped="OnTapped">
+    Loaded="OnLoaded">
 
     <Border x:Name="border" BorderBrush="{ThemeResource SystemControlBackgroundListMediumRevealBorderBrush}">
-        <RelativePanel Background="Transparent">
-            <StackPanel RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock x:Name="platName" HorizontalAlignment="Center" Text="Plat"/>
-                <
+        <RelativePanel Background="Transparent" PointerEntered="OnPointerEntered" PointerExited="OnPointerExited">
+            <TextBlock x:Name="platName" HorizontalAlignment="Center" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"/>
+            <StackPanel x:Name="stackPanel" Orientation="Horizontal" RelativePanel.Below="platName" RelativePanel.AlignHorizontalCenterWithPanel="True" Opacity="0" Margin="0,25,0,0" Background="AliceBlue">
+                <ComboBox x:Name="comboBox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" Background="Gold" SelectionChanged="ComboBox_SelectionChanged" VerticalAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Tapped="AppBarButton_Tapped"  VerticalAlignment="Stretch">
+                    <SymbolIcon Symbol="Clear"/>
+                </Button>
             </StackPanel>
         </RelativePanel>
     </Border>

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
-using Windows.Globalization.DateTimeFormatting;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -16,7 +16,8 @@ namespace Menus
     {
         public static double simpleBorder = 2.5;
         public static double doubleBorder = simpleBorder * 2;
-        
+
+        Dictionary<long, ObservableCollection<Plat>> lists;
         DateTime date;
 
         public Semaine()
@@ -26,7 +27,9 @@ namespace Menus
 
         override protected void OnNavigatedTo(NavigationEventArgs e)
         {
-            date = (DateTime) e.Parameter;
+            KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>> pair = (KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>) e.Parameter;
+            date = pair.Key;
+            lists = pair.Value;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -36,15 +39,20 @@ namespace Menus
             UIElementCollection elements = semaineGrid.Children;
             foreach (UIElement element in elements)
             {
-                FrameworkElement elt = (FrameworkElement)element;
+                FrameworkElement elt = element as FrameworkElement;
                 if (Grid.GetRow(elt) == 0)
                 {
-                    HeaderCell cell = (HeaderCell)elt;
+                    HeaderCell cell = elt as HeaderCell;
                     cell.Date = date.AddDays(Grid.GetColumn(cell));
                     cell.Day = (DayOfWeek)((Grid.GetColumn(cell) + 1) % 7);
                     cell.UpdateLayout();
                     if (cell.MinWidth > minCellWidth)
                         minCellWidth = cell.MinWidth;
+                }
+                else
+                {
+                    ContentCell contentCell = elt as ContentCell;
+                    contentCell.ListPlats = lists[Grid.GetRow(elt)];
                 }
             }
 

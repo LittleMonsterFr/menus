@@ -13,8 +13,17 @@ namespace Menus
     public sealed partial class ContentCell : UserControl
     {
         Plat plat;
+        ObservableCollection<Plat> listPlats;
 
-        ObservableCollection<Plat> ListPlats { get; set; }
+        public ObservableCollection<Plat> ListPlats
+        {
+            get { return listPlats; }
+            set
+            {
+                listPlats = value;
+                comboBox.ItemsSource = listPlats;
+            }
+        }
 
         public ContentCell()
         {
@@ -39,17 +48,27 @@ namespace Menus
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Hand, 0);
+            stackPanel.Opacity = 1;
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 0);
+            if (!comboBox.IsDropDownOpen)
+                stackPanel.Opacity = 0;
         }
 
-        private void OnTapped(object sender, TappedRoutedEventArgs e)
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine("Column {0}, row {1}", Grid.GetColumn(this), Grid.GetRow(this));
+            if ((sender as ComboBox).SelectedItem is Plat plat)
+                platName.Text = plat.nom;
+            else
+                platName.Text = string.Empty;
+        }
+
+        private void AppBarButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            comboBox.SelectedIndex = -1;
+            comboBox.SelectedItem = null;
         }
     }
 }

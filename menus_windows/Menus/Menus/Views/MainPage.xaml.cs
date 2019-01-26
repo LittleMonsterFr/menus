@@ -35,7 +35,6 @@ namespace Menus
             backTransition = new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft };
             drillTransition = new DrillInNavigationTransitionInfo();
             date = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
-            semaineFrame.Navigate(typeof(Semaine), date);
 
             //Dumy item
             selectedItem = new ListViewItem();
@@ -63,6 +62,8 @@ namespace Menus
             soirtitle.Text = "Soir";
             dessertTitle.Text = "Déssert";
             aperitifTitle.Text = "Apéritif";
+
+            semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
         }
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
@@ -124,15 +125,15 @@ namespace Menus
         {
             if (sender == back)
             {
-                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(-7), backTransition);
+                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = date.AddDays(-7), lists), backTransition);
             }
             else if (sender == forward)
             {
-                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(7), forwardTransition);
+                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = date.AddDays(7), lists), forwardTransition);
             }
             else if(sender == today)
             {
-                semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), drillTransition);
+                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), lists), drillTransition);
             }
         }
 

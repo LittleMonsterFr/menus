@@ -116,33 +116,33 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Alert.xaml.cs">
+    <Compile Include="Views\Alert.xaml.cs">
       <DependentUpon>Alert.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContentCell.xaml.cs">
+    <Compile Include="Views\ContentCell.xaml.cs">
       <DependentUpon>ContentCell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseHandler.cs" />
-    <Compile Include="HeaderCell.xaml.cs">
+    <Compile Include="Classes\DatabaseHandler.cs" />
+    <Compile Include="Views\HeaderCell.xaml.cs">
       <DependentUpon>HeaderCell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Plat.cs" />
-    <Compile Include="PlatDialog.xaml.cs">
+    <Compile Include="Classes\Plat.cs" />
+    <Compile Include="Views\PlatDialog.xaml.cs">
       <DependentUpon>PlatDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Saison.cs" />
-    <Compile Include="Semaine.xaml.cs">
+    <Compile Include="Classes\Saison.cs" />
+    <Compile Include="Views\Semaine.xaml.cs">
       <DependentUpon>Semaine.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Type.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Classes\Type.cs" />
+    <Compile Include="Classes\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -165,27 +165,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Alert.xaml">
+    <Page Include="Views\Alert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ContentCell.xaml">
+    <Page Include="Views\ContentCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="HeaderCell.xaml">
+    <Page Include="Views\HeaderCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PlatDialog.xaml">
+    <Page Include="Views\PlatDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Semaine.xaml">
+    <Page Include="Views\Semaine.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
