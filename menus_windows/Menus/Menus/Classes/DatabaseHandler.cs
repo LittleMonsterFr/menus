@@ -312,13 +312,12 @@ namespace Menus
 
         public bool InsertPlatInSemaines(Plat plat, DateTime date)
         {
-            return false;
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "INSERT OR REPLACE INTO semaines (id, date, plat_id, type_id) " +
-                "VALUES ((SELECT id FROM semaines WHERE date = @date AND type_id = @type_id), @date, @plat_id, @type_id);";
+            command.CommandText = "INSERT OR REPLACE INTO semaines (id, date, plat_id) VALUES " +
+                "((SELECT semaines.id FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date = @date AND type = @type_id), @date, @plat_id);";
 
-            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = date.Ticks;
+            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
             command.Parameters.Add("@plat_id", System.Data.DbType.Int64).Value = plat.id;
             command.Parameters.Add("@type_id", System.Data.DbType.Int64).Value = plat.type.Id;
 
@@ -336,6 +335,31 @@ namespace Menus
 
             Disconnect(connection);
             return result;
+        }
+
+        public long GetPlatIdForDateByTypeId(DateTime date, long type_id)
+        {
+            SQLiteConnection connection = Connect();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT plat_id FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date = @date AND type = @type_id;";
+
+            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
+            command.Parameters.Add("@type_id", System.Data.DbType.Int64).Value = type_id;
+
+            long res = 0;
+            try
+            {
+                object obj = command.ExecuteScalar();
+                if (obj != null)
+                    res = (long)obj;
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de l'ajout du plat dans la semaine.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return res;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Menus
         Plat plat;
         ObservableCollection<Plat> listPlats;
         DatabaseHandler databaseHandler;
+        DateTime date;
 
         public ObservableCollection<Plat> ListPlats
         {
@@ -25,7 +26,26 @@ namespace Menus
         }
 
         // Date coresponding to the colum this cell is in
-        public DateTime Date { get; set; }
+        public DateTime Date {
+            get { return date; }
+            set
+            {
+                date = value;
+                long plat_id = databaseHandler.GetPlatIdForDateByTypeId(date, Grid.GetRow(this));
+                if (plat_id != 0)
+                {
+                    foreach (Plat plat in listPlats)
+                    {
+                        if (plat.id == plat_id)
+                        {
+                            comboBox.SelectedItem = plat;
+                            platName.Text = plat.nom;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         public ContentCell()
         {
