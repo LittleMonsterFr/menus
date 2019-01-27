@@ -1,10 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using Windows.UI;
+﻿using System;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -14,6 +12,7 @@ namespace Menus
     {
         Plat plat;
         ObservableCollection<Plat> listPlats;
+        DatabaseHandler databaseHandler;
 
         public ObservableCollection<Plat> ListPlats
         {
@@ -25,9 +24,13 @@ namespace Menus
             }
         }
 
+        // Date coresponding to the colum this cell is in
+        public DateTime Date { get; set; }
+
         public ContentCell()
         {
             this.InitializeComponent();
+            databaseHandler = DatabaseHandler.Instance;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -48,21 +51,30 @@ namespace Menus
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            stackPanel.Opacity = 1;
+            relativePanel.Opacity = 1;
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
             if (!comboBox.IsDropDownOpen)
-                stackPanel.Opacity = 0;
+                relativePanel.Opacity = 0;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as ComboBox).SelectedItem is Plat plat)
+            ComboBox box = sender as ComboBox;
+            if (box.SelectedItem is Plat plat)
             {
-                this.plat = plat;
-                platName.Text = plat.nom;
+                if (databaseHandler.InsertPlatInSemaines(plat, Date))
+                {
+                    this.plat = plat;
+                    platName.Text = plat.nom;
+                }
+                else
+                {
+                    box.SelectedItem = this.plat;
+                    box.SelectedIndex = box.Items.IndexOf(this.plat);
+                }
             }
             else
             {
@@ -79,19 +91,7 @@ namespace Menus
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            stackPanel.MaxWidth = e.NewSize.Width;
-
-            stackPanel.Width = e.NewSize.Width;
-            UpdateLayout();
-        }
-
-        private void UserControl_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
-        {
-            var point = e.GetCurrentPoint(sender as ContentCell);
-            int delta = point.Properties.MouseWheelDelta;
-            double tmp = comboBox.ActualWidth + (delta > 0 ? 2 : -2);
-            comboBox.Width = tmp >= 0 ? tmp : 0;
-            platName.Text = stackPanel.Width.ToString();
+            relativePanel.MaxWidth = e.NewSize.Width;
         }
     }
 }

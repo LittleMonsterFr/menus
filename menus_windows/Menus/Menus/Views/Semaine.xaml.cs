@@ -53,6 +53,7 @@ namespace Menus
                 {
                     ContentCell contentCell = elt as ContentCell;
                     contentCell.ListPlats = lists[Grid.GetRow(elt)];
+                    contentCell.Date = date.AddDays(Grid.GetColumn(contentCell));
                 }
             }
 

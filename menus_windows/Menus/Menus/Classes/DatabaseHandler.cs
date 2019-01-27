@@ -14,6 +14,24 @@ namespace Menus
         List<Type> types = null;
         List<Saison> saisons = null;
 
+        private static DatabaseHandler instance = null;
+        private static readonly object padlock = new object();
+
+        public static DatabaseHandler Instance
+        {
+            get
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new DatabaseHandler();
+                    }
+                    return instance;
+                }
+            }
+        }
+
         public DatabaseHandler()
         {
             DataBaseFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
@@ -290,6 +308,34 @@ namespace Menus
 
             Disconnect(connection);
             return res;
+        }
+
+        public bool InsertPlatInSemaines(Plat plat, DateTime date)
+        {
+            return false;
+            SQLiteConnection connection = Connect();
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "INSERT OR REPLACE INTO semaines (id, date, plat_id, type_id) " +
+                "VALUES ((SELECT id FROM semaines WHERE date = @date AND type_id = @type_id), @date, @plat_id, @type_id);";
+
+            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = date.Ticks;
+            command.Parameters.Add("@plat_id", System.Data.DbType.Int64).Value = plat.id;
+            command.Parameters.Add("@type_id", System.Data.DbType.Int64).Value = plat.type.Id;
+
+            bool result = false;
+            try
+            {
+                int res = command.ExecuteNonQuery();
+                if (res == 1)
+                    result = true;
+            }
+            catch (Exception e)
+            {
+                new Alert("Erreur lors de l'ajout du plat dans la semaine.", e.Message, e.StackTrace).ShowAsync();
+            }
+
+            Disconnect(connection);
+            return result;
         }
     }
 }

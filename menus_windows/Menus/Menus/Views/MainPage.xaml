@@ -14,7 +14,7 @@
         <local:Plat x:Key="TempsConverter"/>
         <DataTemplate x:Key="listViewItemTemplate" x:DataType="local:Plat">
             <ListViewItem IsDoubleTapEnabled="False" IsHoldingEnabled="False" Tapped="ListViewItem_Tapped" IsRightTapEnabled="True" RightTapped="ListViewItem_RightTapped">
-                <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Name="PlatName" Text="{x:Bind nom}" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                 <FlyoutBase.AttachedFlyout>
                     <Flyout Placement="Full" x:Name="viewPlatFlyout">
                         <Flyout.FlyoutPresenterStyle>

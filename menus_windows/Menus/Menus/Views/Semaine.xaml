@@ -55,5 +55,4 @@
         <src:ContentCell Grid.Column="5" Grid.Row="3"/>
         <src:ContentCell Grid.Column="6" Grid.Row="3"/>
     </Grid>
-
 </Page>

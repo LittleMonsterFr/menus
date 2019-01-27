@@ -7,24 +7,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loaded="OnLoaded"
-    SizeChanged="UserControl_SizeChanged"
-    PointerWheelChanged="UserControl_PointerWheelChanged">
+    SizeChanged="UserControl_SizeChanged">
 
     <Border x:Name="border" BorderBrush="{ThemeResource SystemControlBackgroundListMediumRevealBorderBrush}">
         <RelativePanel Background="Transparent" PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" MaxWidth="{Binding ElementName=stackPanel, Path=MaxWidth}">
             <TextBlock x:Name="platName" HorizontalAlignment="Center" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" TextWrapping="WrapWholeWords" Margin="5,0,5,0" HorizontalTextAlignment="Center"/>
-            <StackPanel x:Name="stackPanel" Orientation="Horizontal" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" Opacity="0" Margin="0,0,0,5" Background="AliceBlue" BorderBrush="Aqua" BorderThickness="15">
-                <ComboBox x:Name="comboBox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" SelectionChanged="ComboBox_SelectionChanged" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <RelativePanel x:Name="relativePanel" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Opacity="0" Margin="5,0,5,5">
+                <ComboBox x:Name="comboBox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" SelectionChanged="ComboBox_SelectionChanged"  RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="cancelButton" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Tapped="CancelButton_Tapped"  VerticalAlignment="Stretch">
+                <Button x:Name="cancelButton" Tapped="CancelButton_Tapped" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
                     <SymbolIcon Symbol="Clear"/>
                 </Button>
-            </StackPanel>
+            </RelativePanel>
         </RelativePanel>
     </Border>
 
