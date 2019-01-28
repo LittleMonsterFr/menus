@@ -10,10 +10,9 @@ namespace Menus
 {
     public sealed partial class ContentCell : UserControl
     {
-        Plat plat;
         ObservableCollection<Plat> listPlats;
         DatabaseHandler databaseHandler;
-        DateTime date;
+        Plat plat;
 
         public ObservableCollection<Plat> ListPlats
         {
@@ -26,24 +25,16 @@ namespace Menus
         }
 
         // Date coresponding to the colum this cell is in
-        public DateTime Date {
-            get { return date; }
+        public DateTime Date { get; set; }
+
+        public Plat Plat
+        {
+            get { return plat; }
             set
             {
-                date = value;
-                long plat_id = databaseHandler.GetPlatIdForDateByTypeId(date, Grid.GetRow(this));
-                if (plat_id != 0)
-                {
-                    foreach (Plat plat in listPlats)
-                    {
-                        if (plat.id == plat_id)
-                        {
-                            comboBox.SelectedItem = plat;
-                            platName.Text = plat.nom;
-                            break;
-                        }
-                    }
-                }
+                plat = value;
+                comboBox.SelectedItem = value;
+                platName.Text = plat != null ? plat.nom : string.Empty;
             }
         }
 
@@ -87,18 +78,18 @@ namespace Menus
             {
                 if (databaseHandler.InsertPlatInSemaines(plat, Date))
                 {
-                    this.plat = plat;
+                    this.Plat = plat;
                     platName.Text = plat.nom;
                 }
                 else
                 {
-                    box.SelectedItem = this.plat;
-                    box.SelectedIndex = box.Items.IndexOf(this.plat);
+                    box.SelectedItem = this.Plat;
+                    box.SelectedIndex = box.Items.IndexOf(this.Plat);
                 }
             }
             else
             {
-                this.plat = null;
+                this.Plat = null;
                 platName.Text = string.Empty;
             }
         }

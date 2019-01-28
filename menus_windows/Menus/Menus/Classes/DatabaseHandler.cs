@@ -337,29 +337,41 @@ namespace Menus
             return result;
         }
 
-        public long GetPlatIdForDateByTypeId(DateTime date, long type_id)
+        public Dictionary<DateTimeOffset, Dictionary<long, long>> GetPlatIdsForStartOfWeek(DateTime date)
         {
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT plat_id FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date = @date AND type = @type_id;";
+            command.CommandText = "SELECT plat_id, date, type FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date BETWEEN @date1 AND @date2;";
 
-            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
-            command.Parameters.Add("@type_id", System.Data.DbType.Int64).Value = type_id;
+            command.Parameters.Add("@date1", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
+            command.Parameters.Add("@date2", System.Data.DbType.Int64).Value = ((DateTimeOffset)date.AddDays(7)).ToUnixTimeSeconds();
 
-            long res = 0;
+            Dictionary<DateTimeOffset, Dictionary<long, long>> plats = null;
             try
             {
-                object obj = command.ExecuteScalar();
-                if (obj != null)
-                    res = (long)obj;
+                SQLiteDataReader sQLiteDataReader = command.ExecuteReader();
+                plats = new Dictionary<DateTimeOffset, Dictionary<long, long>>();
+                while (sQLiteDataReader.Read())
+                {
+                    long plat_id = sQLiteDataReader.GetInt64(0);
+                    DateTimeOffset _date = DateTimeOffset.FromUnixTimeSeconds(sQLiteDataReader.GetInt64(1));
+                    long type_id = sQLiteDataReader.GetInt64(2);
+
+                    if (!plats.ContainsKey(_date))
+                    {
+                        plats[_date] = new Dictionary<long, long>();
+                    }
+                    plats[_date][type_id] = plat_id;
+                }
             }
             catch (Exception e)
             {
-                new Alert("Erreur lors de l'ajout du plat dans la semaine.", e.Message, e.StackTrace).ShowAsync();
+                new Alert("Erreur lors de la récupération des plats pour la semaine du " + date.ToLongDateString() + ".", e.Message, e.StackTrace).ShowAsync();
+                plats = null;
             }
 
             Disconnect(connection);
-            return res;
+            return plats;
         }
     }
 }

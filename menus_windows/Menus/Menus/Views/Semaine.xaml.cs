@@ -34,6 +34,7 @@ namespace Menus
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            Dictionary<DateTimeOffset, Dictionary<long, long>> plats = DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
             double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;
@@ -54,6 +55,22 @@ namespace Menus
                     ContentCell contentCell = elt as ContentCell;
                     contentCell.ListPlats = lists[Grid.GetRow(elt)];
                     contentCell.Date = date.AddDays(Grid.GetColumn(contentCell));
+                    if (plats.ContainsKey(contentCell.Date))
+                    {
+                        Dictionary<long, long> platList = plats[contentCell.Date];
+                        if (platList.ContainsKey(Grid.GetRow(elt)))
+                        {
+                            long plat_id = platList[Grid.GetRow(elt)];
+                            foreach (Plat p in contentCell.ListPlats)
+                            {
+                                if (p.id == plat_id)
+                                {
+                                    contentCell.Plat = p;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
