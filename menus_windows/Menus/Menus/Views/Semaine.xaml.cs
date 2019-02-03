@@ -17,12 +17,20 @@ namespace Menus
         public static double simpleBorder = 2.5;
         public static double doubleBorder = simpleBorder * 2;
 
-        Dictionary<long, ObservableCollection<Plat>> lists;
-        DateTime date;
+        private Dictionary<long, ObservableCollection<Plat>> lists;
+        public DateTime date;
 
         public Semaine()
         {
             this.InitializeComponent();
+        }
+
+        public Semaine(KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>> pair)
+        {
+            this.InitializeComponent();
+            date = pair.Key;
+            lists = pair.Value;
+            Page_Loaded(null, null);
         }
 
         override protected void OnNavigatedTo(NavigationEventArgs e)

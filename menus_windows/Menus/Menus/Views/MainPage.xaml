@@ -72,6 +72,7 @@
     </Page.Resources>
 
     <RelativePanel>
+        <Canvas x:Name="PrintCanvas" Opacity="0"/>
         <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True"  Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
@@ -83,6 +84,7 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;"/>
                     </AppBarButton>
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
+                    <AppBarButton x:Name="printButton" Icon="Print" Label="Imprimer" Click="PrintButtonClick" IsEnabled="False"/>
                 </CommandBar>
             </Pivot.RightHeader>
             <PivotItem Header="Plats" x:Name="platTab" >

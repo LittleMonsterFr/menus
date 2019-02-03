@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Windows.Graphics.Printing;
 using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -22,11 +24,12 @@ namespace Menus
         private NavigationTransitionInfo backTransition;
         private NavigationTransitionInfo forwardTransition;
         private NavigationTransitionInfo drillTransition;
-        Dictionary<long, ObservableCollection<Plat>> lists;
-        DatabaseHandler databaseHandler;
-        DateTime date;
-        int fadeDuration = 1000;
-        ListViewItem selectedItem = null;
+        private Dictionary<long, ObservableCollection<Plat>> lists;
+        private DatabaseHandler databaseHandler;
+        private DateTime date;
+        private int fadeDuration = 1000;
+        private ListViewItem selectedItem = null;
+        private PrintHelper printHelper;
 
         public MainPage()
         {
@@ -64,6 +67,12 @@ namespace Menus
             aperitifTitle.Text = "Apéritif";
 
             semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
+
+            if (PrintManager.IsSupported())
+            {
+                printButton.IsEnabled = true;
+                printHelper = new PrintHelper(this);
+            }
         }
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
@@ -123,6 +132,7 @@ namespace Menus
 
         private void SemaineNavigation(object sender, RoutedEventArgs e)
         {
+            printHelper.UnregisterForPrinting();
             if (sender == back)
             {
                 semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = date.AddDays(-7), lists), backTransition);
@@ -135,6 +145,7 @@ namespace Menus
             {
                 semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), lists), drillTransition);
             }
+            printHelper.RegisterForPrinting();
         }
 
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -148,7 +159,7 @@ namespace Menus
                 back.Visibility = Visibility.Collapsed;
                 forward.Visibility = Visibility.Collapsed;
                 today.Visibility = Visibility.Collapsed;
-
+                printHelper.UnregisterForPrinting();
             }
             else if (pivot.SelectedItem == semaineTab)
             {
@@ -158,6 +169,7 @@ namespace Menus
                 today.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 back.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
+                printHelper.RegisterForPrinting();
             }
         }
 
@@ -203,7 +215,7 @@ namespace Menus
                         }
                         else
                         {
-                            new Alert("Erreur lors de la modification du plat.", "Plus d'un plat a été modifié.", null).ShowAsync();
+                            await new Alert("Erreur lors de la modification du plat.", "Plus d'un plat a été modifié.", null).ShowAsync();
                         }
                     }
                 }
@@ -239,6 +251,13 @@ namespace Menus
                     }
                 }
             }
+        }
+
+        private async void PrintButtonClick(object sender, RoutedEventArgs e)
+        {
+            Page semainePage = new Semaine(new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
+            printHelper.PreparePrintContent(semainePage);
+            await printHelper.ShowPrintUIAsync();
         }
     }
 }
