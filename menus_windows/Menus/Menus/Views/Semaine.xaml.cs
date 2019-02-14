@@ -42,7 +42,7 @@ namespace Menus
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Dictionary<DateTimeOffset, Dictionary<long, long>> plats = DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
+            Dictionary<DateTime, Dictionary<long, long>> plats = DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
             double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;

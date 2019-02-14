@@ -153,9 +153,11 @@ namespace Menus
             Pivot pivot = (Pivot)sender;
             if (pivot.SelectedItem == platTab)
             {
+                printButton.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 today.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 back.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
+                printButton.Visibility = Visibility.Collapsed;
                 back.Visibility = Visibility.Collapsed;
                 forward.Visibility = Visibility.Collapsed;
                 today.Visibility = Visibility.Collapsed;
@@ -163,9 +165,11 @@ namespace Menus
             }
             else if (pivot.SelectedItem == semaineTab)
             {
+                printButton.Visibility = Visibility.Visible;
                 today.Visibility = Visibility.Visible;
                 back.Visibility = Visibility.Visible;
                 forward.Visibility = Visibility.Visible;
+                printButton.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 today.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 back.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
                 await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();

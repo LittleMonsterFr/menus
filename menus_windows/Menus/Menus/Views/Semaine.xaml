@@ -10,49 +10,51 @@
     Loaded="Page_Loaded"
     SizeChanged="Page_SizeChanged">
 
-    <Grid x:Name="semaineGrid" xmlns:src="using:Menus">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <src:HeaderCell x:Name="topLeftCell" Grid.Column="0" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="1" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="2" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="3" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="4" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="5" Grid.Row="0"/>
-        <src:HeaderCell Grid.Column="6" Grid.Row="0"/>
-        <src:ContentCell Grid.Column="0" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="1" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="2" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="3" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="4" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="5" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="6" Grid.Row="1"/>
-        <src:ContentCell Grid.Column="0" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="1" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="2" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="3" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="4" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="5" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="6" Grid.Row="2"/>
-        <src:ContentCell Grid.Column="0" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="1" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="2" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="3" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="4" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="5" Grid.Row="3"/>
-        <src:ContentCell Grid.Column="6" Grid.Row="3"/>
-    </Grid>
+    <RelativePanel x:Name="semainePanel">
+        <Grid x:Name="semaineGrid" xmlns:src="using:Menus" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <src:HeaderCell x:Name="topLeftCell" Grid.Column="0" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="1" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="2" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="3" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="4" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="5" Grid.Row="0"/>
+            <src:HeaderCell Grid.Column="6" Grid.Row="0"/>
+            <src:ContentCell Grid.Column="0" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="1" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="2" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="3" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="4" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="5" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="6" Grid.Row="1"/>
+            <src:ContentCell Grid.Column="0" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="1" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="2" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="3" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="4" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="5" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="6" Grid.Row="2"/>
+            <src:ContentCell Grid.Column="0" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="1" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="2" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="3" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="4" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="5" Grid.Row="3"/>
+            <src:ContentCell Grid.Column="6" Grid.Row="3"/>
+        </Grid>
+    </RelativePanel>
 </Page>

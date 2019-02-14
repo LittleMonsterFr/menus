@@ -29,7 +29,7 @@ namespace Menus
         public HeaderCell()
         {
             this.InitializeComponent();
-            dateFormatter = new DateTimeFormatter("day month.full year.full");
+            dateFormatter = new DateTimeFormatter("shortdate");
         }
 
         private void HeaderCell_Loaded(object sender, RoutedEventArgs e)

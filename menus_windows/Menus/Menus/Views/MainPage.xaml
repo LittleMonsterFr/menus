@@ -73,18 +73,18 @@
 
     <RelativePanel>
         <Canvas x:Name="PrintCanvas" Opacity="0"/>
-        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True"  Padding="0,0,0,10" SelectionChanged="Pivot_SelectionChanged">
+        <Pivot x:Name="Pivot" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True"  Padding="0,0,0,15" SelectionChanged="Pivot_SelectionChanged">
             <Pivot.RightHeader>
                 <CommandBar Background="Transparent" ClosedDisplayMode="Compact">
                     <AppBarButton x:Name="back" Icon="Back" Label="Semaine précédente" Click="SemaineNavigation"/>
                     <AppBarButton x:Name="today" Icon="GoToToday" Label="Aujourd'hui" Click="SemaineNavigation"/>
                     <AppBarButton x:Name="forward" Icon="Forward" Label="Semaine suivante" Click="SemaineNavigation"/>
+                    <AppBarButton x:Name="printButton" Icon="Print" Label="Imprimer" Click="PrintButtonClick" IsEnabled="False"/>
                     <AppBarButton Icon="Add" Label="Ajouter&#x0a;un plat" Click="AddPlatButton"/>
                     <AppBarButton Click="OpenDatabaseFolder" Label="Localiser database">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;"/>
                     </AppBarButton>
                     <AppBarButton Icon="Download" Label="Remplir database" Click="RemplirDatabase"/>
-                    <AppBarButton x:Name="printButton" Icon="Print" Label="Imprimer" Click="PrintButtonClick" IsEnabled="False"/>
                 </CommandBar>
             </Pivot.RightHeader>
             <PivotItem Header="Plats" x:Name="platTab" >
@@ -124,7 +124,7 @@
             </PivotItem>
 
             <PivotItem Header="Semaines" x:Name="semaineTab">
-                <Frame x:Name="semaineFrame" IsNavigationStackEnabled="False">
+                <Frame x:Name="semaineFrame" IsNavigationStackEnabled="False" Margin="0,15,0,0">
                     <Frame.ContentTransitions>
                         <TransitionCollection>
                             <NavigationThemeTransition />

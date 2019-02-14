@@ -10,40 +10,57 @@ namespace Menus
 {
     public sealed partial class ContentCell : UserControl
     {
-        ObservableCollection<Plat> listPlats;
-        DatabaseHandler databaseHandler;
-        Plat plat;
+        // Private reference to the corresponding list of plat (starter, main, dinner)
+        private ObservableCollection<Plat> _listPlats;
 
+        // Database handler use to execute database operations
+        private DatabaseHandler databaseHandler;
+
+        // Private reference to the plat assigned to the cell
+        private Plat _plat;
+
+        // Indicate if the comboxbox handler skips the update or not
+        private bool updateComboBox = true;
+
+        // Public accesser to the list of plats
         public ObservableCollection<Plat> ListPlats
         {
-            get { return listPlats; }
+            get { return _listPlats; }
             set
             {
-                listPlats = value;
-                comboBox.ItemsSource = listPlats;
+                _listPlats = value;
+                comboBox.ItemsSource = _listPlats;
             }
         }
 
-        // Date coresponding to the colum this cell is in
+        // Public reference coresponding to the colum this cell is in
         public DateTime Date { get; set; }
 
+        // Public reference to the plat selected in the cell used when the semaine is loaded
         public Plat Plat
         {
-            get { return plat; }
+            get { return _plat; }
             set
             {
-                plat = value;
-                comboBox.SelectedItem = value;
-                platName.Text = plat != null ? plat.nom : string.Empty;
+                _plat = value;
+                updateComboBox = false;
+                comboBox.SelectedItem = _plat;
+                comboBox.SelectedIndex = comboBox.Items.IndexOf(_plat);
+                updateComboBox = true;
+                platName.Text = _plat != null ? _plat.nom : string.Empty;
             }
         }
 
+        // Default constructor
         public ContentCell()
         {
             this.InitializeComponent();
+
+            // Get the database instance
             databaseHandler = DatabaseHandler.Instance;
         }
 
+        // Defines the border at loading time
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             int column = Grid.GetColumn(this);
@@ -62,35 +79,43 @@ namespace Menus
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            relativePanel.Opacity = 1;
+            // Display the panel containing the combobox when the mouse is on this cell
+            platSelectionPanel.Opacity = 1;
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
+            // Hide the panel containing the combobox when the mouse leaves the cell and the dropdown is closed
             if (!comboBox.IsDropDownOpen)
-                relativePanel.Opacity = 0;
+                platSelectionPanel.Opacity = 0;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox box = sender as ComboBox;
-            if (box.SelectedItem is Plat plat)
+            if (updateComboBox)
             {
-                if (databaseHandler.InsertPlatInSemaines(plat, Date))
+                ComboBox box = sender as ComboBox;
+
+                if (box.SelectedItem is Plat plat)
                 {
-                    this.Plat = plat;
-                    platName.Text = plat.nom;
+                    if (await databaseHandler.InsertPlatInSemaines(plat, Date))
+                    {
+                        _plat = plat;
+                        platName.Text = plat.nom;
+                    }
+                    else
+                    {
+                        // Fall back to the previous selected plat and don't update the text
+                        box.SelectedItem = _plat;
+                        box.SelectedIndex = box.Items.IndexOf(_plat);
+                    }
                 }
                 else
                 {
-                    box.SelectedItem = this.Plat;
-                    box.SelectedIndex = box.Items.IndexOf(this.Plat);
+                    _plat = null;
+                    platName.Text = string.Empty;
+                    // TODO : Remove plat from database
                 }
-            }
-            else
-            {
-                this.Plat = null;
-                platName.Text = string.Empty;
             }
         }
 
@@ -100,9 +125,9 @@ namespace Menus
             comboBox.SelectedItem = null;
         }
 
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            relativePanel.MaxWidth = e.NewSize.Width;
+            platSelectionPanel.MaxWidth = e.NewSize.Width;
         }
     }
 }

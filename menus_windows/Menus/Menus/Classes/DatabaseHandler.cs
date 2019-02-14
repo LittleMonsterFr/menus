@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Menus
 {
@@ -310,51 +311,50 @@ namespace Menus
             return res;
         }
 
-        public bool InsertPlatInSemaines(Plat plat, DateTime date)
+        public async Task<bool> InsertPlatInSemaines(Plat plat, DateTime date)
         {
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "INSERT OR REPLACE INTO semaines (id, date, plat_id) VALUES " +
                 "((SELECT semaines.id FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date = @date AND type = @type_id), @date, @plat_id);";
 
-            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
+            command.Parameters.Add("@date", System.Data.DbType.Int64).Value = date.ToMyUnixTimeSeconds();
             command.Parameters.Add("@plat_id", System.Data.DbType.Int64).Value = plat.id;
             command.Parameters.Add("@type_id", System.Data.DbType.Int64).Value = plat.type.Id;
 
             bool result = false;
             try
             {
-                int res = command.ExecuteNonQuery();
-                if (res == 1)
+                if (command.ExecuteNonQuery() == 1)
                     result = true;
             }
             catch (Exception e)
             {
-                new Alert("Erreur lors de l'ajout du plat dans la semaine.", e.Message, e.StackTrace).ShowAsync();
+                await new Alert("Erreur lors de l'ajout du plat.", e.Message, e.StackTrace).ShowAsync();
             }
 
             Disconnect(connection);
             return result;
         }
 
-        public Dictionary<DateTimeOffset, Dictionary<long, long>> GetPlatIdsForStartOfWeek(DateTime date)
+        public Dictionary<DateTime, Dictionary<long, long>> GetPlatIdsForStartOfWeek(DateTime date)
         {
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "SELECT plat_id, date, type FROM semaines INNER JOIN plats on semaines.plat_id = plats.id WHERE date BETWEEN @date1 AND @date2;";
 
-            command.Parameters.Add("@date1", System.Data.DbType.Int64).Value = ((DateTimeOffset)date).ToUnixTimeSeconds();
-            command.Parameters.Add("@date2", System.Data.DbType.Int64).Value = ((DateTimeOffset)date.AddDays(7)).ToUnixTimeSeconds();
+            command.Parameters.Add("@date1", System.Data.DbType.Int64).Value = date.ToMyUnixTimeSeconds();
+            command.Parameters.Add("@date2", System.Data.DbType.Int64).Value = date.AddDays(7).ToMyUnixTimeSeconds();
 
-            Dictionary<DateTimeOffset, Dictionary<long, long>> plats = null;
+            Dictionary<DateTime, Dictionary<long, long>> plats = null;
             try
             {
                 SQLiteDataReader sQLiteDataReader = command.ExecuteReader();
-                plats = new Dictionary<DateTimeOffset, Dictionary<long, long>>();
+                plats = new Dictionary<DateTime, Dictionary<long, long>>();
                 while (sQLiteDataReader.Read())
                 {
                     long plat_id = sQLiteDataReader.GetInt64(0);
-                    DateTimeOffset _date = DateTimeOffset.FromUnixTimeSeconds(sQLiteDataReader.GetInt64(1));
+                    DateTime _date = DateTimeExtensions.FromMyUnixTimeSeconds(sQLiteDataReader.GetInt64(1));
                     long type_id = sQLiteDataReader.GetInt64(2);
 
                     if (!plats.ContainsKey(_date))
