@@ -96,6 +96,7 @@ namespace Menus
             {
                 ComboBox box = sender as ComboBox;
 
+                // A meal has been selected in the combobox, by the user
                 if (box.SelectedItem is Plat plat)
                 {
                     if (await databaseHandler.InsertPlatInSemaines(plat, Date))
@@ -112,9 +113,11 @@ namespace Menus
                 }
                 else
                 {
-                    _plat = null;
-                    platName.Text = string.Empty;
-                    // TODO : Remove plat from database
+                    if(await databaseHandler.DeletePlatInSemaine(_plat, Date))
+                    {
+                        _plat = null;
+                        platName.Text = string.Empty;
+                    }
                 }
             }
         }

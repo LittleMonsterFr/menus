@@ -21,10 +21,10 @@ namespace Menus
 {
     public sealed partial class HeaderCell : UserControl
     {
-        int column;
-        DateTime date;
-        DayOfWeek day;
-        DateTimeFormatter dateFormatter;
+        private int column;
+        private DateTime _date;
+        private DayOfWeek _day;
+        private DateTimeFormatter dateFormatter;
 
         public HeaderCell()
         {
@@ -48,19 +48,19 @@ namespace Menus
         }
 
         public DateTime Date {
-            get { return date; }
+            get { return _date; }
             set {
-                date = value;
-                dateText.Text = dateFormatter.Format(date);
+                _date = value;
+                dateText.Text = dateFormatter.Format(_date);
             }
         }
 
         public DayOfWeek Day
         {
-            get { return day; }
+            get { return _day; }
             set
             {
-                day = value;
+                _day = value;
                 dayText.Text = value.ToString();
             }
         }

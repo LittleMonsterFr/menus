@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Graphics.Printing;
 using Windows.Graphics.Printing.OptionDetails;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Printing;
@@ -64,7 +63,7 @@ namespace Menus
             }
         }
 
-        protected int FontSize = 8;
+        protected int FontSize = 14;
 
         /// <summary>
         /// Constructor
@@ -81,14 +80,18 @@ namespace Menus
         /// </summary>
         public virtual void RegisterForPrinting()
         {
-            printDocument = new PrintDocument();
-            printDocumentSource = printDocument.DocumentSource;
+            if (printDocument == null)
+            {
+                printDocument = new PrintDocument();
+                printDocumentSource = printDocument.DocumentSource;
+            }
+            
             printDocument.Paginate += CreatePrintPreviewPages;
             printDocument.GetPreviewPage += GetPrintPreviewPage;
             printDocument.AddPages += AddPrintPages;
 
-            PrintManager printMan = PrintManager.GetForCurrentView();
-            printMan.PrintTaskRequested += PrintTaskRequested;
+            PrintManager printManager = PrintManager.GetForCurrentView();
+            printManager.PrintTaskRequested += PrintTaskRequested;
         }
 
         /// <summary>
@@ -106,8 +109,8 @@ namespace Menus
             printDocument.AddPages -= AddPrintPages;
 
             // Remove the handler for printing initialization.
-            PrintManager printMan = PrintManager.GetForCurrentView();
-            printMan.PrintTaskRequested -= PrintTaskRequested;
+            PrintManager printManager = PrintManager.GetForCurrentView();
+            printManager.PrintTaskRequested -= PrintTaskRequested;
 
             PrintCanvas.Children.Clear();
         }
@@ -152,23 +155,23 @@ namespace Menus
         {
             PrintTask printTask = null;
             Semaine semainePage = firstPage as Semaine;
-            printTask = e.Request.CreatePrintTask("Menus - Semaine du " + semainePage.date.ToShortDateString(), async sourceRequestedArgs =>
+            printTask = e.Request.CreatePrintTask("Menus - Semaine du " + semainePage.date.ToShortDateString(), sourceRequestedArgs =>
             {
                 var deferral = sourceRequestedArgs.GetDeferral();
+
                 PrintTaskOptionDetails printDetailedOptions = PrintTaskOptionDetails.GetFromPrintTaskOptions(printTask.Options);
                 IList<string> displayedOptions = printDetailedOptions.DisplayedOptions;
 
-                // Choose the printer options to be shown.
+                // Choose the printer options to be shown, if the printer support them
                 // The order in which the options are appended determines the order in which they appear in the UI
                 displayedOptions.Clear();
 
-                displayedOptions.Add(Windows.Graphics.Printing.StandardPrintTaskOptions.Copies);
-                displayedOptions.Add(Windows.Graphics.Printing.StandardPrintTaskOptions.Orientation);
-                displayedOptions.Add(Windows.Graphics.Printing.StandardPrintTaskOptions.ColorMode);
+                displayedOptions.Add(StandardPrintTaskOptions.Copies);
+                displayedOptions.Add(StandardPrintTaskOptions.Orientation);
+                displayedOptions.Add(StandardPrintTaskOptions.ColorMode);
 
-                // Create a new toggle option "Show header". 
                 PrintCustomItemListOptionDetails fontSizes = printDetailedOptions.CreateItemListOption("fontSizes", "Taille de police");
-                for (int i = 1; i < 25; i++)
+                for (int i = 1; i <= 25; i++)
                 {
                     fontSizes.AddItem("font_" + i.ToString(), i.ToString());
                 }
@@ -246,7 +249,7 @@ namespace Menus
                 PrintCanvas.Children.Clear();
 
                 // Get the PrintTaskOptions
-                PrintTaskOptions printingOptions = ((PrintTaskOptions)e.PrintTaskOptions);
+                PrintTaskOptions printingOptions = e.PrintTaskOptions;
 
                 // Get the page description to deterimine how big the page is
                 PrintPageDescription pageDescription = printingOptions.GetPageDescription(0);
@@ -272,10 +275,17 @@ namespace Menus
         /// </summary>
         /// <param name="sender">PrintDocument</param>
         /// <param name="e">Arguments containing the preview requested page</param>
-        protected virtual void GetPrintPreviewPage(object sender, GetPreviewPageEventArgs e)
+        protected async virtual void GetPrintPreviewPage(object sender, GetPreviewPageEventArgs e)
         {
-            PrintDocument printDoc = (PrintDocument)sender;
-            printDoc.SetPreviewPage(e.PageNumber, printPreviewPages[e.PageNumber - 1]);
+            try
+            {
+                PrintDocument printDoc = (PrintDocument)sender;
+                printDoc.SetPreviewPage(e.PageNumber, printPreviewPages[e.PageNumber - 1]);
+            }
+            catch (Exception ex)
+            {
+                await new Alert("Erreur lors de la génération du rendu.", "Une erreur inconnue est survenue.", ex.StackTrace).ShowAsync();
+            }
         }
 
         /// <summary>
@@ -318,6 +328,7 @@ namespace Menus
 
             RelativePanel semainePanel = (RelativePanel)page.FindName("semainePanel");
             Grid semaineGrid = (Grid)page.FindName("semaineGrid");
+            RelativePanel.SetAlignBottomWithPanel(semaineGrid, false);
 
             // Get the margins size
             // If the ImageableRect is smaller than the app provided margins use the ImageableRect
@@ -327,14 +338,6 @@ namespace Menus
             // Set-up "printable area" on the "paper"
             semainePanel.Width = page.Width - marginWidth;
             semainePanel.Height = page.Height - marginHeight;
-
-            double heightSum = 0;
-            foreach (RowDefinition rowdef in semaineGrid.RowDefinitions)
-            {
-                heightSum += rowdef.MinHeight != 0 ? rowdef.MinHeight : rowdef.ActualHeight;
-            }
-            semaineGrid.Height = heightSum;
-            RelativePanel.SetAlignBottomWithPanel(semaineGrid, false);
 
             // Add the (newley created) page to the print canvas which is part of the visual tree and force it to go
             // through layout so that the linked containers correctly distribute the content inside them.

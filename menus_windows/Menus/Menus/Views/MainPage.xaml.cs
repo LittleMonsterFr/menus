@@ -10,7 +10,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -24,6 +23,8 @@ namespace Menus
         private NavigationTransitionInfo backTransition;
         private NavigationTransitionInfo forwardTransition;
         private NavigationTransitionInfo drillTransition;
+
+        // Dictionnary with type ids as key and a list of plat corresponding to that type
         private Dictionary<long, ObservableCollection<Plat>> lists;
         private DatabaseHandler databaseHandler;
         private DateTime date;
@@ -39,33 +40,32 @@ namespace Menus
             drillTransition = new DrillInNavigationTransitionInfo();
             date = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
 
-            //Dumy item
+            // Dumy item to allow selecting only one plat between all the lists
             selectedItem = new ListViewItem();
 
-            databaseHandler = new DatabaseHandler();
+            databaseHandler = DatabaseHandler.Instance;
             lists = new Dictionary<long, ObservableCollection<Plat>>();
 
-            List<Type> types = databaseHandler.GetTypes();
-
+            List<Type> types = databaseHandler.GetTypes().Result;
             foreach (Type type in types)
                 lists.Add(type.Id, new ObservableCollection<Plat>());
 
-            List<Plat> plats = databaseHandler.GetPlats();
+            List<Plat> plats = databaseHandler.GetPlats().Result;
             foreach (Plat plat in plats)
                 lists[plat.type.Id].Add(plat);
 
-            entreeList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Entrée")];
-            platResitanceList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Plat de résistance")];
-            soirList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Soir")];
-            dessertList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Déssert")];
-            aperitifList.ItemsSource = lists[databaseHandler.GetIdForTypeName("Apéritif")];
+            entreeTitle.Text = types[0].Name;
+            platTitle.Text = types[1].Name;
+            soirtitle.Text = types[2].Name;
+            dessertTitle.Text = types[3].Name;
+            aperitifTitle.Text = types[4].Name;
 
-            entreeTitle.Text = "Entrée";
-            platTitle.Text = "Plat de résistance";
-            soirtitle.Text = "Soir";
-            dessertTitle.Text = "Déssert";
-            aperitifTitle.Text = "Apéritif";
-
+            entreeList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(entreeTitle.Text).Result];
+            platResitanceList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(platTitle.Text).Result];
+            soirList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(soirtitle.Text).Result];
+            dessertList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(dessertTitle.Text).Result];
+            aperitifList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(aperitifTitle.Text).Result];
+            
             semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
 
             if (PrintManager.IsSupported())
@@ -77,7 +77,7 @@ namespace Menus
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
         {
-            PlatDialog platDialog = new PlatDialog(databaseHandler)
+            PlatDialog platDialog = new PlatDialog()
             {
                 Title = "Ajout d'un plat",
                 PrimaryButtonText = "Valider",
@@ -87,7 +87,7 @@ namespace Menus
             if (result == ContentDialogResult.Primary)
             {
                 Plat plat = platDialog.Plat;
-                if (databaseHandler.InsertPlat(plat) == true)
+                if (await databaseHandler.InsertPlat(plat))
                 {
                     lists[plat.type.Id].Add(plat);
                 }
@@ -96,7 +96,7 @@ namespace Menus
 
         private async void OpenDatabaseFolder(object sender, RoutedEventArgs e)
         {
-            StorageFolder databaseFolder = databaseHandler.GetDataBaseFolder();
+            StorageFolder databaseFolder = databaseHandler.DataBaseFolder;
             await Windows.System.Launcher.LaunchFolderAsync(databaseFolder);
         }
 
@@ -115,14 +115,14 @@ namespace Menus
                 List<Tuple<string, string, string>> entries = await Utils.parseCsv(file);
                 foreach (Tuple<string, string, string> line in entries)
                 {
-                    long typeId = databaseHandler.GetIdForTypeName(line.Item1);
+                    long typeId = await databaseHandler.GetTypeIdForTypeName(line.Item1);
                     Type type = new Type(typeId, line.Item1);
 
                     long saisonId = 1;
-                    string saisonName = databaseHandler.GetSaisonNameForId(saisonId);
+                    string saisonName = await databaseHandler.GetSaisonNameForSaisonId(saisonId);
                     Saison saison = new Saison(saisonId, saisonName);
                     Plat plat = new Plat(0, line.Item2, type, saison, 0, 0, string.Empty, line.Item3);
-                    if (databaseHandler.InsertPlat(plat))
+                    if (await databaseHandler.InsertPlat(plat))
                     {
                         lists[plat.type.Id].Add(plat);
                     }
@@ -197,7 +197,7 @@ namespace Menus
             string text = item.Text;
             if (text.Equals("Modifier"))
             {
-                PlatDialog platDialog = new PlatDialog(databaseHandler)
+                PlatDialog platDialog = new PlatDialog()
                 {
                     Title = "Edition d'un plat",
                     SecondaryButtonText = "Modifier",
@@ -210,16 +210,21 @@ namespace Menus
                 {
                     if (platDialog.Plat.Equals(plat) == false)
                     {
-                        if (databaseHandler.EditPlat(platDialog.Plat) == 1)
+                        int res;
+                        if ((res = await databaseHandler.EditPlat(platDialog.Plat)) == 1)
                         {
                             int index = lists[plat.type.Id].IndexOf(plat);
                             lists[plat.type.Id].RemoveAt(index);
                             lists[plat.type.Id].Insert(index, platDialog.Plat);
                             selectedItem.DataContext = platDialog.Plat;
                         }
-                        else
+                        else if (res > 1)
                         {
                             await new Alert("Erreur lors de la modification du plat.", "Plus d'un plat a été modifié.", null).ShowAsync();
+                        }
+                        else
+                        {
+                            await new Alert("Erreur lors de la modification du plat.", "Une erreur inconnue est survenue.", null).ShowAsync();
                         }
                     }
                 }
@@ -242,7 +247,7 @@ namespace Menus
                 if (result == ContentDialogResult.Primary)
                 {
                     Plat plat = selectedItem.DataContext as Plat;
-                    if (databaseHandler.DeletePlatById(plat.id) == 1)
+                    if (await databaseHandler.DeletePlatById(plat.id) == 1)
                     {
                         foreach (ObservableCollection<Plat> ListPlat in lists.Values)
                         {

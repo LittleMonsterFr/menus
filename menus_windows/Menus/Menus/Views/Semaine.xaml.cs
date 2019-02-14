@@ -40,9 +40,9 @@ namespace Menus
             lists = pair.Value;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Dictionary<DateTime, Dictionary<long, long>> plats = DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
+            Dictionary<DateTime, Dictionary<long, long>> plats = await DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
             double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;

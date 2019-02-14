@@ -14,14 +14,14 @@ namespace Menus
         private DatabaseHandler databaseHandler;
         private ObservableCollection<Type> types;
         private ObservableCollection<Saison> saisons;
-        private Plat plat;
+        private Plat _plat;
 
-        public PlatDialog(DatabaseHandler databaseHandler)
+        public PlatDialog()
         {
             this.InitializeComponent();
-            this.databaseHandler = databaseHandler;
-            types = new ObservableCollection<Type>(databaseHandler.GetTypes());
-            saisons = new ObservableCollection<Saison>(databaseHandler.GetSaisons());
+            this.databaseHandler = DatabaseHandler.Instance;
+            types = new ObservableCollection<Type>(databaseHandler.GetTypes().Result);
+            saisons = new ObservableCollection<Saison>(databaseHandler.GetSaisons().Result);
         }
 
         private bool ValidatePlatInput()
@@ -57,10 +57,10 @@ namespace Menus
         }
 
         public Plat Plat {
-            get { return plat; }
+            get { return _plat; }
             set
             {
-                plat = new Plat(value.id, value.nom, value.type, value.saison, value.temps, value.note, value.ingredients, value.description);
+                _plat = new Plat(value.id, value.nom, value.type, value.saison, value.temps, value.note, value.ingredients, value.description);
                 nom.Text = value.nom;
                 type.SelectedItem = value.type;
                 saison.SelectedItem = value.saison;
@@ -78,7 +78,7 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                plat = new Plat(0, nom.Text, (Type)type.SelectedValue, (Saison)saison.SelectedValue, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
+                _plat = new Plat(0, nom.Text, (Type)type.SelectedValue, (Saison)saison.SelectedValue, (int)temps.Time.TotalSeconds, (int)note.Value, ingredients.Text, description.Text);
             }
             deferral.Complete();
         }
@@ -89,13 +89,13 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                plat.nom = nom.Text;
-                plat.type = (Type)type.SelectedValue;
-                plat.saison = (Saison)saison.SelectedValue;
-                plat.temps = (int)temps.Time.TotalSeconds;
-                plat.note = (int)note.Value;
-                plat.ingredients = ingredients.Text;
-                plat.description = description.Text;
+                _plat.nom = nom.Text;
+                _plat.type = (Type)type.SelectedValue;
+                _plat.saison = (Saison)saison.SelectedValue;
+                _plat.temps = (int)temps.Time.TotalSeconds;
+                _plat.note = (int)note.Value;
+                _plat.ingredients = ingredients.Text;
+                _plat.description = description.Text;
             }
             deferral.Complete();
         }
