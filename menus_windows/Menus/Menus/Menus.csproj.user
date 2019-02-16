@@ -16,6 +16,7 @@
     <AppIconSource>D:\Damien\Images\menus_vegetables\menus-icon.png</AppIconSource>
     <SplashScreenSource>D:\Damien\Images\menus_vegetables\menus-icon.png</SplashScreenSource>
     <PackageLogoSource>D:\Damien\Images\menus_vegetables\menus-icon.png</PackageLogoSource>
+    <BadgeLogoSource>D:\Damien\Images\menus_vegetables\menus-icon.png</BadgeLogoSource>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <DeviceId>30F105C9-681E-420b-A277-7C086EAD8A4E</DeviceId>
