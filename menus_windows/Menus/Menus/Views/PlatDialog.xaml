@@ -16,7 +16,7 @@
             <TextBox x:Name="nom" Header="* Nom :" PlaceholderText="Nom du plat"/>
             <ComboBox x:Name="type" Header="* Type :" PlaceholderText="Choisir un type" ItemsSource="{x:Bind types}"/>
             <ComboBox x:Name="saison" Header="* Saison :" PlaceholderText="Choisir une saison" ItemsSource="{x:Bind saisons}"/>
-            <TimePicker x:Name="temps" Header="Temps :" MinuteIncrement="15" Time="00:00" />
+            <TimePicker x:Name="temps" Header="Temps :" MinuteIncrement="15" Time="00:00" ClockIdentifier="24HourClock"/>
             <Slider x:Name="note" Header="Note :" Minimum="0" Maximum="10" StepFrequency="1" Value="0" TickPlacement="Outside"  AutomationProperties.Name="Slider with ticks" SnapsTo="Ticks" TickFrequency="1"/>
             <TextBox x:Name="ingredients" Header="Ingrédients :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>
             <TextBox x:Name="description" Header="Description :" AutomationProperties.Name="multi-line TextBox" TextWrapping="Wrap" AcceptsReturn="True" IsSpellCheckEnabled="True" Height="200"/>

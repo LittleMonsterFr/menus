@@ -20,8 +20,8 @@ namespace Menus
         {
             this.InitializeComponent();
             this.databaseHandler = DatabaseHandler.Instance;
-            types = new ObservableCollection<Type>(databaseHandler.GetTypes().Result);
-            saisons = new ObservableCollection<Saison>(databaseHandler.GetSaisons().Result);
+            types = new ObservableCollection<Type>(databaseHandler.Types);
+            saisons = new ObservableCollection<Saison>(databaseHandler.Saisons);
         }
 
         private bool ValidatePlatInput()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -51,6 +52,36 @@ namespace Menus
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0);
             return origin.AddSeconds(seconds);
+        }
+    }
+
+    public static class ObservableCollectionSort
+    {
+        public static ObservableCollection<T> Sort<T>(this ObservableCollection<T> collection, Comparison<T> comparison)
+        {
+            var sortableList = new List<T>(collection);
+            sortableList.Sort(comparison);
+
+            for (int i = 0; i < sortableList.Count; i++)
+            {
+                collection.Move(collection.IndexOf(sortableList[i]), i);
+            }
+
+            return collection;
+        }
+    }
+
+    public static class StringExtension
+    {
+        public static string UppercaseFirst(this string s)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            // Return char and concat substring.
+            return char.ToUpper(s[0]) + s.Substring(1);
         }
     }
 }

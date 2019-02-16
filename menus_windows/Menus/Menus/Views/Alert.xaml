@@ -12,7 +12,7 @@
     <StackPanel Spacing="10">
         <TextBlock x:Name="message" Text="Message"/>
         <ScrollViewer x:Name="scrollView" HorizontalScrollMode="Disabled">
-            <TextBlock x:Name="textBlock" Text="Some text" TextWrapping="Wrap"/>
+            <TextBlock x:Name="textBlock" Text="Some text" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
         </ScrollViewer>
     </StackPanel>
     

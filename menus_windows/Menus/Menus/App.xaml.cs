@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace Menus
@@ -22,6 +14,8 @@ namespace Menus
     /// </summary>
     sealed partial class App : Application
     {
+        DatabaseHandler databaseHandler = null;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -29,6 +23,7 @@ namespace Menus
         public App()
         {
             this.InitializeComponent();
+            databaseHandler = DatabaseHandler.Instance;
             this.Suspending += OnSuspending;
         }
 
@@ -37,7 +32,7 @@ namespace Menus
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -63,6 +58,22 @@ namespace Menus
             {
                 if (rootFrame.Content == null)
                 {
+                    // Look for the database folder and create it if it doesn't exist
+                    if (!File.Exists(databaseHandler.DataBaseFullPath))
+                    {
+                        Exception exception = databaseHandler.CreateDatabase();
+
+                        // If the database creation failed, generate a blank app, an error and leave up to the user to quit
+                        if (exception != null)
+                        {
+                            rootFrame = new Frame();
+                            Window.Current.Content = rootFrame;
+                            Window.Current.Activate();
+                            await new Alert("La création de la base de données a échoué.", "Une erreur est survenue lors de la création de la base de données. Veuillez quitter l'application.", exception.StackTrace).ShowAsync();
+                            return;
+                        }
+                    }
+
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
@@ -72,6 +83,8 @@ namespace Menus
                 Window.Current.Activate();
             }
         }
+
+
 
         /// <summary>
         /// Invoked when Navigation to a certain page fails

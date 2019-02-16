@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Windows.Graphics.Printing;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -32,6 +31,11 @@ namespace Menus
         private ListViewItem selectedItem = null;
         private PrintHelper printHelper;
 
+        private int ComparePlat(Plat plat1, Plat plat2)
+        {
+            return string.Compare(plat1.nom.ToLower(), plat2.nom.ToLower());
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -46,7 +50,7 @@ namespace Menus
             databaseHandler = DatabaseHandler.Instance;
             lists = new Dictionary<long, ObservableCollection<Plat>>();
 
-            List<Type> types = databaseHandler.GetTypes().Result;
+            List<Type> types = databaseHandler.Types;
             foreach (Type type in types)
                 lists.Add(type.Id, new ObservableCollection<Plat>());
 
@@ -60,11 +64,11 @@ namespace Menus
             dessertTitle.Text = types[3].Name;
             aperitifTitle.Text = types[4].Name;
 
-            entreeList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(entreeTitle.Text).Result];
-            platResitanceList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(platTitle.Text).Result];
-            soirList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(soirtitle.Text).Result];
-            dessertList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(dessertTitle.Text).Result];
-            aperitifList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(aperitifTitle.Text).Result];
+            entreeList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(entreeTitle.Text).Result].Sort(ComparePlat);
+            platResitanceList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(platTitle.Text).Result].Sort(ComparePlat);
+            soirList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(soirtitle.Text).Result].Sort(ComparePlat);
+            dessertList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(dessertTitle.Text).Result].Sort(ComparePlat);
+            aperitifList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(aperitifTitle.Text).Result].Sort(ComparePlat);
             
             semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
 
@@ -90,6 +94,7 @@ namespace Menus
                 if (await databaseHandler.InsertPlat(plat))
                 {
                     lists[plat.type.Id].Add(plat);
+                    lists[plat.type.Id].Sort(ComparePlat);
                 }
             }
         }

@@ -9,11 +9,7 @@ namespace Menus
 {
     public class DatabaseHandler
     {
-        private string DatabaseFile = "menus.db";
-        private string DataBaseFullPath;
-
-        private List<Type> types = null;
-        private List<Saison> saisons = null;
+        private readonly string DatabaseFile = "menus.db";
 
         private static DatabaseHandler instance = null;
         private static readonly object padlock = new object();
@@ -35,10 +31,35 @@ namespace Menus
 
         public StorageFolder DataBaseFolder { get; set; }
 
+        public string DataBaseFullPath { get; set; }
+
+        public List<Type> Types { get; set; }
+
+        public List<Saison> Saisons { get; set; }
+
         public DatabaseHandler()
         {
-            DataBaseFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            DataBaseFolder = ApplicationData.Current.LocalFolder;
             DataBaseFullPath = Path.Combine(DataBaseFolder.Path, DatabaseFile);
+
+            // For the moment, hardcode the list of types and saisons
+            Types = new List<Type>
+            {
+                new Type(1, "Entrée"),
+                new Type(2, "Plat de résistance"),
+                new Type(3, "Soir"),
+                new Type(4, "Déssert"),
+                new Type(5, "Apéritif")
+            };
+
+            Saisons = new List<Saison>
+            {
+                new Saison(1, "Toute l'année"),
+                new Saison(2, "Printemps"),
+                new Saison(3, "Eté"),
+                new Saison(4, "Automne"),
+                new Saison(5, "Hiver"),
+            };
         }
 
         private SQLiteConnection Connect()
@@ -53,6 +74,70 @@ namespace Menus
         private void Disconnect(SQLiteConnection connection)
         {
             connection.Close();
+        }
+
+        private void CreateTypesTable(SQLiteConnection connection)
+        {
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "create table types (id integer not null primary key autoincrement unique, nom TEXT);";
+            command.ExecuteNonQuery();
+
+            foreach (Type type in Types)
+            {
+                command.CommandText = "insert into types (id, nom) values (@id, @nom);";
+                command.Parameters.Add("@id", System.Data.DbType.Int64).Value = type.Id;
+                command.Parameters.Add("@nom", System.Data.DbType.String).Value = type.Name;
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private void CreateSaisonsTable(SQLiteConnection connection)
+        {
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "CREATE TABLE saisons ( id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, nom TEXT );";
+            command.ExecuteNonQuery();
+
+            foreach (Saison saison in Saisons)
+            {
+                command.CommandText = "insert into saisons (id, nom) values (@id, @nom);";
+                command.Parameters.Add("@id", System.Data.DbType.Int64).Value = saison.Id;
+                command.Parameters.Add("@nom", System.Data.DbType.String).Value = saison.Name;
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private void CreatePlatsTable(SQLiteConnection connection)
+        {
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "CREATE TABLE plats ( id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT NOT NULL, type INTEGER NOT NULL, saison INTEGER NOT NULL, temps INTEGER, note INTEGER, ingredients TEXT, description TEXT, FOREIGN KEY(type) REFERENCES types(id), FOREIGN KEY(saison) REFERENCES saisons(id) );";
+            command.ExecuteNonQuery();
+        }
+
+        private void CreateSemainesTable(SQLiteConnection connection)
+        {
+            SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = "CREATE TABLE semaines ( id INTEGER PRIMARY KEY AUTOINCREMENT, date INTEGER, plat_id INTEGER, FOREIGN KEY(plat_id) REFERENCES plats(id) );";
+            command.ExecuteNonQuery();
+        }
+
+        public Exception CreateDatabase()
+        {
+            SQLiteConnection connection = Connect();
+
+            try
+            {
+                CreateTypesTable(connection);
+                CreateSaisonsTable(connection);
+                CreatePlatsTable(connection);
+                CreateSemainesTable(connection);
+            }
+            catch (Exception ex)
+            {
+                Disconnect(connection);
+                return ex;
+            }
+
+            return null;
         }
 
         public async Task<bool> InsertPlat(Plat plat)
@@ -89,76 +174,13 @@ namespace Menus
             Disconnect(connection);
             return result;
         }
-
-        public async Task<List<Type>> GetTypes()
-        {
-            // Return the type list if it has already been retreived previously
-            if (types != null)
-                return types;
-
-            SQLiteConnection connection = Connect();
-            SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "select * from types order by id asc";
-
-            try
-            {
-                SQLiteDataReader sQLiteDataReader = command.ExecuteReader();
-                types = new List<Type>();
-
-                while (sQLiteDataReader.Read())
-                {
-                    long id = sQLiteDataReader.GetInt64(0);
-                    string nom = sQLiteDataReader.GetString(1);
-                    types.Add(new Type(id, nom));
-                }
-            }
-            catch (Exception e)
-            {
-                await new Alert("Erreur lors de la récupération des types de plat.", e.Message, e.StackTrace).ShowAsync();
-                types = null;
-            }
-
-            Disconnect(connection);
-            return types;
-        }
-        
-        public async Task<List<Saison>> GetSaisons()
-        {
-            if (saisons != null)
-                return saisons;
-
-            SQLiteConnection connection = Connect();
-            SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "select * from saisons order by id asc";
-
-            try
-            {
-                SQLiteDataReader sQLiteDataReader = command.ExecuteReader();
-                saisons = new List<Saison>();
-
-                while (sQLiteDataReader.Read())
-                {
-                    long id = sQLiteDataReader.GetInt64(0);
-                    string nom = sQLiteDataReader.GetString(1);
-                    saisons.Add(new Saison(id, nom));
-                }
-            }
-            catch (Exception e)
-            {
-                await new Alert("Erreur lors de la récupération des saisons.", e.Message, e.StackTrace).ShowAsync();
-                saisons = null;
-            }
-
-            Disconnect(connection);
-            return saisons;
-        }
         
         public async Task<List<Plat>> GetPlats()
         {
             List<Plat> plats = null;
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "select * from plats;";
+            command.CommandText = "select * from plats order by nom asc;";
 
             try
             {
@@ -175,13 +197,11 @@ namespace Menus
                     int note = sQLiteDataReader.GetInt32(5);
                     string ingredients = sQLiteDataReader.GetString(6);
                     string description = sQLiteDataReader.GetString(7);
-
-                    List<Type> types = await GetTypes();
-                    string typeName = types[(int) typeId - 1].Name;
+                    
+                    string typeName = Types[(int) typeId - 1].Name;
                     Type type = new Type(typeId, typeName);
-
-                    List<Saison> saisons = await GetSaisons();
-                    string saisonName = saisons[(int) saisonId - 1].Name;
+                    
+                    string saisonName = Saisons[(int) saisonId - 1].Name;
                     Saison saison = new Saison(saisonId, saisonName);
 
                     plats.Add(new Plat(id, nom, type, saison, temps, note, ingredients, description));
@@ -201,8 +221,8 @@ namespace Menus
         {
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "select id from types where name = @name;";
-            command.Parameters.Add("@name", System.Data.DbType.String).Value = name;
+            command.CommandText = "select id from types where nom = @nom;";
+            command.Parameters.Add("@nom", System.Data.DbType.String).Value = name;
 
             long id = 0;
             try
@@ -222,8 +242,8 @@ namespace Menus
         {
             SQLiteConnection connection = Connect();
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "select id from saisons where name = @name;";
-            command.Parameters.Add("@name", System.Data.DbType.String).Value = name;
+            command.CommandText = "select id from saisons where nom = @nom;";
+            command.Parameters.Add("@nom", System.Data.DbType.String).Value = name;
 
             long id = 0;
             try
