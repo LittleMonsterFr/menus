@@ -22,6 +22,8 @@ namespace Menus
         // Indicate if the comboxbox handler skips the update or not
         private bool updateComboBox = true;
 
+        private bool platCanceled = false;
+
         // Public accesser to the list of plats
         public ObservableCollection<Plat> ListPlats
         {
@@ -96,36 +98,61 @@ namespace Menus
             {
                 ComboBox box = sender as ComboBox;
 
-                // A meal has been selected in the combobox, by the user
-                if (box.SelectedItem is Plat plat)
+                // A meal has been selected in the combobox or the name of a meal is being edited, by the user
+                if (box.SelectedItem is Plat || box.SelectedItem is string)
                 {
-                    if (await databaseHandler.InsertPlatInSemaines(plat, Date))
+                    // If the name of the meal is being edited
+                    if (box.SelectedItem is string newPlatName)
                     {
-                        _plat = plat;
-                        platName.Text = plat.nom;
+                        string platNameBackup = _plat.nom;
+                        _plat.nom = newPlatName;
+                        if (await databaseHandler.EditPlat(_plat) != 1)
+                        {
+                            _plat.nom = platNameBackup;
+                        }
+                        else
+                        {
+                            platName.Text = _plat.nom;
+                        }
                     }
                     else
                     {
-                        // Fall back to the previous selected plat and don't update the text
-                        box.SelectedItem = _plat;
-                        box.SelectedIndex = box.Items.IndexOf(_plat);
+                        Plat plat = box.SelectedItem as Plat;
+                        if (await databaseHandler.InsertPlatInSemaines(plat, Date))
+                        {
+                            _plat = plat;
+                            platName.Text = plat.nom;
+                        }
+                        else
+                        {
+                            // Fall back to the previous selected plat and don't update the text
+                            box.SelectedItem = _plat;
+                            box.SelectedIndex = box.Items.IndexOf(_plat);
+                        }
                     }
+                        
                 }
                 else
                 {
-                    if(await databaseHandler.DeletePlatInSemaine(_plat, Date))
+                    if (platCanceled)
                     {
-                        _plat = null;
-                        platName.Text = string.Empty;
+                        if (await databaseHandler.DeletePlatInSemaine(_plat, Date))
+                        {
+                            _plat = null;
+                            platName.Text = string.Empty;
+                        }
                     }
+
                 }
             }
         }
 
         private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            platCanceled = true;
             comboBox.SelectedIndex = -1;
             comboBox.SelectedItem = null;
+            platCanceled = false;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)

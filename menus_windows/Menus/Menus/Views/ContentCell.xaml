@@ -14,7 +14,7 @@
             <TextBlock x:Name="platName" HorizontalAlignment="Center" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" TextWrapping="WrapWholeWords" Margin="5,0,5,0" HorizontalTextAlignment="Center"/>
             <RelativePanel x:Name="platSelectionPanel" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Opacity="0" Margin="5,0,5,5">
                 <ComboBox x:Name="comboBox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" SelectionChanged="ComboBox_SelectionChanged"  RelativePanel.AlignLeftWithPanel="True" RelativePanel.LeftOf="cancelButton" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignBottomWithPanel="True"
-                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsEditable="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" TextTrimming="CharacterEllipsis"/>
