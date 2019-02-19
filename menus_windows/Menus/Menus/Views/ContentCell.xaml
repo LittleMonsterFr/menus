@@ -14,7 +14,7 @@
         
         <RelativePanel Background="Transparent" PointerEntered="OnPointerEntered" PointerExited="OnPointerExited">
 
-            <TextBlock x:Name="platName" HorizontalAlignment="Center" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center"/>
+            <TextBlock x:Name="platName" HorizontalAlignment="Center" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" TextWrapping="WrapWholeWords" HorizontalTextAlignment="Center" Margin="5"/>
 
         </RelativePanel>
         

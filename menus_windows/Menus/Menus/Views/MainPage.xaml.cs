@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.Uwp.UI.Animations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.Graphics.Printing;
@@ -69,14 +68,14 @@ namespace Menus
             soirList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(soirtitle.Text).Result].Sort(ComparePlat);
             dessertList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(dessertTitle.Text).Result].Sort(ComparePlat);
             aperitifList.ItemsSource = lists[databaseHandler.GetTypeIdForTypeName(aperitifTitle.Text).Result].Sort(ComparePlat);
-            
-            semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
 
             if (PrintManager.IsSupported())
             {
                 printButton.IsEnabled = true;
                 printHelper = new PrintHelper(this);
             }
+
+            SemaineNavigation(today, null);
 
             mealSelectionCombobox.ItemsSource = lists[1];
         }
@@ -142,28 +141,27 @@ namespace Menus
             printHelper.UnregisterForPrinting();
             if (sender == back)
             {
-                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = date.AddDays(-7), lists), backTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(-7), backTransition);
             }
             else if (sender == forward)
             {
-                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = date.AddDays(7), lists), forwardTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(7), forwardTransition);
             }
             else if(sender == today)
             {
-                semaineFrame.Navigate(typeof(Semaine), new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), lists), drillTransition);
+                semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), drillTransition);
             }
+            Semaine semaine = semaineFrame.Content as Semaine;
+            semaine.Lists = lists;
+            semaine.ComboBox = mealSelectionCombobox;
             printHelper.RegisterForPrinting();
         }
 
-        private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Pivot pivot = (Pivot)sender;
             if (pivot.SelectedItem == platTab)
             {
-                printButton.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                today.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                back.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                await forward.Fade(value: 0.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
                 printButton.Visibility = Visibility.Collapsed;
                 back.Visibility = Visibility.Collapsed;
                 forward.Visibility = Visibility.Collapsed;
@@ -176,10 +174,6 @@ namespace Menus
                 today.Visibility = Visibility.Visible;
                 back.Visibility = Visibility.Visible;
                 forward.Visibility = Visibility.Visible;
-                printButton.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                today.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                back.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).Start();
-                await forward.Fade(value: 1.0f, duration: fadeDuration, delay: 0, easingType: EasingType.Linear).StartAsync();
                 printHelper.RegisterForPrinting();
             }
         }
@@ -271,7 +265,7 @@ namespace Menus
 
         private async void PrintButtonClick(object sender, RoutedEventArgs e)
         {
-            Page semainePage = new Semaine(new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
+            Page semainePage = new Semaine(date, lists);
             printHelper.PreparePrintContent(semainePage);
             await printHelper.ShowPrintUIAsync();
         }

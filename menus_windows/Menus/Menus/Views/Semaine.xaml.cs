@@ -17,32 +17,33 @@ namespace Menus
         public static double simpleBorder = 2.5;
         public static double doubleBorder = simpleBorder * 2;
 
-        private Dictionary<long, ObservableCollection<Plat>> lists;
-        public DateTime date;
+        public Dictionary<long, ObservableCollection<Plat>> Lists { get; set; }
+        public DateTime Date { get; set; }
+        public ComboBox ComboBox { get; set; }
+
+        private ContentCell selectedCell;
 
         public Semaine()
         {
             this.InitializeComponent();
         }
 
-        public Semaine(KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>> pair)
+        public Semaine(DateTime date, Dictionary<long, ObservableCollection<Plat>> lists)
         {
             this.InitializeComponent();
-            date = pair.Key;
-            lists = pair.Value;
+            Date = date;
+            Lists = lists;
             Page_Loaded(null, null);
         }
 
         override protected void OnNavigatedTo(NavigationEventArgs e)
         {
-            KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>> pair = (KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>) e.Parameter;
-            date = pair.Key;
-            lists = pair.Value;
+            Date = (DateTime) e.Parameter;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Dictionary<DateTime, Dictionary<long, long>> plats = await DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(date);
+            Dictionary<DateTime, Dictionary<long, long>> plats = await DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(Date);
             double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;
@@ -52,7 +53,7 @@ namespace Menus
                 if (Grid.GetRow(elt) == 0)
                 {
                     HeaderCell cell = elt as HeaderCell;
-                    cell.Date = date.AddDays(Grid.GetColumn(cell));
+                    cell.Date = Date.AddDays(Grid.GetColumn(cell));
                     cell.Day = (DayOfWeek)((Grid.GetColumn(cell) + 1) % 7);
                     cell.UpdateLayout();
                     if (cell.MinWidth > minCellWidth)
@@ -61,8 +62,9 @@ namespace Menus
                 else
                 {
                     ContentCell contentCell = elt as ContentCell;
-                    contentCell.ListPlats = lists[Grid.GetRow(elt)];
-                    contentCell.Date = date.AddDays(Grid.GetColumn(contentCell));
+                    contentCell.Semaine = this;
+                    contentCell.ListPlats = Lists[Grid.GetRow(elt)];
+                    contentCell.Date = Date.AddDays(Grid.GetColumn(contentCell));
                     if (plats.ContainsKey(contentCell.Date))
                     {
                         Dictionary<long, long> platList = plats[contentCell.Date];
@@ -102,6 +104,34 @@ namespace Menus
                     ContentCell cell = (ContentCell)elt;
                     cell.Height = cellContentHeight;
                 }
+            }
+        }
+
+        public void CellSelectedEvent(ContentCell cell)
+        {
+            if (selectedCell == null)
+            {
+                selectedCell = cell;
+            }
+            else if (selectedCell == cell)
+            {
+                cell.OnUnselectedEvent();
+                selectedCell = null;
+            }
+            else
+            {
+                selectedCell.OnUnselectedEvent();
+                selectedCell = cell;
+            }
+
+            if (selectedCell != null)
+            {
+                int line = Grid.GetRow(selectedCell);
+                ComboBox.ItemsSource = Lists[line];
+            }
+            else
+            {
+                ComboBox.ItemsSource = null;
             }
         }
     }

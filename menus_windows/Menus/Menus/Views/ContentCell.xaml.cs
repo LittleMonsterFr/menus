@@ -26,6 +26,10 @@ namespace Menus
 
         private bool platCanceled = false;
 
+        private Brush defaultBrush;
+
+        public Semaine Semaine { get; set; }
+
         // Public accesser to the list of plats
         public ObservableCollection<Plat> ListPlats
         {
@@ -79,6 +83,8 @@ namespace Menus
             double bottom = row == parent.RowDefinitions.Count - 1 ? doubleBorder : simpleBorder;
 
             border.BorderThickness = new Thickness(left, top, right, bottom);
+
+            defaultBrush = border.BorderBrush;
         }
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
@@ -162,6 +168,12 @@ namespace Menus
         private void ContentCell_Tapped(object sender, TappedRoutedEventArgs e)
         {
             border.BorderBrush = new SolidColorBrush(Colors.Black);
+            Semaine.CellSelectedEvent(this);
+        }
+
+        public void OnUnselectedEvent()
+        {
+            border.BorderBrush = defaultBrush;
         }
     }
 }

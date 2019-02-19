@@ -155,7 +155,7 @@ namespace Menus
         {
             PrintTask printTask = null;
             Semaine semainePage = firstPage as Semaine;
-            printTask = e.Request.CreatePrintTask("Menus - Semaine du " + semainePage.date.ToShortDateString(), sourceRequestedArgs =>
+            printTask = e.Request.CreatePrintTask("Menus - Semaine du " + semainePage.Date.ToShortDateString(), sourceRequestedArgs =>
             {
                 var deferral = sourceRequestedArgs.GetDeferral();
 

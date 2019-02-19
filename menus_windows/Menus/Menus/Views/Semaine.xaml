@@ -12,7 +12,7 @@
     FontSize="15">
 
     <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto">
-        <RelativePanel x:Name="semainePanel">
+        <RelativePanel x:Name="semaineRelativePanel">
             <Grid x:Name="semaineGrid" xmlns:src="using:Menus" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
