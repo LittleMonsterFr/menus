@@ -20,8 +20,8 @@ namespace Menus
         public Dictionary<long, ObservableCollection<Plat>> Lists { get; set; }
         public DateTime Date { get; set; }
         public ComboBox ComboBox { get; set; }
-
-        private ContentCell selectedCell;
+        public StackPanel MealStackPanel { get; set; }
+        public ContentCell SelectedCell { get; set; }
 
         public Semaine()
         {
@@ -38,12 +38,12 @@ namespace Menus
 
         override protected void OnNavigatedTo(NavigationEventArgs e)
         {
-            Date = (DateTime) e.Parameter;
+            Date = (DateTime)e.Parameter;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Dictionary<DateTime, Dictionary<long, long>> plats = await DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(Date);
+            Dictionary<DateTime, Dictionary<long, long>> meals = await DatabaseHandler.Instance.GetPlatIdsForStartOfWeek(Date);
             double minCellWidth = 0;
 
             UIElementCollection elements = semaineGrid.Children;
@@ -63,15 +63,14 @@ namespace Menus
                 {
                     ContentCell contentCell = elt as ContentCell;
                     contentCell.Semaine = this;
-                    contentCell.ListPlats = Lists[Grid.GetRow(elt)];
                     contentCell.Date = Date.AddDays(Grid.GetColumn(contentCell));
-                    if (plats.ContainsKey(contentCell.Date))
+                    if (meals.ContainsKey(contentCell.Date))
                     {
-                        Dictionary<long, long> platList = plats[contentCell.Date];
-                        if (platList.ContainsKey(Grid.GetRow(elt)))
+                        Dictionary<long, long> plats = meals[contentCell.Date];
+                        if (plats.ContainsKey(Grid.GetRow(elt)))
                         {
-                            long plat_id = platList[Grid.GetRow(elt)];
-                            foreach (Plat p in contentCell.ListPlats)
+                            long plat_id = plats[Grid.GetRow(elt)];
+                            foreach (Plat p in Lists[Grid.GetRow(elt)])
                             {
                                 if (p.id == plat_id)
                                 {
@@ -109,29 +108,40 @@ namespace Menus
 
         public void CellSelectedEvent(ContentCell cell)
         {
-            if (selectedCell == null)
+            if (SelectedCell == null)
             {
-                selectedCell = cell;
+                SelectedCell = cell;
             }
-            else if (selectedCell == cell)
+            else if (SelectedCell == cell)
             {
                 cell.OnUnselectedEvent();
-                selectedCell = null;
+                SelectedCell = null;
             }
             else
             {
-                selectedCell.OnUnselectedEvent();
-                selectedCell = cell;
+                SelectedCell.OnUnselectedEvent();
+                SelectedCell = cell;
             }
 
-            if (selectedCell != null)
+            if (SelectedCell != null)
             {
-                int line = Grid.GetRow(selectedCell);
+                int line = Grid.GetRow(SelectedCell);
                 ComboBox.ItemsSource = Lists[line];
+                ComboBox.SelectedItem = SelectedCell.Plat;
+                EnableMealStackPanel(true);
             }
             else
             {
                 ComboBox.ItemsSource = null;
+                EnableMealStackPanel(false);
+            }
+        }
+
+        public void EnableMealStackPanel(bool enable)
+        {
+            foreach (Control control in MealStackPanel.Children)
+            {
+                control.IsEnabled = enable;
             }
         }
     }

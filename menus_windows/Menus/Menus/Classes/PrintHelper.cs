@@ -326,7 +326,7 @@ namespace Menus
             page.Width = printPageDescription.PageSize.Width;
             page.Height = printPageDescription.PageSize.Height;
 
-            RelativePanel semainePanel = (RelativePanel)page.FindName("semainePanel");
+            RelativePanel semaineRelativePanel = (RelativePanel)page.FindName("semaineRelativePanel");
             Grid semaineGrid = (Grid)page.FindName("semaineGrid");
             RelativePanel.SetAlignBottomWithPanel(semaineGrid, false);
 
@@ -336,8 +336,8 @@ namespace Menus
             double marginHeight = Math.Max(printPageDescription.PageSize.Height - printPageDescription.ImageableRect.Height, printPageDescription.PageSize.Height * ApplicationContentMarginTop * 2);
 
             // Set-up "printable area" on the "paper"
-            semainePanel.Width = page.Width - marginWidth;
-            semainePanel.Height = page.Height - marginHeight;
+            semaineRelativePanel.Width = page.Width - marginWidth;
+            semaineRelativePanel.Height = page.Height - marginHeight;
 
             // Add the (newley created) page to the print canvas which is part of the visual tree and force it to go
             // through layout so that the linked containers correctly distribute the content inside them.

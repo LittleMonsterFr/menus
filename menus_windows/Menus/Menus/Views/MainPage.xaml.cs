@@ -26,9 +26,9 @@ namespace Menus
         private Dictionary<long, ObservableCollection<Plat>> lists;
         private DatabaseHandler databaseHandler;
         private DateTime date;
-        private int fadeDuration = 1000;
         private ListViewItem selectedItem = null;
         private PrintHelper printHelper;
+        private Plat selectedPlat;
 
         private int ComparePlat(Plat plat1, Plat plat2)
         {
@@ -76,8 +76,6 @@ namespace Menus
             }
 
             SemaineNavigation(today, null);
-
-            mealSelectionCombobox.ItemsSource = lists[1];
         }
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
@@ -154,6 +152,8 @@ namespace Menus
             Semaine semaine = semaineFrame.Content as Semaine;
             semaine.Lists = lists;
             semaine.ComboBox = mealSelectionCombobox;
+            semaine.MealStackPanel = mealStackPanel;
+            semaine.EnableMealStackPanel(false);
             printHelper.RegisterForPrinting();
         }
 
@@ -270,14 +270,67 @@ namespace Menus
             await printHelper.ShowPrintUIAsync();
         }
 
-        private void MealSelectionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MealSelectionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ComboBox box = sender as ComboBox;
 
+            if (box.SelectedItem is Plat)
+            {
+                (semaineFrame.Content as Semaine).SelectedCell.Plat = box.SelectedItem as Plat;
+            }
+            else if (box.SelectedItem is string newPlatName)
+            {
+                string platNameBackup = selectedPlat.Nom;
+                selectedPlat.Nom = newPlatName;
+                if (await databaseHandler.EditPlat(selectedPlat) != 1)
+                {
+                    selectedPlat.Nom = platNameBackup;
+                }
+                else
+                {
+                    (semaineFrame.Content as Semaine).SelectedCell.Plat = selectedPlat;
+                }
+                selectedPlat = null;
+            }
         }
 
-        private void CancelMealButton_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void CancelMealButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
+            Semaine semaine = semaineFrame.Content as Semaine;
+            if (await databaseHandler.DeletePlatInSemaine(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+            {
+                semaine.SelectedCell.Plat = null;
+                // Unselect the cell and disable the meal stack panel
+                semaine.CellSelectedEvent(semaine.SelectedCell);
+            }
+        }
 
+        private async void ValidateMealButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Semaine semaine = semaineFrame.Content as Semaine;
+            if (await databaseHandler.InsertPlatInSemaines(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+            {
+                // Unselect the cell and disable the meal stack panel
+                semaine.CellSelectedEvent(semaine.SelectedCell);
+            }
+            else
+            {
+                // Fall back to the previous selected plat and don't update the text
+            }
+        }
+
+        private void MealSelectionCombobox_TextSubmitted(ComboBox sender, ComboBoxTextSubmittedEventArgs args)
+        {
+            if (sender.SelectedItem != null)
+            {
+                selectedPlat = sender.SelectedItem as Plat;
+            }
+            else
+            {
+                // Prevent the selection changed handler to be called
+                args.Handled = true;
+                selectedPlat = null;
+            }
         }
     }
 }

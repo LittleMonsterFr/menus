@@ -14,7 +14,7 @@
         <local:Plat x:Key="TempsConverter"/>
         <DataTemplate x:Key="listViewItemTemplate" x:DataType="local:Plat">
             <ListViewItem IsDoubleTapEnabled="False" IsHoldingEnabled="False" Tapped="ListViewItem_Tapped" IsRightTapEnabled="True" RightTapped="ListViewItem_RightTapped">
-                <TextBlock Name="PlatName" Text="{x:Bind Nom}" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                <TextBlock Name="PlatName" Text="{x:Bind Nom, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                 <FlyoutBase.AttachedFlyout>
                     <Flyout Placement="Full" x:Name="viewPlatFlyout">
                         <Flyout.FlyoutPresenterStyle>
@@ -24,30 +24,30 @@
                         </Flyout.FlyoutPresenterStyle>
                         <Grid>
                             <StackPanel Orientation="Vertical" Spacing="10">
-                                <TextBlock Text="{x:Bind Nom}" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Text="{x:Bind Nom, Mode=TwoWay}" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center" FontWeight="Bold"/>
                                 <StackPanel Spacing="5" Orientation="Horizontal">
                                     <TextBlock Text="Type :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{x:Bind type.Name}"/>
+                                    <TextBlock Text="{x:Bind type.Name, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Spacing="5" Orientation="Horizontal">
                                     <TextBlock Text="Saison :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{x:Bind saison.Name}"/>
+                                    <TextBlock Text="{x:Bind saison.Name, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Spacing="5">
                                     <TextBlock Text="Temps :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{Binding Temps, Mode=OneWay, Converter={StaticResource TempsConverter}}"/>
+                                    <TextBlock Text="{Binding Temps, Mode=TwoWay, Converter={StaticResource TempsConverter}}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Spacing="5">
                                     <TextBlock Text="Note :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{x:Bind note}"/>
+                                    <TextBlock Text="{x:Bind note, Mode=TwoWay}"/>
                                 </StackPanel>
                                 <StackPanel Spacing="5">
                                     <TextBlock Text="Ingrédients :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{x:Bind ingredients}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                                    <TextBlock Text="{x:Bind ingredients, Mode=TwoWay}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
                                 </StackPanel>
                                 <StackPanel Spacing="5">
                                     <TextBlock Text="Description :" TextDecorations="Underline"/>
-                                    <TextBlock Text="{x:Bind description}" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
+                                    <TextBlock Text="{x:Bind description, Mode=TwoWay}" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -125,19 +125,22 @@
 
             <PivotItem Header="Semaines" x:Name="semainePivotItem">
                 <RelativePanel>
-                    <StackPanel x:Name="addMealStackPanel" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
-                        <ComboBox x:Name="mealSelectionCombobox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" SelectionChanged="MealSelectionCombobox_SelectionChanged" VerticalAlignment="Stretch" IsEditable="True">
+                    <StackPanel x:Name="mealStackPanel" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12" IsTapEnabled="False">
+                        <ComboBox x:Name="mealSelectionCombobox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" TextSubmitted="MealSelectionCombobox_TextSubmitted" SelectionChanged="MealSelectionCombobox_SelectionChanged"  IsEditable="True" IsEnabled="False">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate x:DataType="local:Plat">
-                                    <TextBlock Text="{x:Bind Path=Nom, Mode=TwoWay}" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{x:Bind Path=Nom, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
-                        <Button x:Name="cancelMealButton" Tapped="CancelMealButton_Tapped" VerticalAlignment="Stretch">
+                        <Button x:Name="validateMealButton" Tapped="ValidateMealButton_Tapped" VerticalAlignment="Stretch" IsEnabled="False">
+                            <SymbolIcon Symbol="Accept"/>
+                        </Button>
+                        <Button x:Name="cancelMealButton" Tapped="CancelMealButton_Tapped" VerticalAlignment="Stretch" IsEnabled="False">
                             <SymbolIcon Symbol="Clear"/>
                         </Button>
                     </StackPanel>
-                    <Frame RelativePanel.Below="addMealStackPanel" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" x:Name="semaineFrame" IsNavigationStackEnabled="False">
+                    <Frame RelativePanel.Below="mealStackPanel" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" x:Name="semaineFrame" IsNavigationStackEnabled="False">
                         <Frame.ContentTransitions>
                             <TransitionCollection>
                                 <NavigationThemeTransition />
