@@ -126,10 +126,10 @@
             <PivotItem Header="Semaines" x:Name="semainePivotItem">
                 <RelativePanel>
                     <StackPanel x:Name="mealStackPanel" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12" IsTapEnabled="False">
-                        <ComboBox x:Name="mealSelectionCombobox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" TextSubmitted="MealSelectionCombobox_TextSubmitted" SelectionChanged="MealSelectionCombobox_SelectionChanged"  IsEditable="True" IsEnabled="False">
+                        <ComboBox x:Name="mealSelectionCombobox" PlaceholderText="Selectionner un plat" IsTextSearchEnabled="True" VerticalAlignment="Stretch"  HorizontalAlignment="Stretch" TextSubmitted="MealSelectionCombobox_TextSubmitted" SelectionChanged="MealSelectionCombobox_SelectionChanged"  IsEditable="True" IsEnabled="False" Width="300">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate x:DataType="local:Plat">
-                                    <TextBlock Text="{x:Bind Path=Nom, Mode=TwoWay}"/>
+                                    <TextBlock Text="{x:Bind Path=Nom, Mode=TwoWay}" TextTrimming="CharacterEllipsis"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

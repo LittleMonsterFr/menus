@@ -137,6 +137,7 @@ namespace Menus
         private void SemaineNavigation(object sender, RoutedEventArgs e)
         {
             printHelper.UnregisterForPrinting();
+
             if (sender == back)
             {
                 semaineFrame.Navigate(typeof(Semaine), date = date.AddDays(-7), backTransition);
@@ -149,11 +150,13 @@ namespace Menus
             {
                 semaineFrame.Navigate(typeof(Semaine), date = DateTime.Now.StartOfWeek(DayOfWeek.Monday), drillTransition);
             }
+
             Semaine semaine = semaineFrame.Content as Semaine;
             semaine.Lists = lists;
             semaine.ComboBox = mealSelectionCombobox;
             semaine.MealStackPanel = mealStackPanel;
             semaine.EnableMealStackPanel(false);
+
             printHelper.RegisterForPrinting();
         }
 
@@ -297,25 +300,31 @@ namespace Menus
         private async void CancelMealButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Semaine semaine = semaineFrame.Content as Semaine;
-            if (await databaseHandler.DeletePlatInSemaine(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+            if (semaine.SelectedCell.Plat != null)
             {
-                semaine.SelectedCell.Plat = null;
-                // Unselect the cell and disable the meal stack panel
-                semaine.CellSelectedEvent(semaine.SelectedCell);
+                if (await databaseHandler.DeletePlatInSemaine(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+                {
+                    semaine.SelectedCell.Plat = null;
+                    // Unselect the cell and disable the meal stack panel
+                    semaine.CellSelectedEvent(semaine.SelectedCell);
+                }
             }
         }
 
         private async void ValidateMealButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             Semaine semaine = semaineFrame.Content as Semaine;
-            if (await databaseHandler.InsertPlatInSemaines(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+            if (semaine.SelectedCell.Plat != null)
             {
-                // Unselect the cell and disable the meal stack panel
-                semaine.CellSelectedEvent(semaine.SelectedCell);
-            }
-            else
-            {
-                // Fall back to the previous selected plat and don't update the text
+                if (await databaseHandler.InsertPlatInSemaines(semaine.SelectedCell.Plat, semaine.SelectedCell.Date))
+                {
+                    // Unselect the cell and disable the meal stack panel
+                    semaine.CellSelectedEvent(semaine.SelectedCell);
+                }
+                else
+                {
+                    // Fall back to the previous selected plat and don't update the text
+                }
             }
         }
 
@@ -329,7 +338,6 @@ namespace Menus
             {
                 // Prevent the selection changed handler to be called
                 args.Handled = true;
-                selectedPlat = null;
             }
         }
     }

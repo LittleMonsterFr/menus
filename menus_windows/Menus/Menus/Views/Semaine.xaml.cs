@@ -108,17 +108,22 @@ namespace Menus
 
         public void CellSelectedEvent(ContentCell cell)
         {
+            // No previous cell selected
             if (SelectedCell == null)
             {
                 SelectedCell = cell;
             }
+            // The new selected cell is the one already selected
             else if (SelectedCell == cell)
             {
+                // Unselect
                 cell.OnUnselectedEvent();
                 SelectedCell = null;
             }
+            // The selected cell is a new one
             else
             {
+                // Unselect the previous one
                 SelectedCell.OnUnselectedEvent();
                 SelectedCell = cell;
             }
