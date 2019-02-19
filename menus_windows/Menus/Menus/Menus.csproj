@@ -122,6 +122,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\BindableBase.cs" />
     <Compile Include="Classes\PrintHelper.cs" />
     <Compile Include="Views\Alert.xaml.cs">
       <DependentUpon>Alert.xaml</DependentUpon>

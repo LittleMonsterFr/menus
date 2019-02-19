@@ -146,10 +146,10 @@ namespace Menus
             SQLiteCommand command = connection.CreateCommand();
             command.CommandText = "insert into plats (nom, type, saison, temps, note, ingredients, description) values (@nom, @type, @saison, @temps, @note, @ingredients, @description);";
 
-            command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.nom;
+            command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.Nom;
             command.Parameters.Add("@type", System.Data.DbType.Int64).Value = plat.type.Id;
             command.Parameters.Add("@saison", System.Data.DbType.Int64).Value = plat.saison.Id;
-            command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.temps;
+            command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.Temps;
             command.Parameters.Add("@note", System.Data.DbType.Int32).Value = plat.note;
             command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
             command.Parameters.Add("@description", System.Data.DbType.String).Value = plat.description;
@@ -308,10 +308,10 @@ namespace Menus
             command.CommandText = "update plats set nom = @nom, type = @type, saison = @saison, temps = @temps, note = @note, ingredients = @ingredients, description = @description where id = @id;";
 
             command.Parameters.Add("@id", System.Data.DbType.Int64).Value = plat.id;
-            command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.nom;
+            command.Parameters.Add("@nom", System.Data.DbType.String).Value = plat.Nom;
             command.Parameters.Add("@type", System.Data.DbType.Int64).Value = plat.type.Id;
             command.Parameters.Add("@saison", System.Data.DbType.Int64).Value = plat.saison.Id;
-            command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.temps;
+            command.Parameters.Add("@temps", System.Data.DbType.Int32).Value = plat.Temps;
             command.Parameters.Add("@note", System.Data.DbType.Int32).Value = plat.note;
             command.Parameters.Add("@ingredients", System.Data.DbType.String).Value = plat.ingredients;
             command.Parameters.Add("@description", System.Data.DbType.String).Value = plat.description;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -31,7 +33,7 @@ namespace Menus
             set
             {
                 _listPlats = value;
-                comboBox.ItemsSource = _listPlats;
+                //comboBox.ItemsSource = _listPlats;
             }
         }
 
@@ -45,11 +47,11 @@ namespace Menus
             set
             {
                 _plat = value;
-                updateComboBox = false;
-                comboBox.SelectedItem = _plat;
-                comboBox.SelectedIndex = comboBox.Items.IndexOf(_plat);
+                //updateComboBox = false;
+                //comboBox.SelectedItem = _plat;
+                //comboBox.SelectedIndex = comboBox.Items.IndexOf(_plat);
                 updateComboBox = true;
-                platName.Text = _plat != null ? _plat.nom : string.Empty;
+                platName.Text = _plat != null ? _plat.Nom : string.Empty;
             }
         }
 
@@ -81,15 +83,12 @@ namespace Menus
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            // Display the panel containing the combobox when the mouse is on this cell
-            platSelectionPanel.Opacity = 1;
+            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Hand, 1);
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-            // Hide the panel containing the combobox when the mouse leaves the cell and the dropdown is closed
-            if (!comboBox.IsDropDownOpen)
-                platSelectionPanel.Opacity = 0;
+            Window.Current.CoreWindow.PointerCursor = new Windows.UI.Core.CoreCursor(Windows.UI.Core.CoreCursorType.Arrow, 1);
         }
 
         private async void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -104,15 +103,15 @@ namespace Menus
                     // If the name of the meal is being edited
                     if (box.SelectedItem is string newPlatName)
                     {
-                        string platNameBackup = _plat.nom;
-                        _plat.nom = newPlatName;
+                        string platNameBackup = _plat.Nom;
+                        _plat.Nom = newPlatName;
                         if (await databaseHandler.EditPlat(_plat) != 1)
                         {
-                            _plat.nom = platNameBackup;
+                            _plat.Nom = platNameBackup;
                         }
                         else
                         {
-                            platName.Text = _plat.nom;
+                            platName.Text = _plat.Nom;
                         }
                     }
                     else
@@ -121,7 +120,7 @@ namespace Menus
                         if (await databaseHandler.InsertPlatInSemaines(plat, Date))
                         {
                             _plat = plat;
-                            platName.Text = plat.nom;
+                            platName.Text = plat.Nom;
                         }
                         else
                         {
@@ -150,14 +149,19 @@ namespace Menus
         private void CancelButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             platCanceled = true;
-            comboBox.SelectedIndex = -1;
-            comboBox.SelectedItem = null;
+            //comboBox.SelectedIndex = -1;
+            //comboBox.SelectedItem = null;
             platCanceled = false;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            platSelectionPanel.MaxWidth = e.NewSize.Width;
+            //platSelectionPanel.MaxWidth = e.NewSize.Width;
+        }
+
+        private void ContentCell_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            border.BorderBrush = new SolidColorBrush(Colors.Black);
         }
     }
 }

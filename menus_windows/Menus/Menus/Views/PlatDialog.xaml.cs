@@ -60,11 +60,11 @@ namespace Menus
             get { return _plat; }
             set
             {
-                _plat = new Plat(value.id, value.nom, value.type, value.saison, value.temps, value.note, value.ingredients, value.description);
-                nom.Text = value.nom;
+                _plat = new Plat(value.id, value.Nom, value.type, value.saison, value.Temps, value.note, value.ingredients, value.description);
+                nom.Text = value.Nom;
                 type.SelectedItem = value.type;
                 saison.SelectedItem = value.saison;
-                temps.Time = TimeSpan.FromSeconds(value.temps);
+                temps.Time = TimeSpan.FromSeconds(value.Temps);
                 note.Value = value.note;
                 ingredients.Text = value.ingredients;
                 description.Text = value.description;
@@ -89,10 +89,10 @@ namespace Menus
             args.Cancel = ValidatePlatInput();
             if (args.Cancel == false)
             {
-                _plat.nom = nom.Text;
+                _plat.Nom = nom.Text;
                 _plat.type = (Type)type.SelectedValue;
                 _plat.saison = (Saison)saison.SelectedValue;
-                _plat.temps = (int)temps.Time.TotalSeconds;
+                _plat.Temps = (int)temps.Time.TotalSeconds;
                 _plat.note = (int)note.Value;
                 _plat.ingredients = ingredients.Text;
                 _plat.description = description.Text;

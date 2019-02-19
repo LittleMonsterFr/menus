@@ -33,7 +33,7 @@ namespace Menus
 
         private int ComparePlat(Plat plat1, Plat plat2)
         {
-            return string.Compare(plat1.nom.ToLower(), plat2.nom.ToLower());
+            return string.Compare(plat1.Nom.ToLower(), plat2.Nom.ToLower());
         }
 
         public MainPage()
@@ -77,6 +77,8 @@ namespace Menus
                 printButton.IsEnabled = true;
                 printHelper = new PrintHelper(this);
             }
+
+            mealSelectionCombobox.ItemsSource = lists[1];
         }
 
         private async void AddPlatButton(object sender, RoutedEventArgs e)
@@ -168,7 +170,7 @@ namespace Menus
                 today.Visibility = Visibility.Collapsed;
                 printHelper.UnregisterForPrinting();
             }
-            else if (pivot.SelectedItem == semaineTab)
+            else if (pivot.SelectedItem == semainePivotItem)
             {
                 printButton.Visibility = Visibility.Visible;
                 today.Visibility = Visibility.Visible;
@@ -272,6 +274,16 @@ namespace Menus
             Page semainePage = new Semaine(new KeyValuePair<DateTime, Dictionary<long, ObservableCollection<Plat>>>(date, lists));
             printHelper.PreparePrintContent(semainePage);
             await printHelper.ShowPrintUIAsync();
+        }
+
+        private void MealSelectionCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void CancelMealButton_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
         }
     }
 }

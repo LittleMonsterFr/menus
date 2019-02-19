@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using Menus.Classes;
+using System;
 using Windows.UI.Xaml.Data;
 
 namespace Menus
 {
-    public class Plat : IValueConverter
+    public class Plat : BindableBase, IValueConverter
     {
+        private string _nom;
+
         public long id;
-        public string nom;
         public Type type;
         public Saison saison;
         public int note;
@@ -22,21 +22,27 @@ namespace Menus
         public Plat(long id, string nom, Type type, Saison saison, int temps, int note, string ingredients, string description)
         {
             this.id = id;
-            this.nom = nom;
+            this._nom = nom;
             this.type = type;
             this.saison = saison;
-            this.temps = temps;
+            this.Temps = temps;
             this.note = note;
             this.ingredients = ingredients;
             this.description = description;
         }
 
-        public override string ToString()
+        public string Nom
         {
-            return nom;
+            get { return this._nom; }
+            set { this.SetProperty(ref this._nom, value); }
         }
 
-        public int temps { get; set; }
+        public override string ToString()
+        {
+            return Nom;
+        }
+
+        public int Temps { get; set; }
 
         public object Convert(object value, System.Type targetType, object parameter, string language)
         {
@@ -51,21 +57,20 @@ namespace Menus
 
         public override bool Equals(object obj)
         {
-            var plat = obj as Plat;
-            return plat != null &&
+            return obj is Plat plat &&
                    id == plat.id &&
-                   nom == plat.nom &&
+                   Nom == plat.Nom &&
                    type.Equals(plat.type) &&
                    saison.Equals(plat.saison) &&
                    note == plat.note &&
                    ingredients.Equals(plat.ingredients) &&
                    description.Equals(plat.description) &&
-                   temps == plat.temps;
+                   Temps == plat.Temps;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(id, nom, type, saison, note, ingredients, description, temps);
+            return HashCode.Combine(id, Nom, type, saison, note, ingredients, description, Temps);
         }
     }
 }

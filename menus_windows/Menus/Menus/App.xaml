@@ -9,5 +9,6 @@
         <x:Double x:Key="ContentDialogMaxHeight">800</x:Double>
         <x:Double x:Key="FlyoutThemeMaxWidth">600</x:Double>
         <x:Double x:Key="FlyoutThemeMaxHeight">800</x:Double>
+        <Thickness x:Key="PivotItemMargin">12</Thickness>
     </Application.Resources>
 </Application>
